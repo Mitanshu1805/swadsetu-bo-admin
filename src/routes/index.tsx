@@ -25,9 +25,13 @@ const Confirm = React.lazy(() => import('../pages/auth/Confirm'));
 const ForgetPassword = React.lazy(() => import('../pages/auth/ForgetPassword'));
 const LockScreen = React.lazy(() => import('../pages/auth/LockScreen'));
 const Logout = React.lazy(() => import('../pages/auth/Logout'));
+const BusinessSelector = React.lazy(() => import('../pages/BusinessSelector'));
 
 // dashboards
 const DashBoard1 = React.lazy(() => import('../pages/dashboards/DashBoard1/'));
+
+const Terminal = React.lazy(() => import('../pages/apps/Terminal'));
+const TerminalList = React.lazy(() => import('../pages/apps/Terminal/TerminalList'));
 
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
@@ -161,6 +165,7 @@ const AllRoutes = () => {
                         { path: 'forget-password', element: <LoadComponent component={ForgetPassword} /> },
                         { path: 'lock-screen', element: <LoadComponent component={LockScreen} /> },
                         { path: 'logout', element: <LoadComponent component={Logout} /> },
+                        { path: 'business-selector', element: <LoadComponent component={BusinessSelector} /> },
                     ],
                 },
                 {
@@ -194,6 +199,18 @@ const AllRoutes = () => {
                     path: 'dashboard',
                     element: <LoadComponent component={DashBoard1} />,
                 },
+                {
+                    path: 'terminal',
+                    element: <LoadComponent component={Terminal} />,
+                },
+                {
+                    path: 'terminal/list',
+                    element: <LoadComponent component={TerminalList} />,
+                },
+                // {
+                //     path: 'business-selector',
+                //     element: <LoadComponent component={BusinessSelector} />,
+                // },
                 {
                     path: 'apps',
                     children: [

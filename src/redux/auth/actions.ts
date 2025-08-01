@@ -10,7 +10,9 @@ export type AuthActionType = {
         | AuthActionTypes.LOGIN_USER
         | AuthActionTypes.LOGOUT_USER
         | AuthActionTypes.RESET
-        | AuthActionTypes.SIGNUP_USER;
+        | AuthActionTypes.SIGNUP_USER
+        | AuthActionTypes.SEND_OTP
+        | AuthActionTypes.VERIFY_OTP;
     payload: {} | string;
 };
 
@@ -59,4 +61,13 @@ export const forgotPassword = (email: string): AuthActionType => ({
 export const resetAuth = (): AuthActionType => ({
     type: AuthActionTypes.RESET,
     payload: {},
+});
+
+export const sendOtp = (phone_number: string): AuthActionType => ({
+    type: AuthActionTypes.SEND_OTP,
+    payload: { phone_number },
+});
+export const verifyOtp = (phone_number: string, otp: string): AuthActionType => ({
+    type: AuthActionTypes.VERIFY_OTP,
+    payload: { phone_number, otp },
 });

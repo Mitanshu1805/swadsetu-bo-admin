@@ -1,0 +1,9 @@
+export enum BusinessActionTypes {
+    USERS_BUSINESSES = '@@business/USERS_BUSINESSES',
+    USERS_BUSINESSES_SUCCESS = '@@business/USERS_BUSINESSES_SUCCESS',
+    USERS_BUSINESSES_ERROR = '@@business/USERS_BUSINESSES_ERROR',
+
+    OUTLET_LIST = '@@outletList/OUTLET_LIST',
+    OUTLET_LIST_SUCCESS = '@@outletList/OUTLET_LIST_SUCCESS',
+    OUTLET_LIST_ERROR = '@@outletList/OUTLET_LIST_ERROR',
+}

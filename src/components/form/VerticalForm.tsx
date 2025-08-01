@@ -31,7 +31,7 @@ const VerticalForm = <TFormValues extends Record<string, any> = Record<string, a
         <form onSubmit={handleSubmit(onSubmit)} className={formClass} noValidate>
             {Array.isArray(children)
                 ? children.map((child) => {
-                      return child.props && child.props.name
+                      return child?.props && child?.props?.name
                           ? React.createElement(child.type, {
                                 ...{
                                     ...child.props,

@@ -1,5 +1,6 @@
 // all routes
 import Routes from './routes/Routes';
+import { AppColors } from './utils/Colors';
 
 // helpers
 
@@ -7,7 +8,15 @@ import Routes from './routes/Routes';
 import './assets/scss/Theme.scss';
 
 const App = () => {
-    return <Routes />;
+    return (
+        <div
+            style={{
+                backgroundColor: AppColors.backgroundColor,
+                minHeight: '100vh',
+            }}>
+            <Routes />
+        </div>
+    );
 };
 
 export default App;

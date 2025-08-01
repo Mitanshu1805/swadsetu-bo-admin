@@ -13,6 +13,7 @@ import { useRedux } from '../../hooks';
 
 // utils
 import { changeBodyAttribute } from '../../utils';
+import { AppColors } from '../../utils/Colors';
 
 // code splitting and lazy loading
 // https://blog.logrocket.com/lazy-loading-components-in-react-16-6-6cea535c0b52
@@ -83,7 +84,7 @@ const HorizontalLayout = ({ children }: HorizontalLayoutProps) => {
 
     return (
         <>
-            <div id="wrapper">
+            <div id="wrapper" style={{ color: AppColors.backgroundColor }}>
                 <Suspense fallback={loading()}>
                     <Topbar openLeftMenuCallBack={openMenu} containerClass="container-fluid" />
                 </Suspense>

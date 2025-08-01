@@ -24,4 +24,81 @@ function forgotPassword(params: { email: string }) {
     return api.create(`${baseUrl}`, params);
 }
 
-export { login, logout, signup, forgotPassword };
+function sendOtp(data: any) {
+    const baseUrl = '/users/otp';
+    return api.create(baseUrl, data);
+}
+
+function verifyOtp(data: any) {
+    const baseUrl = '/users/login';
+    return api.create(baseUrl, data);
+}
+
+function usersBusinesses() {
+    const baseUrl = '/users/businesses';
+    return api.get(baseUrl);
+}
+
+function outletList(data: any) {
+    const baseUrl = '/outlet/list';
+    return api.create(baseUrl, data);
+}
+
+function terminalList(data: any) {
+    const baseUrl = '/terminal/list';
+    return api.create(baseUrl, data);
+}
+
+function terminalUpdate(data: any) {
+    const baseUrl = '/terminal/update';
+    return api.create(baseUrl, data);
+}
+
+function terminalDelete(data: any) {
+    const baseUrl = '/terminal/delete';
+    return api.delete(baseUrl, data);
+}
+
+function terminalCreate(data: any) {
+    const baseUrl = '/terminal/create';
+    return api.create(baseUrl, data);
+}
+
+function dashboardEarningReport(data: any) {
+    const baseUrl = '/order/sales/report/date';
+    return api.create(baseUrl, data);
+}
+
+function dashboardSalesReport(data: any) {
+    const baseUrl = '/order/sales/report/year';
+    return api.create(baseUrl, data);
+}
+
+function orderReportList(data: any) {
+    const baseUrl = '/order/daily/report';
+    return api.create(baseUrl, data);
+}
+
+function ingredientReportList(data: any) {
+    const baseUrl = '/recipe/ingredient/daily/list';
+    return api.create(baseUrl, data);
+}
+
+export {
+    login,
+    logout,
+    signup,
+    forgotPassword,
+    sendOtp,
+    verifyOtp,
+    usersBusinesses,
+    outletList,
+    terminalCreate,
+    terminalDelete,
+    terminalList,
+    terminalUpdate,
+    dashboardEarningReport,
+    dashboardSalesReport,
+    orderReportList,
+    ingredientReportList,
+};

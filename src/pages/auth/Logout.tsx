@@ -15,6 +15,7 @@ import AuthLayout from './AuthLayout';
 // images
 import LogoDark from '../../assets/images/logo-dark.png';
 import LogoLight from '../../assets/images/logo-light.png';
+import SwadSetuLogo from '../../assets/images/logoImage.svg';
 
 const LogoutIcon = () => {
     return (
@@ -45,6 +46,8 @@ const LogoutIcon = () => {
 /* bottom link */
 const BottomLink = () => {
     const { t } = useTranslation();
+    console.log('Rendering BottomLink...');
+
     return (
         <Row className="mt-3">
             <Col xs={12} className="text-center">
@@ -69,6 +72,7 @@ const Logout = () => {
 
     useEffect(() => {
         dispatch(logoutUser());
+        localStorage.clear();
     }, [dispatch]);
 
     return (
@@ -77,14 +81,12 @@ const Logout = () => {
                 <div className="auth-logo">
                     <Link to="/" className="logo logo-dark text-center">
                         <span className="logo-lg">
-                            <img src={LogoDark} alt="" height="22" />
+                            <img src={SwadSetuLogo} alt="" height="50" />
                         </span>
                     </Link>
 
                     <Link to="/" className="logo logo-light text-center">
-                        <span className="logo-lg">
-                            <img src={LogoLight} alt="" height="22" />
-                        </span>
+                        <span className="logo-lg">{/* <img src={SwadSetuLogo} alt="" height="22" /> */}</span>
                     </Link>
                 </div>
             </div>

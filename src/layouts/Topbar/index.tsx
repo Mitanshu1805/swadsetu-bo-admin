@@ -26,6 +26,7 @@ import logoSm from '../../assets/images/logo-sm.png';
 import avatar1 from '../../assets/images/users/user-1.jpg';
 import logoDark from '../../assets/images/logo-dark.png';
 import logoLight from '../../assets/images/logo-light.png';
+import SwadSetuLogo from '../../assets/images/logoImage.svg';
 
 type TopbarProps = {
     openLeftMenuCallBack: () => void;
@@ -36,11 +37,12 @@ const Topbar = ({ openLeftMenuCallBack, containerClass }: TopbarProps) => {
     const { dispatch, appSelector } = useRedux();
     const [isopen, setIsopen] = useState<boolean>(false);
 
-    const { layout, pageTitle } = appSelector((state) => ({
+    const { layout, pageTitle, user } = appSelector((state) => ({
         layout: state.Layout.layoutType,
         pageTitle: state.PageTitle.pageTitle,
+        user: state.Auth.user.data.detail,
     }));
-
+    const firstName = user && typeof user === 'object' && 'first_name' in user ? user.first_name : 'User';
     /**
      * Toggle the leftmenu when having mobile screen
      */
@@ -72,7 +74,7 @@ const Topbar = ({ openLeftMenuCallBack, containerClass }: TopbarProps) => {
                     </li>
                     <li className="dropdown notification-list topbar-dropdown">
                         {/* User */}
-                        <ProfileDropdown userImage={avatar1} username={'Nowak'} menuItems={profileMenus} />
+                        <ProfileDropdown userImage={avatar1} username={firstName} menuItems={profileMenus} />
                     </li>
                     <li className="dropdown notification-list">
                         <ThemeSetting handleRightSideBar={handleRightSideBar} />
@@ -82,20 +84,18 @@ const Topbar = ({ openLeftMenuCallBack, containerClass }: TopbarProps) => {
                 {/* LOGO  */}
                 <div className="logo-box">
                     <Link to="/" className="logo logo-dark text-center">
-                        <span className="logo-sm">
-                            <img src={logoSm} alt="logo-sm" height="22" />
-                        </span>
+                        <span className="logo-sm">{/* <img src={SwadSetuLogo} alt="logo-sm" height="22" /> */}</span>
                         <span className="logo-lg">
-                            <img src={logoDark} alt="logo-dark" height="16" />
+                            <img src={SwadSetuLogo} alt="logo-dark" height="40" />
                         </span>
                     </Link>
 
                     <Link to="/" className="logo logo-light text-center">
                         <span className="logo-sm">
-                            <img src={logoSm} alt="logo-sm" height="22" />
+                            <img src={SwadSetuLogo} alt="logo-sm" height="22" />
                         </span>
                         <span className="logo-lg">
-                            <img src={logoLight} alt="logo-light" height="16" />
+                            <img src={SwadSetuLogo} alt="logo-light" height="16" />
                         </span>
                     </Link>
                 </div>
@@ -119,8 +119,7 @@ const Topbar = ({ openLeftMenuCallBack, containerClass }: TopbarProps) => {
                                     className={classNames('navbar-toggle nav-link', {
                                         open: isopen,
                                     })}
-                                    onClick={handleLeftMenuCallBack}
-                                >
+                                    onClick={handleLeftMenuCallBack}>
                                     <div className="lines">
                                         <span></span>
                                         <span></span>

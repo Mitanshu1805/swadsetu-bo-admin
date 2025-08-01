@@ -1,0 +1,57 @@
+import { all, call, fork, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { BusinessActionTypes } from './constants';
+import { usersBusinessesSuccess, usersBusinessesError, outletListSuccess, outletListError } from './actions';
+
+import { SagaIterator } from 'redux-saga';
+import { usersBusinesses, outletList } from '../../helpers/api/auth';
+import { Route, useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate;
+
+function* usersBusinessesSaga(): SagaIterator {
+    try {
+        const response = yield call(usersBusinesses);
+        console.log('businesses>>', response);
+        if (response.data?.data) {
+            const businesses = response.data.data;
+            console.log('businesses>>', businesses);
+            if (businesses.count == 1) {
+                localStorage.setItem('selected_business', JSON.stringify(businesses));
+            }
+            yield put(usersBusinessesSuccess(businesses));
+        } else {
+            yield put(usersBusinessesError('No businesses found.'));
+        }
+    } catch (error: any) {
+        yield put(usersBusinessesError(error.message || 'Something went wrong'));
+    }
+}
+
+function* outletListSaga(action: any): SagaIterator {
+    try {
+        const response = yield call(outletList, action.payload);
+        console.log('outletList>>', response);
+        if (response.data?.data) {
+            const outlets = response.data.data;
+            console.log('businesses>>', outlets);
+
+            yield put(outletListSuccess(outlets));
+        } else {
+            yield put(outletListError('No outlets found.'));
+        }
+    } catch (error: any) {
+        yield put(outletListError(error.message || 'Something went wrong'));
+    }
+}
+
+function* watchUserBusinesses() {
+    yield takeEvery(BusinessActionTypes.USERS_BUSINESSES, usersBusinessesSaga);
+}
+
+function* watchOutletList() {
+    yield takeEvery(BusinessActionTypes.OUTLET_LIST, outletListSaga);
+}
+
+export default function* rootSaga() {
+    yield all([fork(watchUserBusinesses), fork(watchOutletList)]);
+}

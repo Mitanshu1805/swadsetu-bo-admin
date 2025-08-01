@@ -9,6 +9,16 @@ const api = new APICore();
 const INIT_STATE = {
     user: api.getLoggedInUser(),
     loading: false,
+    userLoggedIn: false,
+    userSignUp: false,
+    userLogout: false,
+    passwordReset: false,
+    passwordChange: false,
+    otpSent: false,
+    otpVerified: false,
+    error: null,
+    registerError: null,
+    resetPasswordSuccess: null,
 };
 
 type UserData = {
@@ -29,7 +39,10 @@ type AuthActionType = {
         | AuthActionTypes.LOGIN_USER
         | AuthActionTypes.SIGNUP_USER
         | AuthActionTypes.LOGOUT_USER
-        | AuthActionTypes.RESET;
+        | AuthActionTypes.RESET
+        | AuthActionTypes.SEND_OTP
+        | AuthActionTypes.VERIFY_OTP
+        | AuthActionTypes.FORGOT_PASSWORD;
     payload: {
         actionType?: string;
         data?: UserData | {};
@@ -38,12 +51,21 @@ type AuthActionType = {
 };
 
 type State = {
-    user?: UserData | {};
-    loading?: boolean;
-    value?: boolean;
+    user?: UserData | {} | null;
+    loading: boolean;
+    userLoggedIn: boolean;
+    userSignUp: boolean;
+    userLogout: boolean;
+    passwordReset: boolean;
+    passwordChange: boolean;
+    otpSent: boolean;
+    otpVerified: boolean;
+    error?: string | null;
+    registerError?: string | null;
+    resetPasswordSuccess?: any;
 };
 
-const Auth = (state: State = INIT_STATE, action: AuthActionType): any => {
+const Auth = (state: State = INIT_STATE, action: AuthActionType): State => {
     switch (action.type) {
         case AuthActionTypes.API_RESPONSE_SUCCESS:
             switch (action.payload.actionType) {
@@ -53,6 +75,26 @@ const Auth = (state: State = INIT_STATE, action: AuthActionType): any => {
                         user: action.payload.data,
                         userLoggedIn: true,
                         loading: false,
+                        error: null,
+                    };
+                }
+                case AuthActionTypes.SEND_OTP: {
+                    return {
+                        ...state,
+                        otpSent: true,
+                        loading: false,
+                        error: null,
+                        user: action.payload.data || state.user, // Keep existing user data if needed
+                    };
+                }
+                case AuthActionTypes.VERIFY_OTP: {
+                    return {
+                        ...state,
+                        user: action.payload.data,
+                        otpVerified: true,
+                        userLoggedIn: true,
+                        loading: false,
+                        error: null,
                     };
                 }
                 case AuthActionTypes.SIGNUP_USER: {
@@ -60,14 +102,18 @@ const Auth = (state: State = INIT_STATE, action: AuthActionType): any => {
                         ...state,
                         userSignUp: true,
                         loading: false,
+                        registerError: null,
                     };
                 }
                 case AuthActionTypes.LOGOUT_USER: {
                     return {
                         ...state,
                         user: null,
+                        userLoggedIn: false,
                         loading: false,
                         userLogout: true,
+                        otpSent: false,
+                        otpVerified: false,
                     };
                 }
                 case AuthActionTypes.FORGOT_PASSWORD: {
@@ -76,6 +122,7 @@ const Auth = (state: State = INIT_STATE, action: AuthActionType): any => {
                         resetPasswordSuccess: action.payload.data,
                         loading: false,
                         passwordReset: true,
+                        error: null,
                     };
                 }
                 default:
@@ -88,6 +135,23 @@ const Auth = (state: State = INIT_STATE, action: AuthActionType): any => {
                     return {
                         ...state,
                         error: action.payload.error,
+                        userLoggedIn: false,
+                        loading: false,
+                    };
+                }
+                case AuthActionTypes.SEND_OTP: {
+                    return {
+                        ...state,
+                        error: action.payload.error,
+                        otpSent: false,
+                        loading: false,
+                    };
+                }
+                case AuthActionTypes.VERIFY_OTP: {
+                    return {
+                        ...state,
+                        error: action.payload.error,
+                        otpVerified: false,
                         userLoggedIn: false,
                         loading: false,
                     };
@@ -113,22 +177,59 @@ const Auth = (state: State = INIT_STATE, action: AuthActionType): any => {
             }
 
         case AuthActionTypes.LOGIN_USER:
-            return { ...state, loading: true, userLoggedIn: false };
+            return {
+                ...state,
+                loading: true,
+                userLoggedIn: false,
+                error: null,
+            };
+
+        case AuthActionTypes.SEND_OTP:
+            return {
+                ...state,
+                loading: true,
+                otpSent: false,
+                error: null,
+            };
+
+        case AuthActionTypes.VERIFY_OTP:
+            return {
+                ...state,
+                loading: true,
+                otpVerified: false,
+                error: null,
+            };
+
         case AuthActionTypes.SIGNUP_USER:
-            return { ...state, loading: true, userSignUp: false };
+            return {
+                ...state,
+                loading: true,
+                userSignUp: false,
+                registerError: null,
+            };
+
         case AuthActionTypes.LOGOUT_USER:
-            return { ...state, loading: true, userLogout: false };
+            return {
+                ...state,
+                loading: true,
+                userLogout: false,
+            };
+
         case AuthActionTypes.RESET:
             return {
                 ...state,
                 loading: false,
-                error: false,
+                error: null,
+                registerError: null,
                 userSignUp: false,
                 userLoggedIn: false,
                 passwordReset: false,
                 passwordChange: false,
+                otpSent: false,
+                otpVerified: false,
                 resetPasswordSuccess: null,
             };
+
         default:
             return { ...state };
     }

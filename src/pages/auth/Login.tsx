@@ -1,183 +1,4 @@
-// import { useEffect, useState } from 'react';
-// import { Button, Alert, Row, Col } from 'react-bootstrap';
-// import { Navigate, Link, useLocation } from 'react-router-dom';
-// import * as yup from 'yup';
-// import { yupResolver } from '@hookform/resolvers/yup';
-// import { useTranslation } from 'react-i18next';
-// import axios from 'axios';
-
-// // hooks
-// import { useRedux } from '../../hooks/';
-
-// // actions
-// import { resetAuth, loginUser } from '../../redux/actions';
-
-// // components
-// import { VerticalForm, FormInput } from '../../components/form/';
-// import Loader from '../../components/Loader';
-
-// import AuthLayout from './AuthLayout';
-// import config from '../../config';
-
-// type LocationState = {
-//     from?: Location;
-// };
-
-// type UserData = {
-//     email: string;
-//     password: string;
-// };
-
-// const BottomLink = () => {
-//     const { t } = useTranslation();
-
-//     return (
-//         <Row className="mt-3">
-//             <Col xs={12} className="text-center">
-//                 <p className="text-muted">
-//                     <Link to="/auth/forget-password" className="text-muted ms-1">
-//                         <i className="fa fa-lock me-1"></i>
-//                         {t('Forgot your password?')}
-//                     </Link>
-//                 </p>
-//                 <p className="text-muted">
-//                     {t("Don't have an account?")}{' '}
-//                     <Link to={'/auth/register'} className="text-dark ms-1">
-//                         <b>{t('Sign Up')}</b>
-//                     </Link>
-//                 </p>
-//             </Col>
-//         </Row>
-//     );
-// };
-
-// const Login = () => {
-//     const { t } = useTranslation();
-//     const { dispatch, appSelector } = useRedux();
-
-//     const { user, userLoggedIn, loading, error } = appSelector((state) => ({
-//         user: state.Auth.user,
-//         loading: state.Auth.loading,
-//         error: state.Auth.error,
-//         userLoggedIn: state.Auth.userLoggedIn,
-//     }));
-
-//     const [loginError, setLoginError] = useState<string | null>(null); // Declare the login error state
-
-//     useEffect(() => {
-//         dispatch(resetAuth());
-//     }, [dispatch]);
-
-//     /*
-//     form validation schema
-//     */
-//     const schemaResolver = yupResolver(
-//         yup.object().shape({
-//             email: yup.string().required(t('Please enter Email')).email(t('Please enter valid Email')),
-//             password: yup.string().required(t('Please enter Password')),
-//         })
-//     );
-
-//     /*
-//     handle form submission
-//     */
-//     const onSubmit = async (formData: UserData) => {
-//         const { email, password } = formData;
-//         const data = { email, password };
-
-//         console.log('Login request data:', data);
-
-//         try {
-//             // const apiUrl = config.API_URL;
-//             const loginEndpoint = `${config.API_URL}/login/`; // Ensure the endpoint is correct
-//             console.log('Login Endpoint:', loginEndpoint);
-
-//             const response = await axios.post(loginEndpoint, data, {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//             });
-
-//             console.log('Login success:', response.data);
-//             // handle successful login (e.g., store token, redirect user, etc.)
-//         } catch (error) {
-//             if (axios.isAxiosError(error)) {
-//                 // API error (e.g., 400 Bad Request)
-//                 console.error('API error response:', error.response);
-//                 setLoginError(error.response?.data?.message || 'Login failed');
-//             } else {
-//                 // Network error
-//                 setLoginError('Network error. Please try again later.');
-//             }
-//         }
-//     };
-
-//     const location = useLocation();
-//     let redirectUrl = '/';
-
-//     if (location.state) {
-//         const { from } = location.state as LocationState;
-//         redirectUrl = from ? from.pathname : '/';
-//     }
-
-//     return (
-//         <>
-//             {userLoggedIn && user && <Navigate to={redirectUrl} replace />}
-
-//             <AuthLayout bottomLinks={<BottomLink />}>
-//                 <div className="text-center mb-4">
-//                     <h4 className="text-uppercase mt-0">{t('Sign In')}</h4>
-//                 </div>
-
-//                 {loginError && (
-//                     <Alert variant="danger" className="my-2">
-//                         {loginError}
-//                     </Alert>
-//                 )}
-
-//                 {loading && <Loader />}
-
-//                 <VerticalForm<UserData>
-//                     onSubmit={onSubmit}
-//                     resolver={schemaResolver}
-//                     defaultValues={{ email: 'adminto@coderthemes.com', password: 'test' }}>
-//                     <FormInput
-//                         type="email"
-//                         name="email"
-//                         label={t('Email address')}
-//                         placeholder={t('hello@coderthemes.com')}
-//                         containerClass={'mb-3'}
-//                     />
-//                     <FormInput
-//                         label={t('Password')}
-//                         type="password"
-//                         name="password"
-//                         placeholder="Enter your password"
-//                         containerClass={'mb-3'}
-//                     />
-
-//                     <FormInput
-//                         type="checkbox"
-//                         name="checkbox"
-//                         label={t('Remember me')}
-//                         containerClass={'mb-3'}
-//                         defaultChecked
-//                     />
-
-//                     <div className="text-center d-grid mb-3">
-//                         <Button variant="primary" type="submit" disabled={loading}>
-//                             {t('Log In')}
-//                         </Button>
-//                     </div>
-//                 </VerticalForm>
-//             </AuthLayout>
-//         </>
-//     );
-// };
-
-// export default Login;
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Alert, Row, Col } from 'react-bootstrap';
 import { Navigate, Link, useLocation } from 'react-router-dom';
 import * as yup from 'yup';
@@ -188,80 +9,58 @@ import { useTranslation } from 'react-i18next';
 import { useRedux } from '../../hooks/';
 
 // actions
-import { resetAuth, loginUser } from '../../redux/actions';
+import { resetAuth, loginUser, sendOtp, verifyOtp } from '../../redux/actions';
 
 // components
 import { VerticalForm, FormInput } from '../../components/form/';
 import Loader from '../../components/Loader';
-
+import { useNavigate } from 'react-router-dom';
 import AuthLayout from './AuthLayout';
-// import axios, { AxiosError } from 'axios';
-
-// const apiUrl = process.env.REACT_APP_LOGIN_ENDPOINT;
-
-// axios
-//     .post(`${apiUrl}/login`, {
-//         email: 'admin@admin.com',
-//         password: 'password123',
-//     })
-//     .then((response) => {
-//         console.log('Login successful:', response.data);
-//     })
-//     .catch((error) => {
-//         console.error('Login failed:', error);
-//     });
+import { useSelector } from 'react-redux';
+import BusinessSelector from '../BusinessSelector';
 
 type LocationState = {
     from?: Location;
 };
 
 type UserData = {
-    email: string;
-    password: string;
+    phone_number: string;
 };
+
+type OtpData = { phone_number: string; otp: string };
 
 /* bottom links */
 const BottomLink = () => {
     const { t } = useTranslation();
 
-    return (
-        <Row className="mt-3">
-            <Col xs={12} className="text-center">
-                <p className="text-muted">
-                    <Link to="/auth/forget-password" className="text-muted ms-1">
-                        <i className="fa fa-lock me-1"></i>
-                        {t('Forgot your password?')}
-                    </Link>
-                </p>
-                <p className="text-muted">
-                    {t("Don't have an account?")}{' '}
-                    <Link to={'/auth/register'} className="text-dark ms-1">
-                        <b>{t('Sign Up')}</b>
-                    </Link>
-                </p>
-            </Col>
-        </Row>
-    );
+    return <Row className="mt-3"></Row>;
 };
 
 const Login = () => {
     const { t } = useTranslation();
     const { dispatch, appSelector } = useRedux();
+    const navigate = useNavigate();
+    const businesses = useSelector((state: any) => state.Businesses.businesses);
 
-    const { user, userLoggedIn, loading, error } = appSelector((state) => ({
+    const { user, userLoggedIn, loading, error, otp } = appSelector((state) => ({
         user: state.Auth.user,
         loading: state.Auth.loading,
         error: state.Auth.error,
         userLoggedIn: state.Auth.userLoggedIn,
+        otp: state.Auth.user?.data.otp,
     }));
+    console.log(otp);
 
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [showOtpForm, setShowOtpForm] = useState(false);
+    const [showBusinessSelector, setShowBusinessSelector] = useState(false);
+    const [verified, setVerified] = useState(false);
+
+    const location = useLocation();
     useEffect(() => {
         dispatch(resetAuth());
     }, [dispatch]);
 
-    /*
-    form validation schema
-    */
     const schemaResolver = yupResolver(
         yup.object().shape({
             email: yup.string().required(t('Please enter Email')).email(t('Please enter valid Email')),
@@ -269,43 +68,47 @@ const Login = () => {
         })
     );
 
-    /*
-    handle form submission
-    */
-    const onSubmit = (formData: UserData) => {
-        dispatch(loginUser(formData['email'], formData['password']));
+    const phoneSchema = yupResolver(
+        yup.object().shape({
+            phone_number: yup.string().required(t('Please enter phone number')),
+        })
+    );
+
+    const otpSchema = yupResolver(
+        yup.object().shape({
+            otp: yup.string().required(t('Please enter OTP')),
+        })
+    );
+
+    const handleSendOtp = (data: UserData) => {
+        setPhoneNumber(data.phone_number);
+        dispatch(sendOtp(data.phone_number));
+        setShowOtpForm(true);
     };
 
-    // const onSubmit = async (formData: UserData) => {
-    //     const { email, password } = formData;
-    //     const data = { email, password };
+    const handleVerifyOtp = (data: OtpData) => {
+        dispatch(verifyOtp(data.phone_number, data.otp));
+        setVerified(true);
+        console.log(verified);
+    };
 
-    //     // Show loading spinner
-    //     dispatch(loginUser(email, password)); // if you are dispatching a Redux action for login
+    useEffect(() => {
+        console.log('useEffect triggered');
 
-    //     try {
-    //         const apiUrl = process.env.REACT_APP_API_URL; // use the API URL from .env
-    //         const response = await axios.post(`${apiUrl}/api/v1/superadmin/login/`, data, {
-    //             headers: {
-    //                 'Content-Type': 'application/json', // specify JSON format
-    //             },
-    //         });
+        if (verified && businesses && businesses.count > 1) {
+            console.log(verified);
+            console.log(businesses);
+            console.log(businesses.count);
 
-    //         console.log('Login success:', response.data);
-    //         // handle successful login (e.g., redirect or store user data)
-    //     } catch (error: unknown) {
-    //         // handle error
-    //         if (axios.isAxiosError(error)) {
-    //             // API error (e.g., 400 Bad Request)
-    //             setLoginError(error.response?.data?.message || 'Login failed'
-    //         } else {
-    //             // Network error
-    //             setLoginError('Network error. Please try again later.');
-    //         }
-    //     }
-    // };
+            setShowBusinessSelector(true);
+        }
+    }, [verified, businesses]);
 
-    const location = useLocation();
+    if (showBusinessSelector) {
+        navigate('/auth/business-selector');
+    }
+
+    // const location = useLocation();
     let redirectUrl = '/';
 
     if (location.state) {
@@ -322,45 +125,47 @@ const Login = () => {
                     <h4 className="text-uppercase mt-0">{t('Login')}</h4>
                 </div>
 
-                {error && (
-                    <Alert variant="danger" className="my-2">
-                        {error}
-                    </Alert>
-                )}
+                {error && <Alert variant="danger">{error}</Alert>}
                 {loading && <Loader />}
 
-                <VerticalForm<UserData>
-                    onSubmit={onSubmit}
-                    resolver={schemaResolver}
-                    defaultValues={{ email: 'adminto@coderthemes.com', password: 'test' }}>
-                    <FormInput
-                        type="email"
-                        name="email"
-                        label={t('Email address')}
-                        placeholder={t('hello@coderthemes.com')}
-                        containerClass={'mb-3'}
-                    />
-                    <FormInput
-                        label={t('Password')}
-                        type="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        containerClass={'mb-3'}></FormInput>
+                {!showOtpForm ? (
+                    <VerticalForm<UserData> onSubmit={handleSendOtp} resolver={phoneSchema}>
+                        <FormInput
+                            name="phone_number"
+                            label={t('Enter your Mobile Number for Login')}
+                            placeholder={t('Phone number')}
+                            containerClass="mb-3"
+                        />
+                        <div className="text-center d-grid mb-3">
+                            <Button variant="danger" type="submit" disabled={loading}>
+                                {t('Get OTP')}
+                            </Button>
+                        </div>
+                    </VerticalForm>
+                ) : (
+                    <VerticalForm<OtpData>
+                        onSubmit={handleVerifyOtp}
+                        resolver={otpSchema}
+                        defaultValues={{ phone_number: phoneNumber }}>
+                        <FormInput
+                            name="otp"
+                            label={t('Enter OTP')}
+                            placeholder={t('6-digit code')}
+                            containerClass="mb-3"
+                        />
 
-                    <FormInput
-                        type="checkbox"
-                        name="checkbox"
-                        label={t('Remember me')}
-                        containerClass={'mb-3'}
-                        defaultChecked
-                    />
-
-                    <div className="text-center d-grid mb-3">
-                        <Button variant="primary" type="submit" disabled={loading}>
-                            {t('Log In')}
-                        </Button>
-                    </div>
-                </VerticalForm>
+                        {otp && (
+                            <div className="text-center mt-3">
+                                <span className="fw-classic fs-7 text-danger">OTP : {otp}</span>
+                            </div>
+                        )}
+                        <div className="text-center d-grid mb-3">
+                            <Button variant="danger" type="submit" disabled={loading}>
+                                {t('Verify OTP')}
+                            </Button>
+                        </div>
+                    </VerticalForm>
+                )}
             </AuthLayout>
         </>
     );

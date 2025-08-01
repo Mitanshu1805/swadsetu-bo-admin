@@ -1,19 +1,39 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
-import { login as loginApi } from '../../helpers/api/auth'; // Import login API function
+import { login as loginApi, sendOtp as sendOtpApi, verifyOtp as verifyOtpApi } from '../../helpers/api/auth'; // Import API functions
 import { APICore, setAuthorization } from '../../helpers/api/apiCore'; // Import API helpers
 import { authApiResponseSuccess, authApiResponseError } from './actions'; // Import action creators
 import { AuthActionTypes } from './constants'; // Import AuthActionTypes enum
 import { SagaIterator } from '@redux-saga/core'; // Import SagaIterator for typing
+import { BusinessActionType, usersBusinesses } from '../actions';
 
 // Create an instance of APICore for setting the logged-in user and auth token
 const api = new APICore();
 
-// Define the type for the action
+// Define the type for the login action
 interface LoginAction {
     type: string; // The action type will be a string (e.g., LOGIN_USER)
     payload: {
         email: string;
         password: string;
+    };
+}
+
+// Define the type for the send OTP action
+interface SendOtpAction {
+    type: string;
+    payload: {
+        // email: string;
+        phone_number: string;
+    };
+}
+
+// Define the type for the verify OTP action
+interface VerifyOtpAction {
+    type: string;
+    payload: {
+        // email: string;
+        otp: string;
+        phone_number: string;
     };
 }
 
@@ -49,16 +69,71 @@ function* login({ payload: { email, password }, type }: LoginAction): SagaIterat
     }
 }
 
+/**
+ * The send OTP saga
+ */
+function* sendOtp({ payload: { phone_number }, type: actionType }: SendOtpAction): SagaIterator {
+    try {
+        // Call sendOtpApi using yield
+        const response = yield call(sendOtpApi, { phone_number });
+        const data = response.data; // API response data
+
+        // Dispatch the success action with the response data
+        yield put(authApiResponseSuccess(AuthActionTypes.SEND_OTP, data));
+    } catch (error: unknown) {
+        // Dispatch error action
+        yield put(
+            authApiResponseError(AuthActionTypes.SEND_OTP, error instanceof Error ? error.message : String(error))
+        );
+    }
+}
+
+/**
+ * The verify OTP saga
+ */
+function* verifyOtp({ payload: { otp, phone_number }, type }: VerifyOtpAction): SagaIterator {
+    try {
+        const response = yield call(verifyOtpApi, { otp, phone_number });
+
+        const user = response.data;
+        console.log('user>>>', user.data.detail.auth_token);
+        if (user?.data?.detail?.auth_token) {
+            localStorage.setItem('auth_token', user?.data?.detail?.auth_token);
+            api.setLoggedInUser(user);
+            setAuthorization(user?.data?.detail?.auth_token);
+        }
+        yield put(authApiResponseSuccess(AuthActionTypes.VERIFY_OTP, user));
+        yield put(usersBusinesses());
+    } catch (error: unknown) {
+        yield put(
+            authApiResponseError(AuthActionTypes.VERIFY_OTP, error instanceof Error ? error.message : String(error))
+        );
+    }
+}
+
 // Watch for the LOGIN_USER action
 function* watchLoginUser(): SagaIterator {
     yield takeEvery(AuthActionTypes.LOGIN_USER, login); // Start the login saga when LOGIN_USER action is dispatched
 }
 
-// Root saga to combine all watchers
-export default function* rootSaga() {
-    yield all([fork(watchLoginUser)]);
+// Watch for the SEND_OTP action
+function* watchSendOtp(): SagaIterator {
+    yield takeEvery(AuthActionTypes.SEND_OTP, sendOtp);
 }
 
+// Watch for the VERIFY_OTP action
+function* watchVerifyOtp(): SagaIterator {
+    yield takeEvery(AuthActionTypes.VERIFY_OTP, verifyOtp);
+}
+
+// Root saga to combine all watchers
+export default function* rootSaga() {
+    yield all([fork(watchLoginUser), fork(watchSendOtp), fork(watchVerifyOtp)]);
+}
+
+function dispatch(usersBusinesses: () => BusinessActionType) {
+    throw new Error('Function not implemented.');
+}
 // import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 // import { SagaIterator } from '@redux-saga/core';
 

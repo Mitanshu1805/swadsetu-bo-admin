@@ -1,8 +1,29 @@
 import { Card, Dropdown } from 'react-bootstrap';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
+import { useRedux } from '../../../hooks';
+import { useEffect } from 'react';
+import { dashboardSalesReport } from '../../../redux/actions';
+import { useSelector } from 'react-redux';
+import { AppColors } from '../../../utils/Colors';
+import App from '../../../App';
 
 const RevenueChart = () => {
+    const { dispatch, appSelector } = useRedux();
+    const selected_business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+    const business_id = selected_business.business_id;
+    const sales = useSelector(
+        (state: any) => state?.Report?.dashboardSalesReport?.data?.data?.data?.SalesReportDetails
+    );
+    console.log('sales>>>>>>>', sales);
+
+    useEffect(() => {
+        console.log('triggered');
+        dispatch(dashboardSalesReport(business_id));
+    }, [dispatch]);
+    const months = sales?.map((item: any) => item.month) || [];
+    const totalAmountData = sales?.map((item: any) => item.total_amount) || [];
+
     const options: ApexOptions = {
         chart: {
             height: 350,
@@ -17,7 +38,7 @@ const RevenueChart = () => {
         },
         stroke: {
             curve: 'smooth',
-            width: [3, 3],
+            width: [3],
         },
         dataLabels: {
             enabled: false,
@@ -27,39 +48,26 @@ const RevenueChart = () => {
         },
         fill: {
             type: 'solid',
-            opacity: [0, 1],
+            opacity: [0.5],
         },
-        colors: ['#3cc469', '#188ae2'],
+        colors: [AppColors.primaryColor],
         xaxis: {
-            categories: ['2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015'],
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
+            categories: months,
+            axisBorder: { show: false },
+            axisTicks: { show: false },
             labels: {
-                style: {
-                    colors: '#adb5bd',
-                },
+                style: { colors: '#adb5bd' },
             },
         },
         yaxis: {
             tickAmount: 4,
-            min: 0,
-            max: 100,
             labels: {
-                style: {
-                    colors: '#adb5bd',
-                },
+                style: { colors: '#adb5bd' },
             },
         },
         grid: {
             show: false,
-            padding: {
-                top: 0,
-                bottom: 0,
-            },
+            padding: { top: 0, bottom: 0 },
         },
         tooltip: {
             theme: 'dark',
@@ -68,14 +76,9 @@ const RevenueChart = () => {
 
     const series = [
         {
-            name: 'Series A',
+            name: 'Total Revenue',
             type: 'area',
-            data: [50, 75, 30, 50, 75, 50, 75, 100],
-        },
-        {
-            name: 'Series B',
-            type: 'line',
-            data: [0, 40, 80, 40, 10, 40, 50, 70],
+            data: totalAmountData,
         },
     ];
 
@@ -83,9 +86,9 @@ const RevenueChart = () => {
         <Card>
             <Card.Body>
                 <Dropdown className="float-end" align="end">
-                    <Dropdown.Toggle as="a" className="cursor-pointer card-drop">
+                    {/* <Dropdown.Toggle as="a" className="cursor-pointer card-drop">
                         <i className="mdi mdi-dots-vertical"></i>
-                    </Dropdown.Toggle>
+                    </Dropdown.Toggle> */}
                     <Dropdown.Menu>
                         <Dropdown.Item>Action</Dropdown.Item>
                         <Dropdown.Item>Anothther Action</Dropdown.Item>
@@ -94,7 +97,7 @@ const RevenueChart = () => {
                     </Dropdown.Menu>
                 </Dropdown>
 
-                <h4 className="header-title mt-0">Total Revenue</h4>
+                <h4 className="header-title mt-0">Earning Statistics (Last 6 months)</h4>
 
                 <div dir="ltr">
                     <Chart options={options} series={series} type="line" height={268} className="apex-charts mt-2" />

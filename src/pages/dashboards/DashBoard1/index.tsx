@@ -14,11 +14,12 @@ import Projects from './Projects';
 
 // dummy data
 import { messages, projectDetails } from './data';
+import { AppColors } from '../../../utils/Colors';
 
 const DashBoard1 = () => {
     // set pagetitle
     usePageTitle({
-        title: 'DashBoard',
+        title: 'Reports DashBoard',
         breadCrumbItems: [
             {
                 path: '/dashboard',
@@ -29,13 +30,13 @@ const DashBoard1 = () => {
     });
 
     return (
-        <>
+        <div>
             <Statistics />
 
             <Row>
-                <Col xl={4}>
+                {/* <Col xl={4}>
                     <SalesChart />
-                </Col>
+                </Col> */}
                 <Col xl={4}>
                     <StatisticsChart />
                 </Col>
@@ -44,17 +45,17 @@ const DashBoard1 = () => {
                 </Col>
             </Row>
 
-            <Users />
+            {/* <Users /> */}
 
-            <Row>
+            {/* <Row>
                 <Col xl={4}>
                     <Inbox messages={messages} />
                 </Col>
                 <Col xl={8}>
                     <Projects projectDetails={projectDetails} />
                 </Col>
-            </Row>
-        </>
+            </Row> */}
+        </div>
     );
 };
 

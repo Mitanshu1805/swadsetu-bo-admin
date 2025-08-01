@@ -111,9 +111,9 @@ const VerticalLayout = () => {
                         </Container>
                     </div>
 
-                    <Suspense fallback={loading()}>
+                    {/* <Suspense fallback={loading()}>
                         <Footer />
-                    </Suspense>
+                    </Suspense> */}
                 </div>
             </div>
 
