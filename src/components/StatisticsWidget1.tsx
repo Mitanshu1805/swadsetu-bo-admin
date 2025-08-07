@@ -65,9 +65,9 @@ const StatisticsWidget1 = ({ title, data, color, stats, subTitle }: StatisticsWi
         <Card>
             <Card.Body>
                 <Dropdown className="float-end" align="end">
-                    <Dropdown.Toggle as="a" className="cursor-pointer card-drop">
+                    {/* <Dropdown.Toggle as="a" className="cursor-pointer card-drop">
                         <i className="mdi mdi-dots-vertical"></i>
-                    </Dropdown.Toggle>
+                    </Dropdown.Toggle> */}
                     <Dropdown.Menu>
                         <Dropdown.Item>Action</Dropdown.Item>
                         <Dropdown.Item>Anothther Action</Dropdown.Item>

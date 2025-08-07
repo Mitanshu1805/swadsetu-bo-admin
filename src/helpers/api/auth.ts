@@ -1,3 +1,4 @@
+import { ingredientDailyList } from './../../redux/ingredients/actions';
 import { APICore } from './apiCore';
 import { Axios } from 'axios';
 
@@ -51,7 +52,7 @@ function terminalList(data: any) {
 
 function terminalUpdate(data: any) {
     const baseUrl = '/terminal/update';
-    return api.create(baseUrl, data);
+    return api.update(baseUrl, data);
 }
 
 function terminalDelete(data: any) {
@@ -84,6 +85,71 @@ function ingredientReportList(data: any) {
     return api.create(baseUrl, data);
 }
 
+function staffList(data: any) {
+    const baseUrl = '/staff/list';
+    return api.create(baseUrl, data);
+}
+
+function staffRegister(data: any) {
+    const baseUrl = '/staff/register';
+    return api.create(baseUrl, data);
+}
+
+function staffDelete(data: any) {
+    const baseUrl = '/staff/delete';
+    return api.delete(baseUrl, data);
+}
+
+function staffUpdate(data: any) {
+    const baseUrl = '/staff/update';
+    return api.update(baseUrl, data);
+}
+
+function staffDetails(data: any) {
+    const baseUrl = '/staff/details';
+    return api.create(baseUrl, data);
+}
+
+function staffAllocationUpdate(data: any) {
+    const baseUrl = '/staff/allocate/update';
+    return api.update(baseUrl, data);
+}
+
+function staffAttendanceUpdate(data: any) {
+    const baseUrl = '/staff/attendance/update';
+    return api.update(baseUrl, data);
+}
+
+export function categoryRegister(data: any) {
+    return api.create('/category/register', data);
+}
+
+export function categoryUpdate(data: any) {
+    return api.update('/category/update', data);
+}
+
+export function categoryDelete(data: any) {
+    return api.delete('/category/delete', data);
+}
+
+export function categoryUpdateIsActive(data: any) {
+    return api.update('/category/update/isactive', data);
+}
+
+export function categoryUpdateDisable(data: any) {
+    return api.update('/category/update/disable', data);
+}
+
+export function categoryOutletLists(data: any) {
+    const baseUrl = '/category/outlet/lists';
+    return api.create(`${baseUrl}`, data);
+}
+
+export function categoryItemList(data: any) {
+    const baseUrl = '/category/item/list';
+    return api.create(`${baseUrl}`, data);
+}
+
 export {
     login,
     logout,
@@ -101,4 +167,11 @@ export {
     dashboardSalesReport,
     orderReportList,
     ingredientReportList,
+    staffAllocationUpdate,
+    staffDelete,
+    staffDetails,
+    staffList,
+    staffRegister,
+    staffUpdate,
+    staffAttendanceUpdate,
 };

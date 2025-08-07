@@ -53,8 +53,6 @@ const Businesses = (state: State = INIT_STAT, action: BusinessActionType): State
             };
 
         case BusinessActionTypes.USERS_BUSINESSES_SUCCESS:
-            console.log('API Response payload:', action.payload); // Keep this for now
-
             const payload = action.payload as any;
 
             return {

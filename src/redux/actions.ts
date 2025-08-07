@@ -4,3 +4,5 @@ export * from './pageTitle/actions';
 export * from './business/actions';
 export * from './terminal/actions';
 export * from './report/actions';
+export * from './staff/actions';
+export * from './menu/actions';

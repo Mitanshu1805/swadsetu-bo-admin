@@ -32,8 +32,7 @@ const ProfileDropdown = ({ userImage, username, menuItems }: ProfileDropdownProp
                 variant=""
                 className="nav-link nav-user me-0 waves-effect waves-light"
                 id="page-header-user-dropdown"
-                onClick={toggleDropdown}
-            >
+                onClick={toggleDropdown}>
                 <img src={userImage} alt="user" className="rounded-circle" />
                 <span className="pro-user-name ms-1">
                     {username} <i className="mdi mdi-chevron-down"></i>
@@ -42,9 +41,9 @@ const ProfileDropdown = ({ userImage, username, menuItems }: ProfileDropdownProp
 
             <Dropdown.Menu align="end" className="profile-dropdown">
                 <div onClick={toggleDropdown}>
-                    <Dropdown.Header className="noti-title">
+                    {/* <Dropdown.Header className="noti-title">
                         <h6 className="text-overflow m-0">Welcome !</h6>
-                    </Dropdown.Header>
+                    </Dropdown.Header> */}
 
                     {(menuItems || []).map((menu, i) => {
                         return (
@@ -53,8 +52,7 @@ const ProfileDropdown = ({ userImage, username, menuItems }: ProfileDropdownProp
                                 <Link
                                     to={menu.redirectTo}
                                     className="dropdown-item notify-item"
-                                    key={i + '-profile-menu'}
-                                >
+                                    key={i + '-profile-menu'}>
                                     <i className={classNames(menu.icon, 'me-1')}></i>
                                     <span>{menu.label}</span>
                                 </Link>

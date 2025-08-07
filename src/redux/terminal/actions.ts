@@ -2,9 +2,9 @@
 
 import { TerminalActionTypes } from './constants';
 
-export const terminalList = (payload: { outlet_id: string }) => ({
+export const terminalList = (outlet_id: string) => ({
     type: TerminalActionTypes.TERMINAL_LIST,
-    payload,
+    payload: { outlet_id },
 });
 
 export const terminalListSuccess = (data: any) => ({
@@ -82,15 +82,9 @@ export const terminalCreateError = (error: any) => ({
 //   message: "Terminal updated successfully."
 // }
 // ─────────────────────────────
-export const terminalUpdate = (payload: {
-    terminal_id: string;
-    terminal_name: string;
-    session_duration: string;
-    is_active: boolean;
-    device_id: string;
-}) => ({
+export const terminalUpdate = (data: any) => ({
     type: TerminalActionTypes.TERMINAL_UPDATE,
-    payload,
+    payload: { data },
 });
 
 export const terminalUpdateSuccess = (data: { message: string }) => ({
@@ -115,9 +109,9 @@ export const terminalUpdateError = (error: any) => ({
 //   message: "Terminal deleted successfully."
 // }
 // ─────────────────────────────
-export const terminalDelete = (payload: { terminal_id: string }) => ({
+export const terminalDelete = (terminal_id: string) => ({
     type: TerminalActionTypes.TERMINAL_DELETE,
-    payload,
+    payload: { terminal_id },
 });
 
 export const terminalDeleteSuccess = (data: { message: string }) => ({

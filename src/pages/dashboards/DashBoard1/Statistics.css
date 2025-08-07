@@ -1,0 +1,10 @@
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 8px 0;
+    scrollbar-width: none; /* Firefox */
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}

@@ -11,10 +11,9 @@ const navigate = useNavigate;
 function* usersBusinessesSaga(): SagaIterator {
     try {
         const response = yield call(usersBusinesses);
-        console.log('businesses>>', response);
         if (response.data?.data) {
             const businesses = response.data.data;
-            console.log('businesses>>', businesses);
+
             if (businesses.count == 1) {
                 localStorage.setItem('selected_business', JSON.stringify(businesses));
             }

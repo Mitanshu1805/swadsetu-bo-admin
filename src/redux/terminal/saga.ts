@@ -18,10 +18,9 @@ import { Route, useNavigate } from 'react-router-dom';
 function* terminalListSaga(action: any): SagaIterator {
     try {
         const response = yield call(terminalList, action.payload);
-        console.log('terminalList>>', response);
+
         if (response.data?.data) {
             const terminals = response.data.data;
-            console.log('terminals>>', terminals);
 
             yield put(terminalListSuccess(terminals));
         } else {
@@ -48,7 +47,7 @@ function* terminalCreateSaga(action: any): SagaIterator {
 // UPDATE TERMINAL
 function* terminalUpdateSaga(action: any): SagaIterator {
     try {
-        const response = yield call(terminalUpdate, action.payload);
+        const response = yield call(terminalUpdate, action.payload?.data);
         if (response.data?.message) {
             yield put(terminalUpdateSuccess(response.data.message));
         } else {

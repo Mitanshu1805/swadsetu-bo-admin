@@ -42,8 +42,6 @@ const AUTH_SESSION_KEY = 'adminto_user';
 
 // Authorization Helper
 const setAuthorization = (token: string | null) => {
-    console.log('token: ', token);
-    console.log('Setting Authorization header with token:', token);
     if (token) {
         axios.defaults.headers.common['Authorization'] = `JWT ${token}`;
     } else {

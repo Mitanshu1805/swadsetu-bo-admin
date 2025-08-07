@@ -58,8 +58,8 @@ export interface DashboardSalesReportResponse {
 export interface OrderReportPayload {
     start_date: string;
     end_date: string;
-    outlet_id: string;
-    business_id: string;
+    outlet_id?: string;
+    business_id: string | null;
 }
 
 export interface OrderReportItem {
@@ -72,7 +72,7 @@ export interface IngredientReportPayload {
     business_id: string;
     start_date: string;
     end_date: string;
-    outlet_id: string;
+    outlet_id?: string;
 }
 
 export interface IngredientReportItem {
@@ -85,9 +85,9 @@ export interface IngredientReportItem {
 // =============== ACTIONS ==================
 
 // Dashboard Earning Report
-export const dashboardEarningReport = (payload: DashboardEarningReportPayload) => ({
+export const dashboardEarningReport = (business_id: string) => ({
     type: ReportActionTypes.DASHBOARD_EARNING_REPORT,
-    payload,
+    payload: { business_id },
 });
 
 export const dashboardEarningReportSuccess = (data: DashboardEarningReportResponse) => ({
@@ -117,9 +117,9 @@ export const dashboardSalesReportError = (error: string) => ({
 });
 
 // Order Report
-export const orderReportList = (payload: OrderReportPayload) => ({
+export const orderReportList = (data: OrderReportPayload) => ({
     type: ReportActionTypes.ORDER_REPORT_LIST,
-    payload,
+    payload: { data },
 });
 
 export const orderReportListSuccess = (data: OrderReportItem[]) => ({

@@ -34,7 +34,6 @@ const UserBox = () => {
     const business_logo = selected_business?.business_logo;
 
     const businesses = useSelector((state: any) => state.Businesses.businesses);
-    console.log(businesses);
 
     const handleClickChange = () => {
         setShowBusinessSelector(true);

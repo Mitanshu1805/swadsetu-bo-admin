@@ -15,10 +15,8 @@ const StatisticsChart = () => {
     const sales = useSelector(
         (state: any) => state?.Report?.dashboardSalesReport?.data?.data?.data?.SalesReportDetails
     );
-    console.log('sales>>>>>>>', sales);
 
     useEffect(() => {
-        console.log('triggered');
         dispatch(dashboardSalesReport(business_id));
     }, [dispatch]);
     const months = sales?.map((item: any) => item.month) || [];

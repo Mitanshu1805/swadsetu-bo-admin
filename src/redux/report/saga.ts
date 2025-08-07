@@ -39,8 +39,6 @@ function* dashboardEarningReportSaga(action: any): SagaIterator {
 
 function* dashboardSalesReportSaga(action: any): SagaIterator {
     try {
-        console.log(action);
-
         const response = yield call(dashboardSalesReport, action.payload);
         yield put(dashboardSalesReportSuccess(response));
     } catch (error: any) {
@@ -59,7 +57,7 @@ function* ingredientReportListSaga(action: any): SagaIterator {
 
 function* orderReportListSaga(action: any): SagaIterator {
     try {
-        const response = yield call(orderReportList, action.payload);
+        const response = yield call(orderReportList, action.payload.data);
         yield put(orderReportListSuccess(response));
     } catch (error: any) {
         yield put(orderReportListError(error.message || 'Something went wrong'));

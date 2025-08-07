@@ -26,12 +26,21 @@ const ForgetPassword = React.lazy(() => import('../pages/auth/ForgetPassword'));
 const LockScreen = React.lazy(() => import('../pages/auth/LockScreen'));
 const Logout = React.lazy(() => import('../pages/auth/Logout'));
 const BusinessSelector = React.lazy(() => import('../pages/BusinessSelector'));
+const StaffDetails = React.lazy(() => import('../pages/apps/Staff/staffDetails'));
+const Menu = React.lazy(() => import('../pages/apps/Menu'));
+const CategoryList = React.lazy(() => import('../pages/apps/Menu/CategoryList'));
 
 // dashboards
 const DashBoard1 = React.lazy(() => import('../pages/dashboards/DashBoard1/'));
 
 const Terminal = React.lazy(() => import('../pages/apps/Terminal'));
 const TerminalList = React.lazy(() => import('../pages/apps/Terminal/TerminalList'));
+const OutletListPage = React.lazy(() => import('../components/OutletListPage'));
+const ModulePage = React.lazy(() => import('../components/ModulePage'));
+const TransactionReportList = React.lazy(() => import('../pages/apps/DailyReports/TransReportList'));
+const IngredientReportList = React.lazy(() => import('../pages/apps/DailyReports/IngredientReportList'));
+const StaffList = React.lazy(() => import('../pages/apps/Staff'));
+const StaffReg = React.lazy(() => import('../pages/apps/Staff/Registration'));
 
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
@@ -118,7 +127,8 @@ const Landing = React.lazy(() => import('../pages/Landing'));
 const loading = () => <div className=""></div>;
 
 type LoadComponentProps = {
-    component: React.LazyExoticComponent<() => JSX.Element>;
+    // component: React.LazyExoticComponent<() => JSX.Element>;
+    component: React.LazyExoticComponent<React.ComponentType<any>>;
 };
 
 const LoadComponent = ({ component: Component }: LoadComponentProps) => (
@@ -200,17 +210,42 @@ const AllRoutes = () => {
                     element: <LoadComponent component={DashBoard1} />,
                 },
                 {
-                    path: 'terminal',
-                    element: <LoadComponent component={Terminal} />,
+                    path: ':module/outlets',
+                    element: <LoadComponent component={OutletListPage} />,
                 },
                 {
-                    path: 'terminal/list',
-                    element: <LoadComponent component={TerminalList} />,
+                    path: ':module/outlets/:outletId',
+                    element: <LoadComponent component={ModulePage} />,
                 },
-                // {
-                //     path: 'business-selector',
-                //     element: <LoadComponent component={BusinessSelector} />,
-                // },
+                {
+                    path: '/trans-report-list',
+                    element: <LoadComponent component={TransactionReportList} />,
+                },
+                {
+                    path: '/ingredient-report-list',
+                    element: <LoadComponent component={IngredientReportList} />,
+                },
+                {
+                    path: '/staff-list',
+                    element: <LoadComponent component={StaffList} />,
+                },
+                {
+                    path: '/staff-register',
+                    element: <LoadComponent component={StaffReg} />,
+                },
+                {
+                    path: '/staff-details',
+                    element: <LoadComponent component={StaffDetails} />,
+                },
+                {
+                    path: '/menu-list',
+                    element: <LoadComponent component={Menu} />,
+                },
+                {
+                    path: '/category-list',
+                    element: <LoadComponent component={CategoryList} />,
+                },
+
                 {
                     path: 'apps',
                     children: [

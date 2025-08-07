@@ -5,7 +5,9 @@ import layoutSaga from './layout/saga';
 import businesses from './business/saga';
 import terminal from './terminal/saga';
 import report from './report/saga';
+import staff from './staff/saga';
+import menu from './menu/saga';
 
 export default function* rootSaga() {
-    yield all([authSaga(), layoutSaga(), businesses(), terminal(), report()]);
+    yield all([authSaga(), layoutSaga(), businesses(), terminal(), report(), staff(), menu()]);
 }
