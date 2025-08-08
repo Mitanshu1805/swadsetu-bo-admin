@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { categoryItemList } from '../../../redux/actions';
 import { AppColors } from '../../../utils/Colors';
 import WhiteColorLogo from '../../../assets/images/pure-white-color-onn79dldw0gujsoa.jpg';
@@ -16,6 +16,7 @@ const ItemList = () => {
 
     const { dispatch } = useRedux();
     const location = useLocation();
+    const navigate = useNavigate();
     const outletId = location?.state?.outletId;
     const outlet_name = location?.state?.outlet_name;
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
@@ -94,6 +95,16 @@ const ItemList = () => {
         }
     };
 
+    const handleItemCardClicked = (item_id: string) => {
+        console.log('item clicked of id:', item_id);
+        navigate('/item-details', {
+            state: {
+                item_id,
+                outletId,
+            },
+        });
+    };
+
     return (
         <div style={{ padding: '20px' }}>
             <div
@@ -154,7 +165,9 @@ const ItemList = () => {
                             alignItems: 'center',
                             gap: '16px',
                             width: '100%',
-                        }}>
+                            cursor: 'pointer',
+                        }}
+                        onClick={() => handleItemCardClicked(item.item_id)}>
                         <img
                             src={item.logo_image || WhiteColorLogo}
                             // alt={item.item_name}
@@ -189,7 +202,10 @@ const ItemList = () => {
                                     justifyContent: 'center',
                                     cursor: 'pointer',
                                 }}
-                                onClick={() => handleItemDelete(item.item_id)}>
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleItemDelete(item.item_id);
+                                }}>
                                 <FaRegTrashAlt />
                             </button>
                             <div onClick={(e) => e.stopPropagation()}>

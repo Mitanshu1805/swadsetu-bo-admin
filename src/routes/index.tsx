@@ -31,6 +31,7 @@ const Menu = React.lazy(() => import('../pages/apps/Menu'));
 const CategoryList = React.lazy(() => import('../pages/apps/Menu/CategoryList'));
 const CategoryModal = React.lazy(() => import('../pages/apps/Menu/CategoryModal'));
 const ItemList = React.lazy(() => import('../pages/apps/Menu/ItemList'));
+const ItemDetails = React.lazy(() => import('../pages/apps/Menu/ItemDetails'));
 
 // dashboards
 const DashBoard1 = React.lazy(() => import('../pages/dashboards/DashBoard1/'));
@@ -254,6 +255,10 @@ const AllRoutes = () => {
                 {
                     path: '/item-list',
                     element: <LoadComponent component={ItemList} />,
+                },
+                {
+                    path: '/item-details',
+                    element: <LoadComponent component={ItemDetails} />,
                 },
 
                 {

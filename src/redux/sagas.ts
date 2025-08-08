@@ -8,7 +8,8 @@ import report from './report/saga';
 import staff from './staff/saga';
 import menu from './menu/saga';
 import item from './item/saga';
+import recipe from './recipe/saga';
 
 export default function* rootSaga() {
-    yield all([authSaga(), layoutSaga(), businesses(), terminal(), report(), staff(), menu(), item()]);
+    yield all([authSaga(), layoutSaga(), businesses(), terminal(), report(), staff(), menu(), item(), recipe()]);
 }
