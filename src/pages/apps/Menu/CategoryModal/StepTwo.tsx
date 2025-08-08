@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap';
 import { outletList } from '../../../../redux/actions';
 import { useRedux } from '../../../../hooks';
 import { useSelector } from 'react-redux';
-import './AddStaff.css';
+import './style.css';
 
 const StepTwo: React.FC = () => {
     const { dispatch } = useRedux();
@@ -18,10 +18,10 @@ const StepTwo: React.FC = () => {
     const outletsState = useSelector((state: any) => state.Businesses.outlets);
     const outletListData = outletsState?.OutletsLists ?? [];
 
-    // Watch outlet_ids
-    // const outlet_ids = watch('outlet_ids', []);
-    const outlet_idsRaw = watch('outlet_ids', []);
-    const outlet_ids = Array.isArray(outlet_idsRaw) ? outlet_idsRaw : [outlet_idsRaw];
+    // Watch outlet_id
+    // const outlet_id = watch('outlet_id', []);
+    const outlet_idRaw = watch('outlet_id', []);
+    const outlet_id = Array.isArray(outlet_idRaw) ? outlet_idRaw : [outlet_idRaw];
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
@@ -32,16 +32,12 @@ const StepTwo: React.FC = () => {
     }, [dispatch]);
 
     // ✅ Handle "Active All"
-    // const handleActiveAll = () => {
-    //     const allOutletIds = outletListData.map((outlet: any) => outlet.outlet_id);
-    //     setValue('outlet_ids', allOutletIds);
-    // };
     const handleActiveAll = () => {
-        if (outlet_idsRaw.length === outletListData.length) {
-            setValue('outlet_ids', []); // Uncheck all
+        if (outlet_id.length === outletListData.length) {
+            setValue('outlet_id', []); // Uncheck all
         } else {
             setValue(
-                'outlet_ids',
+                'outlet_id',
                 outletListData.map((o: any) => o.outlet_id)
             ); // Select all
         }
@@ -69,7 +65,7 @@ const StepTwo: React.FC = () => {
                         className="btn btn-danger btn-sm"
                         onClick={handleActiveAll}
                         style={{ borderRadius: '8px' }}>
-                        {outlet_ids.length === outletListData.length ? 'Inactive All' : 'Active All'}
+                        {outlet_id.length === outletListData.length ? 'Inactive All' : 'Active All'}
                     </button>
                 </div>
 
@@ -77,7 +73,7 @@ const StepTwo: React.FC = () => {
                     {outletListData.map((outlet: any) => (
                         <label
                             key={outlet.outlet_id}
-                            className={`radio-box ${outlet_ids.includes(outlet.outlet_id) ? 'active' : ''}`}
+                            className={`radio-box ${outlet_id.includes(outlet.outlet_id) ? 'active' : ''}`}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -89,14 +85,14 @@ const StepTwo: React.FC = () => {
                             <input
                                 type="checkbox"
                                 value={outlet.outlet_id}
-                                {...register('outlet_ids', { required: 'Select at least one outlet' })}
+                                {...register('outlet_id', { required: 'Select at least one outlet' })}
                                 style={{ marginRight: '12px' }}
                             />
                             {outlet.outlet_name}
                         </label>
                     ))}
                 </div>
-                {errors.outlet_ids && <small className="text-danger">{errors.outlet_ids.message}</small>}
+                {errors.outlet_id && <small className="text-danger">{errors.outlet_id.message}</small>}
             </Form.Group>
         </div>
     );

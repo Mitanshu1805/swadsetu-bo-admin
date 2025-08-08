@@ -301,8 +301,8 @@ body[data-topbar-color='dark'] {
         }
     }
     .content-page {
-        // margin-top: calc(70px + 24px);
-        margin-top: 0px;
+        margin-top: calc(70px + 24px);
+        // margin-top: 0px;
     }
     .navbar-custom {
         background-color: $bg-topbar-dark !important;

@@ -51,9 +51,9 @@ const Menu: React.FC<props> = ({ outletId }) => {
     };
     const handleItemClick = (outletId: string) => {
         console.log('item checking needed for outlet_id: ', outletId);
-        // navigate('/ingredient-report-list', {
-        //     state: { outletId },
-        // });
+        navigate('/item-list', {
+            state: { outletId },
+        });
     };
     return (
         <div style={{ padding: '1rem', fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif" }}>

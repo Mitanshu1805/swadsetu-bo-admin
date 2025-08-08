@@ -1,0 +1,225 @@
+.add-staff-container {
+    background-color: #fdfaf6;
+    /* min-height: 100vh; */
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.back-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 2px solid #dcdcdc;
+}
+
+.step-circle.active {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+}
+
+.step-line {
+    width: 40px;
+    height: 2px;
+    background-color: #dcdcdc;
+    margin: 0 8px;
+}
+
+.bottom-btn {
+    background-color: #f44336;
+    color: white;
+    font-size: 16px;
+    padding: 14px;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 20px;
+}
+/* ✅ Form Container */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background-color: #fdfaf6;
+    /* min-height: 100vh; */
+}
+
+/* ✅ Labels */
+.form-container label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* ✅ Input fields */
+.form-container input.form-control {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    margin-bottom: 8px;
+    background: white;
+}
+
+/* ✅ Radio button group */
+.radio-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* .radio-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #fff;
+    transition: 0.2s;
+}
+
+.radio-box.active {
+    border: 2px solid #f44336;
+    color: #f44336;
+    font-weight: bold;
+} */
+
+/* ✅ Step Indicator (reuse from parent) */
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 2px solid #dcdcdc;
+    background-color: #fff;
+}
+
+.step-circle.active {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
+
+.step-line {
+    width: 40px;
+    height: 2px;
+    background-color: #dcdcdc;
+    margin: 0 8px;
+}
+
+/* ✅ Bottom Continue Button */
+.bottom-btn {
+    background-color: #f44336;
+    color: white;
+    font-size: 16px;
+    padding: 14px;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.radio-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.radio-box {
+    display: flex;
+    align-items: center;
+    padding: 14px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+}
+
+.radio-box input {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 12px;
+    position: relative;
+    cursor: pointer;
+}
+
+.radio-box input:checked {
+    border-color: #ff4d4f;
+    background-color: #ff4d4f;
+}
+
+.radio-box input:checked::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+.outlet-list {
+    margin-top: 10px;
+}
+
+.bottom-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #ff4d4f;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    margin-top: auto;
+}

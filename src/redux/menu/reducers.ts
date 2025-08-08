@@ -90,7 +90,7 @@ type MenuManagementCategoryActions =
       }
     | {
           type: typeof MenuManagementCategoryActionTypes.CATEGORY_ITEM_LIST_SUCCESS;
-          payload: { categories: Category[]; message: string };
+          payload: { items: any; categories: Category[]; message: string };
       }
     | { type: typeof MenuManagementCategoryActionTypes.CATEGORY_ITEM_LIST_ERROR; payload: { error: string } };
 
@@ -250,6 +250,7 @@ const MenuManagementCategoryReducer = (state = initialState, action: MenuManagem
                 ...state,
                 loading: false,
                 categories: action.payload.categories || [],
+                // items: action.payload.cat || [],
                 message: action.payload.message,
             };
 

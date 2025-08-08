@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { categoryItemList, deleteCategory } from '../../../redux/menu/actions';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { categoryItemList, categoryUpdateIsActive, deleteCategory } from '../../../redux/menu/actions';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
+import ToggleSwitch from '../../../components/ToggleSwitch';
 
 const CategoryList = () => {
     const categoryState = useSelector((state: any) => state?.Menu?.categories || []);
@@ -16,13 +17,15 @@ const CategoryList = () => {
     const outlet_name = location?.state?.outlet_name;
     const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [businessId, setBusinessId] = useState<string>('');
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const business_id = business.business_id;
+        setBusinessId(business_id);
 
         const payload = {
-            business_id,
+            business_id: business_id,
             outlet_id: outletId,
         };
         if (payload.outlet_id === 'master') {
@@ -30,6 +33,8 @@ const CategoryList = () => {
         }
         dispatch(categoryItemList(payload));
     }, [dispatch]);
+
+    const navigate = useNavigate();
 
     const cardStyle: React.CSSProperties = {
         boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
@@ -104,8 +109,45 @@ const CategoryList = () => {
         }
     };
 
-    const handleDeleteCategory = (category_id: string) => {
-        dispatch(deleteCategory(category_id));
+    const handleRegisterCategory = (business_id: string, outletId: string) => {
+        console.log('register category clicked for business_id:', business_id, 'and outlet id:', outletId);
+        navigate('/category-modal', {
+            state: {
+                business_id,
+                outletId,
+            },
+        });
+    };
+
+    const handleEditCategory = (business_id: string, outletId: string, category_id: string) => {
+        console.log('edit category clicked for business_id:', business_id, 'and outlet id:', outletId);
+        navigate('/category-modal', {
+            state: {
+                business_id,
+                outletId,
+                editMode: true,
+                category_id,
+            },
+        });
+    };
+
+    const handleCategoryToggle = (category_id: string, is_active: boolean) => {
+        dispatch(categoryUpdateIsActive(category_id, is_active));
+
+        setTimeout(() => {
+            const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+            const business_id = business.business_id;
+            setBusinessId(business_id);
+
+            const payload = {
+                business_id: business_id,
+                outlet_id: outletId,
+            };
+            if (payload.outlet_id === 'master') {
+                delete payload.outlet_id;
+            }
+            dispatch(categoryItemList(payload));
+        }, 100);
     };
 
     return (
@@ -147,7 +189,13 @@ const CategoryList = () => {
                                     </div>
                                 </div>
                                 {/* Edit/Delete Button Column */}
-                                <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        gap: '0.5rem',
+                                        marginLeft: 'auto',
+                                        alignItems: 'center',
+                                    }}>
                                     <button
                                         style={{
                                             backgroundColor: AppColors.borderColor,
@@ -159,8 +207,7 @@ const CategoryList = () => {
                                             height: '40px',
                                             width: '40px',
                                         }}
-                                        // onClick={() => handleTerminalEdit(item.terminal_id)}
-                                    >
+                                        onClick={() => handleEditCategory(businessId, outletId, category.category_id)}>
                                         <FaRegEdit />
                                     </button>
 
@@ -187,6 +234,12 @@ const CategoryList = () => {
                                         title="Delete this Category"
                                         message="Are you sure you want to delete this category? This action cannot be undone."
                                     />
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                        <ToggleSwitch
+                                            checked={category.is_active}
+                                            onChange={(checked) => handleCategoryToggle(category.category_id, checked)}
+                                        />
+                                    </div>
                                 </div>
                             </Card.Body>
                         </Card>
@@ -207,8 +260,7 @@ const CategoryList = () => {
                         width: '100%',
                     }}
                     onClick={() => {
-                        // Navigate to register category or open modal
-                        console.log('Register New Category');
+                        handleRegisterCategory(businessId, outletId);
                     }}>
                     + Add Category
                 </Button>

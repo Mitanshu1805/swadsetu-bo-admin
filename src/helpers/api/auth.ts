@@ -150,6 +150,31 @@ export function categoryItemList(data: any) {
     return api.create(`${baseUrl}`, data);
 }
 
+export function registerItem(data: any) {
+    return api.create('/item/register', data);
+}
+
+export function updateItem(data: any) {
+    return api.update('/item/update', data);
+}
+
+export function deleteItem(data: any) {
+    return api.delete('/item/delete', data);
+}
+
+export function itemUpdateIsActive(data: any) {
+    return api.update('/item/update/isactive', data);
+}
+
+export function itemUpdateDisable(data: any) {
+    return api.update('/item/update/disable', data);
+}
+
+export function updateOutletPrice(data: any) {
+    const baseUrl = '/item/update/outlet/price';
+    return api.update(`${baseUrl}`, data);
+}
+
 export {
     login,
     logout,

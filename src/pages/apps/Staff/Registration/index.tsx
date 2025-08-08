@@ -28,6 +28,8 @@ const AddStaff: React.FC = () => {
     const editMode = location?.state?.editMode || false;
     const staffId = location?.state?.staff_id || null;
     const staff = useSelector((state: any) => state?.Staff?.staffDetails);
+    console.log('staffff>>>', staff);
+
     const { dispatch } = useRedux();
     const startStep = location?.state?.startStep || 1;
     const [step, setStep] = useState(startStep);
