@@ -8,6 +8,7 @@ import WhiteColorLogo from '../../../assets/images/pure-white-color-onn79dldw0gu
 import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 import ToggleSwitch from '../../../components/ToggleSwitch';
+import { deleteItem, itemUpdateIsActive } from '../../../redux/item/actions';
 
 const ItemList = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
@@ -17,7 +18,7 @@ const ItemList = () => {
     const location = useLocation();
     const outletId = location?.state?.outletId;
     const outlet_name = location?.state?.outlet_name;
-    const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
+    const [itemToDelete, setItemToDelete] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -50,13 +51,48 @@ const ItemList = () => {
     const selectedCategory = itemState.find((cat: any) => cat.category_id === selectedCategoryId);
     const items = selectedCategory?.items || [];
 
-    function confirmDelete(): void {
-        throw new Error('Function not implemented.');
-    }
+    const handleItemToggle = (item_id: string, is_active: boolean) => {
+        dispatch(itemUpdateIsActive(item_id, is_active));
 
-    function handleCategoryToggle(category_id: any, checked: boolean): void {
-        throw new Error('Function not implemented.');
-    }
+        setTimeout(() => {
+            const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+            const business_id = business.business_id;
+            setBusinessId(business_id);
+
+            const payload = {
+                business_id: business_id,
+                outlet_id: outletId,
+            };
+            if (payload.outlet_id === 'master') {
+                delete payload.outlet_id;
+            }
+            dispatch(categoryItemList(payload));
+        }, 100);
+    };
+
+    const handleItemDelete = (item_id: string) => {
+        setItemToDelete(item_id);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = () => {
+        if (itemToDelete) {
+            dispatch(deleteItem(itemToDelete));
+            setTimeout(() => {
+                const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+                const business_id = business.business_id;
+                const payload = {
+                    business_id,
+                    outlet_id: outletId,
+                };
+                if (payload.outlet_id === 'master') {
+                    delete payload.outlet_id;
+                }
+                dispatch(categoryItemList(payload));
+            }, 200);
+            setShowDeleteModal(false);
+        }
+    };
 
     return (
         <div style={{ padding: '20px' }}>
@@ -153,26 +189,25 @@ const ItemList = () => {
                                     justifyContent: 'center',
                                     cursor: 'pointer',
                                 }}
-                                // onClick={() => handleCategoryDelete(category.category_id)}
-                            >
+                                onClick={() => handleItemDelete(item.item_id)}>
                                 <FaRegTrashAlt />
                             </button>
-                            <ConfirmDeleteModal
-                                show={showDeleteModal}
-                                onClose={() => setShowDeleteModal(false)}
-                                onConfirm={confirmDelete}
-                                title="Delete this Category"
-                                message="Are you sure you want to delete this category? This action cannot be undone."
-                            />
                             <div onClick={(e) => e.stopPropagation()}>
                                 <ToggleSwitch
                                     checked={item.is_active}
-                                    onChange={(checked) => handleCategoryToggle(item.item_id, checked)}
+                                    onChange={(checked) => handleItemToggle(item.item_id, checked)}
                                 />
                             </div>
                         </div>
                     </div>
                 ))}
+                <ConfirmDeleteModal
+                    show={showDeleteModal}
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={confirmDelete}
+                    title="Delete this Item"
+                    message="Are you sure you want to delete this item? This action cannot be undone."
+                />
             </div>
             <style>
                 {`

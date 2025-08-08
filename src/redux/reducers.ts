@@ -8,6 +8,7 @@ import Terminal from './terminal/reducers';
 import Report from './report/reducers';
 import Staff from './staff/reducers';
 import Menu from './menu/reducers';
+import Item from './item/reducers';
 
 export default combineReducers({
     Auth,
@@ -18,4 +19,5 @@ export default combineReducers({
     Report,
     Staff,
     Menu,
+    Item,
 });
