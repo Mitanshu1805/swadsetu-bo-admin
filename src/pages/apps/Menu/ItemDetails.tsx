@@ -6,13 +6,14 @@ import { categoryItemList } from '../../../redux/actions';
 import WhiteColorLogo from '../../../assets/images/pure-white-color-onn79dldw0gujsoa.jpg';
 import { AppColors } from '../../../utils/Colors';
 import { recipeList } from '../../../redux/recipe/actions';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
 const ItemDetails = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
     const { dispatch } = useRedux();
     const location = useLocation();
 
-    const recipeState = useSelector((state: any) => state);
+    const recipeState = useSelector((state: any) => state?.Recipe?.recipes);
     console.log('recipe??', recipeState);
 
     const outletId = location?.state?.outletId;
@@ -233,27 +234,111 @@ const ItemDetails = () => {
             </div>
 
             {/* Recipe Details heading */}
-            <h3 style={{ marginTop: '30px', marginBottom: '12px' }}>Recipe Details</h3>
 
-            <div
-                style={{
-                    border: '1px solid #ddd',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    backgroundColor: '#fff',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-                    maxWidth: '400px',
-                }}>
-                <p>
-                    <strong>Preparation Time:</strong> {selectedItem.preparation_time || 'N/A'}
-                </p>
-                <p>
-                    <strong>Preparation Type:</strong> {selectedItem.preparation_type || 'N/A'}
-                </p>
-                <p>
-                    <strong>Instructions:</strong> {selectedItem.instructions || 'N/A'}
-                </p>
-            </div>
+            {recipeState && Object.keys(recipeState).length > 0 ? (
+                <div>
+                    <h3 style={{ marginTop: '30px', marginBottom: '12px' }}>Recipe Details</h3>
+                    <div
+                        style={{
+                            border: '1px solid #ddd',
+                            borderRadius: '8px',
+                            padding: '16px',
+                            backgroundColor: '#fff',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                            maxWidth: '400px',
+                            position: 'relative',
+                        }}>
+                        {/* Action Buttons */}
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: '12px',
+                                right: '12px',
+                                display: 'flex',
+                                gap: '6px',
+                            }}>
+                            <button
+                                // onClick={() => handleEdit(recipeState)}
+                                style={{
+                                    backgroundColor: AppColors.primaryColor,
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    padding: '4px 8px',
+                                    cursor: 'pointer',
+                                }}>
+                                Edit Recipe
+                            </button>
+                            <button
+                                style={{
+                                    backgroundColor: AppColors.borderColor,
+                                    color: AppColors.iconColor,
+                                    height: '40px',
+                                    width: '40px',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                }}
+                                // onClick={() => handleDelete(recipeState.id)}
+                            >
+                                <FaRegTrashAlt />
+                            </button>
+                        </div>
+
+                        <p>
+                            <strong>Preparation Time:</strong> {recipeState.preparation_time || 'N/A'}
+                        </p>
+                        <p>
+                            <strong>Preparation Type:</strong> {recipeState.preparation_type || 'N/A'}
+                        </p>
+                        <p>
+                            <strong>Instructions:</strong> {recipeState.instructions || 'N/A'}
+                        </p>
+
+                        {/* Ingredients Cards */}
+                        {recipeState.ingredients?.length > 0 && (
+                            <div style={{ marginTop: '16px' }}>
+                                <h5>Ingredients:</h5>
+                                {recipeState.ingredients.map((ing: any, index: any) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            border: '1px solid #eee',
+                                            borderRadius: '6px',
+                                            padding: '8px 12px',
+                                            marginBottom: '8px',
+                                            backgroundColor: '#f9f9f9',
+                                        }}>
+                                        <span style={{ fontWeight: '500' }}>{ing.ingredient_name}</span>
+                                        <span style={{ color: '#555' }}>
+                                            {ing.quantity} {ing.unit}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <button
+                    // onClick={() => handleAddRecipe(itemId)}
+                    style={{
+                        backgroundColor: AppColors.primaryColor,
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        padding: '10px 16px',
+                        cursor: 'pointer',
+                    }}>
+                    Add Recipe
+                </button>
+            )}
 
             <style>{`
   .order-type-scroll::-webkit-scrollbar {

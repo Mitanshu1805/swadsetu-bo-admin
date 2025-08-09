@@ -9,7 +9,7 @@ import Report from './report/reducers';
 import Staff from './staff/reducers';
 import Menu from './menu/reducers';
 import Item from './item/reducers';
-import Recipe from './item/reducers';
+import Recipe from './recipe/reducers';
 
 export default combineReducers({
     Auth,

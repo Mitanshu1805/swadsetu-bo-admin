@@ -30,7 +30,10 @@ type RecipeManagementActions =
     | { type: typeof RecipeManagementActionTypes.RECIPE_DELETE_ERROR; payload: { error: string } };
 
 const RecipeManagementReducer = (state = initialState, action: RecipeManagementActions): State => {
+    console.log("action", action);
+    
     switch (action.type) {
+        
         case RecipeManagementActionTypes.RECIPE_ADD:
             return { ...state, loading: true, error: null };
 

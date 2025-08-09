@@ -40,6 +40,8 @@ function* recipeListSaga(action: any): SagaIterator {
         const response = yield call(recipeList, action.payload);
         console.log(response);
         const recipe = response?.data?.data;
+        console.log("recipe?>>>", recipe);
+        
         yield put(recipeListSuccess(recipe));
     } catch (error: any) {
         yield put(recipeListError(error.message || 'Error Occured'));

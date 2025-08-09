@@ -79,15 +79,12 @@ function* categoryItemListSaga(action: any): SagaIterator {
         console.log('we are here');
 
         const response = yield call(categoryItemList, action.payload);
-        console.log('API Response: ', response);
-        console.log('API Response Data: ', response.data.data);
+
 
         if (response.data && Array.isArray(response.data.data)) {
-            // Check for the array directly
-            console.log('Dispatching CATEGORY_ITEM_LIST_SUCCESS with categories:', response.data.data);
-            console.log('Before dispatching CATEGORY_ITEM_LIST_SUCCESS');
+            
             yield put(categoryItemListSuccess(response.data.data, response.data.message));
-            console.log('After dispatching CATEGORY_ITEM_LIST_SUCCESS');
+            
         } else {
             yield put(categoryItemListError('No categories found'));
         }
