@@ -14,4 +14,6 @@ export enum RecipeManagementActionTypes {
     RECIPE_DELETE = '@@recipe/RECIPE_DELETE',
     RECIPE_DELETE_SUCCESS = '@@recipe/RECIPE_DELETE_SUCCESS',
     RECIPE_DELETE_ERROR = '@@recipe/RECIPE_DELETE_ERROR',
+
+    CLEAR_RECIPE = '@@recipe/CLEAR_RECIPE',
 }

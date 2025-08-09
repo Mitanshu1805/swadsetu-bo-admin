@@ -27,13 +27,13 @@ type RecipeManagementActions =
     | { type: typeof RecipeManagementActionTypes.RECIPE_UPDATE_ERROR; payload: { error: string } }
     | { type: typeof RecipeManagementActionTypes.RECIPE_DELETE }
     | { type: typeof RecipeManagementActionTypes.RECIPE_DELETE_SUCCESS; payload: { recipe_id: string } }
-    | { type: typeof RecipeManagementActionTypes.RECIPE_DELETE_ERROR; payload: { error: string } };
+    | { type: typeof RecipeManagementActionTypes.RECIPE_DELETE_ERROR; payload: { error: string } }
+    | { type: typeof RecipeManagementActionTypes.CLEAR_RECIPE };
 
 const RecipeManagementReducer = (state = initialState, action: RecipeManagementActions): State => {
-    console.log("action", action);
-    
+    console.log('action', action);
+
     switch (action.type) {
-        
         case RecipeManagementActionTypes.RECIPE_ADD:
             return { ...state, loading: true, error: null };
 
@@ -45,6 +45,12 @@ const RecipeManagementReducer = (state = initialState, action: RecipeManagementA
 
         case RecipeManagementActionTypes.RECIPE_LIST:
             return { ...state, loading: true, error: null };
+
+        case RecipeManagementActionTypes.CLEAR_RECIPE:
+            return {
+                ...state,
+                recipes: null,
+            };
 
         case RecipeManagementActionTypes.RECIPE_LIST_SUCCESS:
             console.log('action???', action.payload.recipes);

@@ -7,6 +7,7 @@ import WhiteColorLogo from '../../../assets/images/pure-white-color-onn79dldw0gu
 import { AppColors } from '../../../utils/Colors';
 import { recipeList } from '../../../redux/recipe/actions';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { RecipeManagementActionTypes } from '../../../redux/recipe/constants';
 
 const ItemDetails = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
@@ -35,10 +36,11 @@ const ItemDetails = () => {
         if (payload.outlet_id === 'master') {
             delete payload.outlet_id;
         }
-        dispatch(categoryItemList(payload));
+        dispatch({ type: RecipeManagementActionTypes.CLEAR_RECIPE });
 
+        dispatch(categoryItemList(payload));
         dispatch(recipeList(business_id, itemId));
-    }, [dispatch]);
+    }, [dispatch, outletId, itemId]);
 
     // Find the selected item in categories
     useEffect(() => {

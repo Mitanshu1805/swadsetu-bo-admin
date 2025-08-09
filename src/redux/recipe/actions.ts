@@ -47,6 +47,9 @@ export type RecipeManagementAction =
           };
       }
     | {
+          type: typeof RecipeManagementActionTypes.CLEAR_RECIPE;
+      }
+    | {
           type: typeof RecipeManagementActionTypes.RECIPE_LIST_SUCCESS;
           payload: { recipes: any };
       }
@@ -100,6 +103,8 @@ export const recipeList = (business_id: string, item_id: any): RecipeManagementA
     type: RecipeManagementActionTypes.RECIPE_LIST,
     payload: { item_id, business_id },
 });
+
+export const clearRecipe = {};
 
 export const recipeListSuccess = (recipes: any): RecipeManagementAction => ({
     type: RecipeManagementActionTypes.RECIPE_LIST_SUCCESS,
