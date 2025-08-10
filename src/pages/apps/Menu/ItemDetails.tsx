@@ -9,6 +9,9 @@ import { recipeList } from '../../../redux/recipe/actions';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { RecipeManagementActionTypes } from '../../../redux/recipe/constants';
 
+import { useNavigate } from 'react-router-dom';
+import AddRecipeModal from './RecipeModal';
+
 const ItemDetails = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
     const { dispatch } = useRedux();
@@ -22,7 +25,11 @@ const ItemDetails = () => {
 
     const [businessId, setBusinessId] = useState<string>('');
     const [selectedItem, setSelectedItem] = useState<any>(null);
+
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'general' | 'tax' | 'quantity'>('general');
+
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
@@ -58,6 +65,20 @@ const ItemDetails = () => {
     if (!selectedItem) {
         return <div>Loading item details...</div>;
     }
+
+    const handleEditRecipe = (recipe_id: string, outletId: string, itemId: string) => {
+        console.log('edit recipe clicked for recipeID:', recipe_id, 'outlet_id:', outletId, 'item_id:', itemId);
+    };
+
+    const handleAddRecipe = () => {
+        console.log('add recipe clicked for recipeID:', outletId, 'item_id:', itemId);
+        navigate('/recipe-modal', {
+            state: {
+                itemId,
+                outletId,
+            },
+        });
+    };
 
     return (
         <div style={{ padding: '20px' }}>
@@ -260,7 +281,7 @@ const ItemDetails = () => {
                                 gap: '6px',
                             }}>
                             <button
-                                // onClick={() => handleEdit(recipeState)}
+                                onClick={() => handleEditRecipe(recipeState.recipe_id, outletId, itemId)}
                                 style={{
                                     backgroundColor: AppColors.primaryColor,
                                     color: '#fff',
@@ -329,7 +350,7 @@ const ItemDetails = () => {
                 </div>
             ) : (
                 <button
-                    // onClick={() => handleAddRecipe(itemId)}
+                    onClick={() => handleAddRecipe()}
                     style={{
                         backgroundColor: AppColors.primaryColor,
                         color: '#fff',
@@ -338,6 +359,7 @@ const ItemDetails = () => {
                         padding: '10px 16px',
                         cursor: 'pointer',
                     }}>
+                    <AddRecipeModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleAddRecipe} />
                     Add Recipe
                 </button>
             )}
