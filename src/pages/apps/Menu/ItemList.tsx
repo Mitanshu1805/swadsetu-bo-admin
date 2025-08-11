@@ -147,9 +147,33 @@ const ItemList = () => {
                                 borderRadius: '50px',
                             }}
                         />
+
                         <p style={{ marginTop: '8px', fontWeight: 'bold' }}>{category.category_name}</p>
                     </div>
                 ))}
+                {outletId === 'master' && (
+                    <button
+                        style={{
+                            padding: '6px 12px',
+                            backgroundColor: AppColors.primaryColor,
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '4px',
+                            fontSize: '14px',
+                            cursor: 'pointer',
+                        }}
+                        onClick={() =>
+                            navigate('/item-modal', {
+                                state: {
+                                    businessId,
+                                    outletId,
+                                    categoryId: selectedCategoryId,
+                                },
+                            })
+                        }>
+                        + Add Item
+                    </button>
+                )}
             </div>
             <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {items.map((item: any) => (

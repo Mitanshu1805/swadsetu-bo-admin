@@ -1,0 +1,196 @@
+import React, { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+// import StepOne from './StepOne';
+// import StepTwo from './StepTwo';
+// import StepThree from './StepThree';
+// import { registerItem, updateItem, getItemDetails } from '../../../../redux/menu/actions';
+import StepOne from './StepOne';
+import StepTwo from './StepTwo';
+import StepThree from './StepThree';
+import './style.css';
+import { registerItem } from '../../../../redux/actions';
+
+type FormData = {
+    item_name: {
+        english: string;
+        hindi: string;
+        gujarati: string;
+    };
+    description: string;
+    price: number;
+    category_id: string;
+    outlet_id: string[];
+    images: string[];
+    is_active: boolean;
+    outlet_prices: [];
+    online_display_name: string;
+    dietary_type: string;
+    item_order_type: string;
+    gst_type: string;
+    loose_quantity: boolean;
+    quantity: string;
+    unit_type: string;
+    volume_unit: string;
+};
+
+interface Outlet {
+    outlet_id: string;
+    outlet_name: string;
+}
+
+const ItemModal = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const startStep = location?.state?.startStep || 1;
+    const [step, setStep] = useState(startStep);
+
+    const editMode = location?.state?.editMode || false;
+    const itemId = location?.state?.item_id || null;
+    const category_id = location?.state?.categoryId;
+
+    const itemData = useSelector((state: any) => state?.Menu?.items);
+    const [selectedOutlets, setSelectedOutlets] = useState<Outlet[]>([]);
+    const methods = useForm<FormData>({
+        defaultValues: {
+            item_name: { english: '', hindi: '', gujarati: '' },
+            description: '',
+            price: 0,
+            category_id: '',
+            outlet_id: [],
+            images: [],
+            is_active: false,
+        },
+        mode: 'onBlur',
+    });
+
+    // Fetch item details if editing
+    useEffect(() => {
+        if (editMode && itemId) {
+            // dispatch(getItemDetails(itemId));
+        }
+    }, [dispatch, editMode, itemId]);
+
+    // Populate form when data arrives
+    useEffect(() => {
+        if (editMode && itemId && itemData) {
+            const toEdit = Array.isArray(itemData) ? itemData.find((i) => String(i.item_id) === String(itemId)) : null;
+            if (toEdit) {
+                methods.reset({
+                    item_name: {
+                        english: toEdit.item_names?.english || '',
+                        hindi: toEdit.item_names?.hindi || '',
+                        gujarati: toEdit.item_names?.gujarati || '',
+                    },
+                    description: toEdit.description || '',
+                    price: toEdit.price || 0,
+                    category_id: toEdit.category_id || '',
+                    outlet_id: toEdit.outlets || [],
+                    images: toEdit.images || [],
+                    is_active: Boolean(toEdit.is_active),
+                });
+            }
+        }
+    }, [editMode, itemId, itemData, methods]);
+
+    const prevStep = () => setStep((prev: any) => prev - 1);
+    const nextStep = async () => {
+        let fieldsToValidate: (keyof FormData)[] = [];
+
+        if (step === 1) fieldsToValidate = ['item_name', 'description', 'price'];
+        if (step === 2) fieldsToValidate = ['category_id', 'outlet_id'];
+
+        const isValid = await methods.trigger(fieldsToValidate as any);
+        if (isValid) {
+            if (step < 3) setStep(step + 1);
+            else methods.handleSubmit(onSubmit)();
+        }
+    };
+
+    const onSubmit = (data: any) => {
+        console.log(data, '<<<<<<<data');
+
+        const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+        const businessId = business.business_id;
+        if (!businessId) return;
+
+        const formDataToSend = new window.FormData();
+        formDataToSend.append('business_id', businessId);
+        if (editMode) formDataToSend.append('item_id', itemId);
+
+        formDataToSend.append('item_name', JSON.stringify(data.item_name));
+        formDataToSend.append('category_id', category_id);
+        formDataToSend.append('online_display_name', data.online_display_name);
+        formDataToSend.append('available_order_type', JSON.stringify(data.item_order_type));
+        formDataToSend.append('dietary', data.dietary_type);
+        formDataToSend.append('description', data.description);
+        formDataToSend.append('price', String(data.price));
+        // formDataToSend.append('category_id', category_id);
+        formDataToSend.append('outlet_prices', JSON.stringify(data.outlet_prices));
+        formDataToSend.append('quantity_type', String(data.unit_type));
+        formDataToSend.append('quantity_params', data.quantity_params);
+        formDataToSend.append('quantity_value', data.quantity);
+        formDataToSend.append('is_loose', String(data.loose_quantity));
+        formDataToSend.append('gst_type', data.gst_type);
+        // formDataToSend.append('is_active', String(data.is_active));
+
+        if (data.logo_image) formDataToSend.append('logo_image', data.logo_image);
+        if (data.swiggy_image) formDataToSend.append('swiggy_image', data.swiggy_image);
+        if (data.banner_image) formDataToSend.append('banner_image', data.banner_image);
+
+        // data.images.forEach((img: any) => {
+        //     if (img instanceof File) formDataToSend.append('images', img);
+        // });
+
+        console.log(formDataToSend);
+
+        if (editMode) {
+            // dispatch(updateItem(formDataToSend));
+        } else {
+            dispatch(registerItem(formDataToSend));
+        }
+
+        navigate('/item-list', { state: { from: 'item-modal' } });
+    };
+
+    return (
+        <FormProvider {...methods}>
+            <form
+                onSubmit={methods.handleSubmit(onSubmit)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && step < 3) e.preventDefault();
+                }}
+                className="add-item-container">
+                {step > 1 && (
+                    <button type="button" className="back-btn" onClick={prevStep}>
+                        ←
+                    </button>
+                )}
+
+                {/* Stepper */}
+                <div className="step-indicator">
+                    <div className={`step-circle ${step === 1 ? 'active' : ''}`}>1</div>
+                    <div className="step-line"></div>
+                    <div className={`step-circle ${step === 2 ? 'active' : ''}`}>2</div>
+                    <div className="step-line"></div>
+                    <div className={`step-circle ${step === 3 ? 'active' : ''}`}>3</div>
+                </div>
+
+                {step === 1 && <StepOne />}
+                {step === 2 && <StepTwo selectedOutlets={selectedOutlets} setSelectedOutlets={setSelectedOutlets} />}
+                {step === 3 && <StepThree selectedOutlets={selectedOutlets} />}
+
+                <div className="bottom-btn-container">
+                    <button type="button" className="bottom-btn" onClick={nextStep}>
+                        {editMode ? (step < 3 ? 'Continue' : 'Update') : step < 3 ? 'Continue' : 'Submit'}
+                    </button>
+                </div>
+            </form>
+        </FormProvider>
+    );
+};
+
+export default ItemModal;
