@@ -10,7 +10,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { RecipeManagementActionTypes } from '../../../redux/recipe/constants';
 
 import { useNavigate } from 'react-router-dom';
-import AddRecipeModal from './RecipeModal';
+// import AddRecipeModal from './RecipeModal';
 
 const ItemDetails = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
@@ -29,7 +29,7 @@ const ItemDetails = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'general' | 'tax' | 'quantity'>('general');
 
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
@@ -68,6 +68,14 @@ const ItemDetails = () => {
 
     const handleEditRecipe = (recipe_id: string, outletId: string, itemId: string) => {
         console.log('edit recipe clicked for recipeID:', recipe_id, 'outlet_id:', outletId, 'item_id:', itemId);
+
+        navigate('/recipe-modal', {
+            state: {
+                itemId,
+                outletId,
+                recipe_id,
+            },
+        });
     };
 
     const handleAddRecipe = () => {
@@ -123,10 +131,8 @@ const ItemDetails = () => {
                     </div>
                 ))}
             </div>
-
             {/* Heading */}
             <h2 style={{ marginBottom: '16px' }}>Item Details</h2>
-
             {/* Tabs for General, Tax, Quantity */}
             <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
                 {[
@@ -156,7 +162,6 @@ const ItemDetails = () => {
                     );
                 })}
             </div>
-
             {/* Tab content box */}
             <div
                 style={{
@@ -216,10 +221,8 @@ const ItemDetails = () => {
                     </div>
                 )}
             </div>
-
             {/* Available Order Type heading */}
             <h3 style={{ marginTop: '30px', marginBottom: '12px' }}>Available Order Type</h3>
-
             {/* Order types horizontal scroll container */}
             <div
                 style={{
@@ -255,9 +258,7 @@ const ItemDetails = () => {
                     <p style={{ color: '#666' }}>No available order types.</p>
                 )}
             </div>
-
             {/* Recipe Details heading */}
-
             {recipeState && Object.keys(recipeState).length > 0 ? (
                 <div>
                     <h3 style={{ marginTop: '30px', marginBottom: '12px' }}>Recipe Details</h3>
@@ -358,12 +359,10 @@ const ItemDetails = () => {
                         borderRadius: '6px',
                         padding: '10px 16px',
                         cursor: 'pointer',
-                    }}>
-                    <AddRecipeModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleAddRecipe} />
-                    Add Recipe
-                </button>
+                    }}></button>
             )}
-
+            {/* <AddRecipeModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleAddRecipe} /> */}
+            Add Recipe
             <style>{`
   .order-type-scroll::-webkit-scrollbar {
     display: none;

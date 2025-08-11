@@ -10,6 +10,7 @@ import Staff from './staff/reducers';
 import Menu from './menu/reducers';
 import Item from './item/reducers';
 import Recipe from './recipe/reducers';
+import RecipeIngredients from './recipeIngredients/reducers';
 
 export default combineReducers({
     Auth,
@@ -22,4 +23,5 @@ export default combineReducers({
     Menu,
     Item,
     Recipe,
+    RecipeIngredients,
 });

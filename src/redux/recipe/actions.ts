@@ -4,14 +4,15 @@ import { RecipeManagementActionTypes } from './constants';
 // PostPOST PUT DELETE
 
 type AddRecipe = {
-    item_id: string;
+    // item_id: string;
+
     business_id: string;
-    preparation_time: number;
+    preparation_time: string;
     // cooking_time: number;
     preparation_type: string;
     instructions: string;
     // is_active: boolean;
-    ingredients: { ingredient_id: string; quantity: number }[]; // ✅ Fixed
+    ingredients: { ingredient_name: string; quantity: number; unit: string }[]; // ✅ Fixed
 };
 
 type UpdateRecipe = {

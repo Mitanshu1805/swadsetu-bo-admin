@@ -8,3 +8,4 @@ export * from './staff/actions';
 export * from './menu/actions';
 export * from './item/actions';
 export * from './recipe/actions';
+export * from './recipeIngredients/actions';
