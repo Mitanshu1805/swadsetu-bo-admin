@@ -196,44 +196,50 @@ const CategoryList = () => {
                                         marginLeft: 'auto',
                                         alignItems: 'center',
                                     }}>
-                                    <button
-                                        style={{
-                                            backgroundColor: AppColors.borderColor,
-                                            color: AppColors.iconColor,
-                                            border: 'none',
-                                            borderRadius: '4px',
-                                            padding: '8px',
-                                            cursor: 'pointer',
-                                            height: '40px',
-                                            width: '40px',
-                                        }}
-                                        onClick={() => handleEditCategory(businessId, outletId, category.category_id)}>
-                                        <FaRegEdit />
-                                    </button>
+                                    {outletId == 'master' && (
+                                        <>
+                                            <button
+                                                style={{
+                                                    backgroundColor: AppColors.borderColor,
+                                                    color: AppColors.iconColor,
+                                                    border: 'none',
+                                                    borderRadius: '4px',
+                                                    padding: '8px',
+                                                    cursor: 'pointer',
+                                                    height: '40px',
+                                                    width: '40px',
+                                                }}
+                                                onClick={() =>
+                                                    handleEditCategory(businessId, outletId, category.category_id)
+                                                }>
+                                                <FaRegEdit />
+                                            </button>
 
-                                    <button
-                                        style={{
-                                            backgroundColor: AppColors.borderColor,
-                                            color: AppColors.iconColor,
-                                            height: '40px',
-                                            width: '40px',
-                                            border: 'none',
-                                            borderRadius: '4px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                        }}
-                                        onClick={() => handleCategoryDelete(category.category_id)}>
-                                        <FaRegTrashAlt />
-                                    </button>
-                                    <ConfirmDeleteModal
-                                        show={showDeleteModal}
-                                        onClose={() => setShowDeleteModal(false)}
-                                        onConfirm={confirmDelete}
-                                        title="Delete this Category"
-                                        message="Are you sure you want to delete this category? This action cannot be undone."
-                                    />
+                                            <button
+                                                style={{
+                                                    backgroundColor: AppColors.borderColor,
+                                                    color: AppColors.iconColor,
+                                                    height: '40px',
+                                                    width: '40px',
+                                                    border: 'none',
+                                                    borderRadius: '4px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                }}
+                                                onClick={() => handleCategoryDelete(category.category_id)}>
+                                                <FaRegTrashAlt />
+                                            </button>
+                                            <ConfirmDeleteModal
+                                                show={showDeleteModal}
+                                                onClose={() => setShowDeleteModal(false)}
+                                                onConfirm={confirmDelete}
+                                                title="Delete this Category"
+                                                message="Are you sure you want to delete this category? This action cannot be undone."
+                                            />
+                                        </>
+                                    )}
                                     <div onClick={(e) => e.stopPropagation()}>
                                         <ToggleSwitch
                                             checked={category.is_active}
@@ -254,16 +260,18 @@ const CategoryList = () => {
                     display: 'flex',
                     justifyContent: 'flex-end',
                 }}>
-                <Button
-                    variant="danger"
-                    style={{
-                        width: '100%',
-                    }}
-                    onClick={() => {
-                        handleRegisterCategory(businessId, outletId);
-                    }}>
-                    + Add Category
-                </Button>
+                {outletId == 'master' && (
+                    <Button
+                        variant="danger"
+                        style={{
+                            width: '100%',
+                        }}
+                        onClick={() => {
+                            handleRegisterCategory(businessId, outletId);
+                        }}>
+                        + Add Category
+                    </Button>
+                )}
             </div>
         </div>
     );

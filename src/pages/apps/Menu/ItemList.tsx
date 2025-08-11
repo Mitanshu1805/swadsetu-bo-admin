@@ -189,25 +189,27 @@ const ItemList = () => {
                                 marginLeft: 'auto',
                                 alignItems: 'center',
                             }}>
-                            <button
-                                style={{
-                                    backgroundColor: AppColors.borderColor,
-                                    color: AppColors.iconColor,
-                                    height: '40px',
-                                    width: '40px',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleItemDelete(item.item_id);
-                                }}>
-                                <FaRegTrashAlt />
-                            </button>
+                            {outletId == 'master' && (
+                                <button
+                                    style={{
+                                        backgroundColor: AppColors.borderColor,
+                                        color: AppColors.iconColor,
+                                        height: '40px',
+                                        width: '40px',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleItemDelete(item.item_id);
+                                    }}>
+                                    <FaRegTrashAlt />
+                                </button>
+                            )}
                             <div onClick={(e) => e.stopPropagation()}>
                                 <ToggleSwitch
                                     checked={item.is_active}
