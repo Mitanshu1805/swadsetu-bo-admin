@@ -27,6 +27,11 @@ const Ingredients = () => {
     const [ingredientToDelete, setIngredientToDelete] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredIngredients = ingredients.filter((ingredient: any) =>
+        ingredient?.ingredient_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
@@ -124,9 +129,17 @@ const Ingredients = () => {
                 </Button>
             </div>
 
+            <Form.Control
+                type="text"
+                placeholder="Search ingredient..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ marginBottom: '1rem' }}
+            />
+
             <Row>
-                {ingredients.length > 0 ? (
-                    ingredients.map((ingredient: any, index: number) => (
+                {filteredIngredients.length > 0 ? (
+                    filteredIngredients.map((ingredient: any, index: number) => (
                         <Col key={index} md={12}>
                             <Card style={cardStyle}>
                                 <Card.Body style={{ display: 'flex', alignItems: 'center' }}>
