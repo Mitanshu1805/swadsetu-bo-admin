@@ -105,6 +105,18 @@ const ItemList = () => {
         });
     };
 
+    const handleEditItem = (item_id: string, category_id: string) => {
+        console.log(category_id, item_id);
+
+        navigate('/item-modal', {
+            state: {
+                item_id,
+                category_id,
+                editMode: true,
+            },
+        });
+    };
+
     return (
         <div style={{ padding: '20px' }}>
             <div
@@ -167,7 +179,7 @@ const ItemList = () => {
                                 state: {
                                     businessId,
                                     outletId,
-                                    categoryId: selectedCategoryId,
+                                    category_id: selectedCategoryId,
                                 },
                             })
                         }>
@@ -214,25 +226,46 @@ const ItemList = () => {
                                 alignItems: 'center',
                             }}>
                             {outletId == 'master' && (
-                                <button
-                                    style={{
-                                        backgroundColor: AppColors.borderColor,
-                                        color: AppColors.iconColor,
-                                        height: '40px',
-                                        width: '40px',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleItemDelete(item.item_id);
-                                    }}>
-                                    <FaRegTrashAlt />
-                                </button>
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
+                                    <button
+                                        style={{
+                                            backgroundColor: AppColors.borderColor,
+                                            color: AppColors.iconColor,
+                                            height: '40px',
+                                            width: '40px',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            selectedCategoryId && handleEditItem(item.item_id, selectedCategoryId);
+                                        }}>
+                                        <FaRegEdit />
+                                    </button>
+                                    <button
+                                        style={{
+                                            backgroundColor: AppColors.borderColor,
+                                            color: AppColors.iconColor,
+                                            height: '40px',
+                                            width: '40px',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleItemDelete(item.item_id);
+                                        }}>
+                                        <FaRegTrashAlt />
+                                    </button>
+                                </div>
                             )}
                             <div onClick={(e) => e.stopPropagation()}>
                                 <ToggleSwitch

@@ -39,9 +39,10 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
     const location = useLocation();
 
     // const business_id = location.state?.business_id;
-    const category_id = location.state?.categoryId;
+    const category_id = location.state?.category_id;
     const outlet_id = location.state?.outletId;
     console.log(category_id);
+    console.log(outlet_id);
 
     const categories = appSelector((state: RootState) => state?.Menu?.categories || []);
     console.log(categories);
@@ -84,7 +85,9 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
         );
     }, [selectedOutlets, setValue]);
 
-    if (!outletListData?.length || !category) {
+    const isLoading = !outletListData?.length || !category;
+
+    if (isLoading) {
         return <p>Loading outlets...</p>;
     }
 

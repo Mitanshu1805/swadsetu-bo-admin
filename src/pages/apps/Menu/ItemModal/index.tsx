@@ -10,7 +10,7 @@ import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import './style.css';
-import { registerItem } from '../../../../redux/actions';
+import { registerItem, updateItem } from '../../../../redux/actions';
 
 type FormData = {
     item_name: {
@@ -50,9 +50,12 @@ const ItemModal = () => {
 
     const editMode = location?.state?.editMode || false;
     const itemId = location?.state?.item_id || null;
-    const category_id = location?.state?.categoryId;
+    const category_id = location?.state?.category_id;
 
-    const itemData = useSelector((state: any) => state?.Menu?.items);
+    const itemData = useSelector((state: any) => state?.Menu?.categories);
+
+    console.log(itemData);
+
     const [selectedOutlets, setSelectedOutlets] = useState<Outlet[]>([]);
     const methods = useForm<FormData>({
         defaultValues: {
@@ -76,8 +79,26 @@ const ItemModal = () => {
 
     // Populate form when data arrives
     useEffect(() => {
-        if (editMode && itemId && itemData) {
-            const toEdit = Array.isArray(itemData) ? itemData.find((i) => String(i.item_id) === String(itemId)) : null;
+        if (editMode && itemId && Array.isArray(itemData)) {
+            console.log(editMode, itemId, itemData);
+
+            let toEdit = null;
+
+            for (const category of itemData) {
+                console.log(category.items);
+
+                if (Array.isArray(category.items)) {
+                    const foundItem = category.items.find((item: any) => String(item.item_id) === String(itemId));
+                    console.log(foundItem);
+
+                    if (foundItem) {
+                        toEdit = foundItem;
+                        break;
+                    }
+                }
+            }
+            console.log(toEdit.outlets);
+
             if (toEdit) {
                 methods.reset({
                     item_name: {
@@ -88,11 +109,14 @@ const ItemModal = () => {
                     description: toEdit.description || '',
                     price: toEdit.price || 0,
                     category_id: toEdit.category_id || '',
-                    outlet_id: toEdit.outlets || [],
+                    // outlet_id: toEdit.outlets || [],
+                    outlet_id: toEdit.outlets?.map((o: any) => o.outlet_id) || [],
                     images: toEdit.images || [],
                     is_active: Boolean(toEdit.is_active),
+                    online_display_name: toEdit.online_display_name,
                 });
             }
+            console.log(toEdit.online_display_name);
         }
     }, [editMode, itemId, itemData, methods]);
 
@@ -148,7 +172,7 @@ const ItemModal = () => {
         console.log(formDataToSend);
 
         if (editMode) {
-            // dispatch(updateItem(formDataToSend));
+            dispatch(updateItem(formDataToSend));
         } else {
             dispatch(registerItem(formDataToSend));
         }
