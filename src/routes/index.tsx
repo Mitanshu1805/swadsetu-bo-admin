@@ -265,6 +265,10 @@ const AllRoutes = () => {
                     element: <LoadComponent component={ItemDetails} />,
                 },
                 {
+                    path: '/item-modal',
+                    element: <LoadComponent component={ItemModal} />,
+                },
+                {
                     path: '/recipe-modal',
                     element: <LoadComponent component={RecipeModal} />,
                 },

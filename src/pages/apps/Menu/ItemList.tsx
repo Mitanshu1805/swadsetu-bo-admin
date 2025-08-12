@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { categoryItemList } from '../../../redux/actions';
+import { categoryItemList, outletList } from '../../../redux/actions';
 import { AppColors } from '../../../utils/Colors';
 import WhiteColorLogo from '../../../assets/images/pure-white-color-onn79dldw0gujsoa.jpg';
 import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 import ToggleSwitch from '../../../components/ToggleSwitch';
-import { deleteItem, itemUpdateIsActive } from '../../../redux/item/actions';
+import { deleteItem, itemUpdateIsActive, updateOutletPrice } from '../../../redux/item/actions';
 
 const ItemList = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
@@ -23,10 +23,20 @@ const ItemList = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+    const outlets = useSelector((state: any) => state.Businesses.outlets);
+    const outletListData = outlets?.OutletsLists ?? [];
+    console.log(outletListData);
+    const [priceEditData, setPriceEditData] = useState<{
+        outlet_id: string;
+        outletName: string;
+        item_id: string;
+        price: number | '';
+    } | null>(null);
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const business_id = business.business_id;
         setBusinessId(business_id);
+        dispatch(outletList(business_id));
 
         const payload = {
             business_id: business_id,
@@ -115,6 +125,65 @@ const ItemList = () => {
                 editMode: true,
             },
         });
+    };
+
+    const handleEditItemNonMaster = (outletId: string, item_id: string) => {
+        const outlet = outletListData.find((o: any) => o.outlet_id == outletId);
+        if (!outlet) return;
+
+        const categoryWithItem = itemState.find((cat: any) => cat.items.some((item: any) => item.item_id === item_id));
+        const foundItem = categoryWithItem?.items.find((item: any) => item.item_id === item_id);
+        if (!foundItem) return;
+
+        setPriceEditData({
+            outlet_id: outletId,
+            outletName: outlet.outlet_name,
+            item_id: item_id,
+            price: foundItem.price,
+        });
+    };
+
+    // Handle form input change
+    const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        if (!priceEditData) return;
+
+        // Allow only numbers or empty
+        if (/^\d*$/.test(val)) {
+            setPriceEditData({ ...priceEditData, price: val === '' ? '' : Number(val) });
+        }
+    };
+
+    // Handle form submit (for now just console.log and close form)
+    const onPriceFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!priceEditData) return;
+
+        console.log('Save price:', priceEditData);
+
+        dispatch(updateOutletPrice(priceEditData.outlet_id, priceEditData.item_id, priceEditData.price));
+
+        // Close form after save
+        setPriceEditData(null);
+
+        setTimeout(() => {
+            const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+            const business_id = business.business_id;
+            setBusinessId(business_id);
+            const payload = {
+                business_id: business_id,
+                outlet_id: outletId,
+            };
+            if (payload.outlet_id === 'master') {
+                delete payload.outlet_id;
+            }
+            dispatch(categoryItemList(payload));
+        });
+    };
+
+    // Handle cancel
+    const onPriceFormCancel = () => {
+        setPriceEditData(null);
     };
 
     return (
@@ -225,8 +294,8 @@ const ItemList = () => {
                                 marginLeft: 'auto',
                                 alignItems: 'center',
                             }}>
-                            {outletId == 'master' && (
-                                <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
+                                {outletId == 'master' ? (
                                     <button
                                         style={{
                                             backgroundColor: AppColors.borderColor,
@@ -246,6 +315,109 @@ const ItemList = () => {
                                         }}>
                                         <FaRegEdit />
                                     </button>
+                                ) : (
+                                    <button
+                                        style={{
+                                            backgroundColor: AppColors.borderColor,
+                                            color: AppColors.iconColor,
+                                            height: '40px',
+                                            width: '40px',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            selectedCategoryId && handleEditItemNonMaster(outletId, item.item_id);
+                                        }}>
+                                        <FaRegEdit />
+                                    </button>
+                                )}
+                                {priceEditData && (
+                                    <div
+                                        style={{
+                                            position: 'fixed',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            backgroundColor: '#fff',
+                                            padding: 24,
+                                            borderRadius: 8,
+                                            boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
+                                            zIndex: 9999,
+                                            width: 320,
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}>
+                                        <h3>Edit Price</h3>
+                                        <form onSubmit={onPriceFormSubmit}>
+                                            <div style={{ marginBottom: 12 }}>
+                                                <label
+                                                    style={{ display: 'block', marginBottom: 4, fontWeight: 'bold' }}>
+                                                    Outlet Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={priceEditData.outletName}
+                                                    readOnly
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '8px',
+                                                        borderRadius: 4,
+                                                        border: '1px solid #ccc',
+                                                    }}
+                                                />
+                                            </div>
+                                            <div style={{ marginBottom: 12 }}>
+                                                <label
+                                                    style={{ display: 'block', marginBottom: 4, fontWeight: 'bold' }}>
+                                                    Price
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={priceEditData.price}
+                                                    onChange={onPriceChange}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '8px',
+                                                        borderRadius: 4,
+                                                        border: '1px solid #ccc',
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={onPriceFormCancel}
+                                                    style={{
+                                                        padding: '8px 16px',
+                                                        backgroundColor: '#ccc',
+                                                        border: 'none',
+                                                        borderRadius: 4,
+                                                        cursor: 'pointer',
+                                                    }}>
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    style={{
+                                                        padding: '8px 16px',
+                                                        backgroundColor: AppColors.primaryColor,
+                                                        color: '#fff',
+                                                        border: 'none',
+                                                        borderRadius: 4,
+                                                        cursor: 'pointer',
+                                                    }}>
+                                                    Save
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                )}
+                                {outletId == 'master' && (
                                     <button
                                         style={{
                                             backgroundColor: AppColors.borderColor,
@@ -265,8 +437,8 @@ const ItemList = () => {
                                         }}>
                                         <FaRegTrashAlt />
                                     </button>
-                                </div>
-                            )}
+                                )}
+                            </div>
                             <div onClick={(e) => e.stopPropagation()}>
                                 <ToggleSwitch
                                     checked={item.is_active}

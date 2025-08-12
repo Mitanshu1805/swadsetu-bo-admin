@@ -76,7 +76,7 @@ export type MenuManagementItemAction =
     | { type: typeof MenuManagementItemActionTypes.ITEM_UPDATE_DISABLE_SUCCESS; payload: { message: string } }
     | { type: typeof MenuManagementItemActionTypes.ITEM_UPDATE_DISABLE_ERROR; payload: { error: string } };
 
-export const updateOutletPrice = (outlet_id: string, item_id: string, price: number): MenuManagementItemAction => ({
+export const updateOutletPrice = (outlet_id: string, item_id: string, price: any): MenuManagementItemAction => ({
     type: MenuManagementItemActionTypes.UPDATE_OUTLET_PRICE,
     payload: { outlet_id, item_id, price },
 });
