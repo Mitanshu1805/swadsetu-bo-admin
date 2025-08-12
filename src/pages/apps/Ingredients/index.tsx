@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { recipeIngredientDelete, recipeIngredientList } from '../../../redux/actions';
+import {
+    recipeIngredientAdd,
+    recipeIngredientDelete,
+    recipeIngredientList,
+    // recipeIngredientCreate,
+    recipeIngredientUpdate,
+    recipeIngredientUpdateStatus,
+} from '../../../redux/actions';
 import { useRedux } from '../../../hooks';
-import { Card, Row, Col, Button } from 'react-bootstrap';
+import { Card, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
@@ -11,6 +18,12 @@ import ToggleSwitch from '../../../components/ToggleSwitch';
 const Ingredients = () => {
     const { dispatch } = useRedux();
     const ingredients = useSelector((state: any) => state?.RecipeIngredients?.ingredients || []);
+
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [editData, setEditData] = useState<any>(null);
+    const [ingredientName, setIngredientName] = useState('');
+    const [unit, setUnit] = useState('');
+
     const [ingredientToDelete, setIngredientToDelete] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
@@ -24,9 +37,41 @@ const Ingredients = () => {
         }
     }, [dispatch]);
 
+    const handleAddIngredient = () => {
+        setEditData(null);
+        setIngredientName('');
+        setUnit('');
+        setShowFormModal(true);
+    };
+
     const handleEditIngredient = (ingredient: any) => {
-        console.log('Edit ingredient:', ingredient);
-        // navigate to modal or form
+        setEditData(ingredient);
+        setIngredientName(ingredient.ingredient_name || '');
+        setUnit(ingredient.unit || '');
+        setShowFormModal(true);
+    };
+
+    const handleSaveIngredient = () => {
+        if (!ingredientName.trim()) return;
+
+        const payload = {
+            ingredient_name: ingredientName,
+            unit: unit,
+            business_id: businessId,
+        };
+
+        if (editData) {
+            // update
+            dispatch(recipeIngredientUpdate(editData.ingredient_id, ingredientName, unit, businessId));
+        } else {
+            // create
+            dispatch(recipeIngredientAdd(payload));
+        }
+
+        setShowFormModal(false);
+        setTimeout(() => {
+            dispatch(recipeIngredientList(businessId));
+        }, 200);
     };
 
     const handleIngredientDelete = (ingredient_id: string) => {
@@ -45,7 +90,7 @@ const Ingredients = () => {
     };
 
     const handleIngredientToggle = (ingredient_id: string, is_active: boolean) => {
-        // dispatch(updateIngredientIsActive(ingredient_id, is_active));
+        dispatch(recipeIngredientUpdateStatus(ingredient_id, is_active));
         setTimeout(() => {
             dispatch(recipeIngredientList(businessId));
         }, 200);
@@ -66,7 +111,18 @@ const Ingredients = () => {
 
     return (
         <div style={{ padding: '1rem' }}>
-            <h3>Ingredients List</h3>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1rem',
+                }}>
+                <h3 style={{ margin: 0 }}>Ingredients List</h3>
+                <Button variant="danger" onClick={handleAddIngredient}>
+                    + Add Ingredient
+                </Button>
+            </div>
 
             <Row>
                 {ingredients.length > 0 ? (
@@ -74,12 +130,21 @@ const Ingredients = () => {
                         <Col key={index} md={12}>
                             <Card style={cardStyle}>
                                 <Card.Body style={{ display: 'flex', alignItems: 'center' }}>
-                                    {ingredient.image && (
+                                    {/* {ingredient.image && (
                                         <img src={ingredient.image} alt="Ingredient" style={logoStyle} />
-                                    )}
+                                    )} */}
 
-                                    <div style={{ fontSize: '1.25rem', paddingLeft: '14px' }}>
-                                        {ingredient.ingredient_name || 'Unnamed Ingredient'}
+                                    <div
+                                        style={{
+                                            fontSize: '1.25rem',
+                                            paddingLeft: '14px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                        }}>
+                                        <div>
+                                            <strong>{ingredient?.ingredient_name || 'Unnamed Ingredient'}</strong>
+                                        </div>
+                                        <div>{ingredient?.unit}</div>
                                     </div>
 
                                     <div
@@ -131,7 +196,7 @@ const Ingredients = () => {
 
                                         <div onClick={(e) => e.stopPropagation()}>
                                             <ToggleSwitch
-                                                checked={ingredient.is_active}
+                                                checked={ingredient?.is_active}
                                                 onChange={(checked) =>
                                                     handleIngredientToggle(ingredient.ingredient_id, checked)
                                                 }
@@ -147,14 +212,44 @@ const Ingredients = () => {
                 )}
             </Row>
 
-            <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'flex-end' }}>
-                <Button
-                    variant="danger"
-                    style={{ width: '100%' }}
-                    onClick={() => console.log('Add ingredient clicked')}>
-                    + Add Ingredient
-                </Button>
-            </div>
+            {/* Add/Edit Modal */}
+            <Modal show={showFormModal} onHide={() => setShowFormModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{editData ? 'Edit Ingredient' : 'Add Ingredient'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Ingredient Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={ingredientName}
+                                onChange={(e) => setIngredientName(e.target.value)}
+                                placeholder="Enter ingredient name"
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Unit</Form.Label>
+                            <Form.Select value={unit} onChange={(e) => setUnit(e.target.value)}>
+                                <option value="">Select Unit</option>
+                                <option value="gm">GM</option>
+                                <option value="kg">KG</option>
+                                <option value="ml">ML</option>
+                                <option value="l">L</option>
+                                <option value="piece">Piece</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowFormModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleSaveIngredient}>
+                        {editData ? 'Update' : 'Save'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
