@@ -56,7 +56,7 @@ const MENU_ITEMS: MenuItemTypes[] = [
         key: 'ingredients',
         label: 'Ingredients',
         icon: 'mdi mdi-silverware-fork-knife',
-        url: '/ingredients/outlets',
+        url: '/ingredient-list',
     },
     {
         key: 'order-history',

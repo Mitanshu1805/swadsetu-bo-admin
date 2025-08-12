@@ -16,6 +16,7 @@ import { LayoutTypes } from '../constants';
 // hooks
 import { useRedux } from '../hooks';
 import PrivateRoute from './PrivateRoute';
+import { Import } from 'lucide-react';
 
 // lazy load all the views
 // auth
@@ -46,6 +47,7 @@ const TransactionReportList = React.lazy(() => import('../pages/apps/DailyReport
 const IngredientReportList = React.lazy(() => import('../pages/apps/DailyReports/IngredientReportList'));
 const StaffList = React.lazy(() => import('../pages/apps/Staff'));
 const StaffReg = React.lazy(() => import('../pages/apps/Staff/Registration'));
+const Ingredients = React.lazy(() => import('../pages/apps/Ingredients'));
 
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
@@ -267,8 +269,8 @@ const AllRoutes = () => {
                     element: <LoadComponent component={RecipeModal} />,
                 },
                 {
-                    path: '/item-modal',
-                    element: <LoadComponent component={ItemModal} />,
+                    path: '/ingredient-list',
+                    element: <LoadComponent component={Ingredients} />,
                 },
 
                 {
