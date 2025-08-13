@@ -9,10 +9,15 @@ type Props = {
     onHide: () => void;
     terminal: any;
     outlet_id: string;
+    selectedTerminalData: {
+        session_duration: string;
+    };
 };
 
-const TerminalUpdateModal: React.FC<Props> = ({ show, onHide, terminal, outlet_id }) => {
-    const [validity, setValidity] = useState('no_expiry');
+const TerminalUpdateModal: React.FC<Props> = ({ show, onHide, terminal, outlet_id, selectedTerminalData }) => {
+    console.log(selectedTerminalData);
+
+    const [validity, setValidity] = useState(selectedTerminalData.session_duration);
     const { dispatch } = useRedux();
 
     const handleSubmit = () => {
@@ -62,7 +67,7 @@ const TerminalUpdateModal: React.FC<Props> = ({ show, onHide, terminal, outlet_i
                                     type="radio"
                                     name="loginValidity"
                                     value={item.value}
-                                    checked={validity === item.value}
+                                    checked={validity == item.value}
                                     onChange={(e) => setValidity(e.target.value)}
                                     style={{
                                         accentColor: AppColors.primaryColor,

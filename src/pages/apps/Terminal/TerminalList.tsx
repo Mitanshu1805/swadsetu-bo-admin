@@ -33,6 +33,8 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
 
     const handleTerminalEdit = (terminal_id: string) => {
         const terminalData = terminal.find((item: any) => item.terminal_id == terminal_id);
+        console.log(terminalData);
+
         setSelectedTerminalData(terminalData);
         setShowTermEditModal(true);
     };
@@ -151,6 +153,7 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
                     onHide={() => setShowTermEditModal(false)}
                     terminal={selectedTerminalData}
                     outlet_id={outletId}
+                    selectedTerminalData={selectedTerminalData}
                 />
             )}
         </div>
