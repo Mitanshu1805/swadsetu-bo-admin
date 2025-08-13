@@ -62,7 +62,7 @@ const CategoryModal = () => {
             logo_image: '',
             swiggy_image: '',
             banner_image: '',
-            is_active: false,
+            is_active: true,
         },
         mode: 'onBlur',
     });
@@ -116,7 +116,6 @@ const CategoryModal = () => {
 
         const formDataToSend = new window.FormData();
         formDataToSend.append('business_id', businessId);
-        formDataToSend.append('category_id', categoryId);
         formDataToSend.append('category_name', JSON.stringify(data.category_name));
         formDataToSend.append('is_active', String(data.is_active));
 
@@ -129,6 +128,7 @@ const CategoryModal = () => {
         console.log(formDataToSend);
 
         if (editMode) {
+            formDataToSend.append('category_id', categoryId);
             dispatch(updateCategory(formDataToSend)); // must match your API
         } else {
             dispatch(registerCategory(formDataToSend));

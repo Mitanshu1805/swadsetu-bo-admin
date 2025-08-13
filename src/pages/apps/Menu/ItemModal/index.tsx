@@ -150,15 +150,15 @@ const ItemModal = () => {
         formDataToSend.append('online_display_name', data.online_display_name);
         formDataToSend.append('available_order_type', JSON.stringify(data.item_order_type));
         formDataToSend.append('dietary', data.dietary_type);
-        formDataToSend.append('description', data.description);
+        formDataToSend.append('description', data.description ?? '');
         formDataToSend.append('price', String(data.price));
         // formDataToSend.append('category_id', category_id);
         formDataToSend.append('outlet_prices', JSON.stringify(data.outlet_prices));
-        formDataToSend.append('quantity_type', String(data.unit_type));
-        formDataToSend.append('quantity_params', data.quantity_params);
-        formDataToSend.append('quantity_value', data.quantity);
+        formDataToSend.append('quantity_type', String(data.unit_type) ?? 'none');
+        formDataToSend.append('quantity_params', data.quantity_params ?? 'none');
+        formDataToSend.append('quantity_value', data.quantity ?? 'none');
         formDataToSend.append('is_loose', String(data.loose_quantity));
-        formDataToSend.append('gst_type', data.gst_type);
+        formDataToSend.append('gst_type', data.gst_type ?? 'none');
         // formDataToSend.append('is_active', String(data.is_active));
 
         if (data.logo_image) formDataToSend.append('logo_image', data.logo_image);

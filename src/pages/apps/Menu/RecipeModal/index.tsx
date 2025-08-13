@@ -154,29 +154,34 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
             .map(({ ingredient_id, ingredient_name, unit, quantity }) => ({
                 ingredient_id,
                 // ingredient_name,
-                unit,
+                // unit,
                 quantity,
             }));
         console.log(selectedIngredients);
 
-        const payload: any = {
-            business_id: businessId,
-            item_id: itemId,
-            // outletId: outletId,
+        let payload: any = {
             preparation_time: data.preparation_time,
-            preparation_type: data.preparation_type,
+            preparation_type: data.preparation_type.toLowerCase(),
             instructions: data.instructions,
             ingredients: selectedIngredients,
-            is_active: true,
+            // is_active: true,
         };
 
-        if (outletId !== 'master') {
-            payload.outletId = outletId;
+        // If creating (no recipeId), include business_id and outletId
+        if (!recipeId) {
+            payload.business_id = businessId;
+            payload.item_id = itemId;
+            if (outletId !== 'master') {
+                payload.outletId = outletId;
+            }
         }
 
+        // If editing, include recipe_id
         if (recipeId) {
             payload.recipe_id = recipeId;
             dispatch(recipeUpdate(payload));
+        } else {
+            dispatch(recipeAdd(payload)); // or whatever your create action is
         }
 
         console.log(payload);
