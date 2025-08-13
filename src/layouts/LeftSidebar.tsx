@@ -18,6 +18,7 @@ import { usersBusinesses } from '../redux/actions';
 import { useRedux } from '../hooks';
 import { useNavigate } from 'react-router-dom';
 import BusinessSelector from '../pages/BusinessSelector';
+import { AppColors } from '../utils/Colors';
 
 /* user box */
 const UserBox = () => {
@@ -84,12 +85,15 @@ const UserBox = () => {
     return (
         <div className="user-box text-center">
             <img src={business_logo} alt="" title="Mat Helme" className="rounded-circle img-thumbnail avatar-xl" />
-            <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
+            <Dropdown
+                show={dropdownOpen}
+                // onToggle={toggleDropdown}
+            >
                 <Dropdown.Toggle
-                    id="dropdown-notification"
+                    // id="dropdown-notification"
                     to="#"
                     as={Link}
-                    onClick={toggleDropdown}
+                    // onClick={toggleDropdown}
                     className="user-name h5 mt-2 mb-1 d-block">
                     {business_name}
                 </Dropdown.Toggle>
@@ -111,7 +115,7 @@ const UserBox = () => {
             </Dropdown>
             {/* <p className="text-muted left-user-info">Business Owner</p> */}
             {businesses?.count > 1 && (
-                <div style={{ cursor: 'pointer' }} onClick={handleClickChange}>
+                <div style={{ cursor: 'pointer', color: AppColors.primaryColor }} onClick={handleClickChange}>
                     Change
                 </div>
             )}
