@@ -5,6 +5,7 @@ import { orderReportList } from '../../../redux/actions';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
 import './TransReportList.css';
+import { AppColors } from '../../../utils/Colors';
 
 const TransReportList = () => {
     const transReport = useSelector((state: any) => state?.Report?.orderReport?.data?.data?.data?.report);
@@ -46,7 +47,7 @@ const TransReportList = () => {
             <Row className="align-items-center mb-4">
                 <Col md={5}>
                     <Card>
-                        <Card.Body>
+                        <Card.Body style={{ padding: '0px', height: '15px' }}>
                             <Form.Control
                                 type="date"
                                 value={startDate}
@@ -62,70 +63,114 @@ const TransReportList = () => {
 
                 <Col md={5}>
                     <Card>
-                        <Card.Body>
+                        <Card.Body style={{ padding: '0px', height: '15px' }}>
                             <Form.Control type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
 
-            <Accordion alwaysOpen>
+            <Row>
+                {/* CASH Accordion */}
                 {transReport?.CASH?.length > 0 && (
-                    <Accordion.Item eventKey="0" className="custom-accordion">
-                        <Accordion.Header>Cash Payment</Accordion.Header>
-                        <Accordion.Body>
-                            <table className="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Item Name</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Total Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {transReport.CASH.map((item: any, idx: number) => (
-                                        <tr key={idx}>
-                                            <td>{item.item_name}</td>
-                                            <td>{item.total_quantity}</td>
-                                            <td>₹{item.price}</td>
-                                            <td>₹{item.total_amount}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </Accordion.Body>
-                    </Accordion.Item>
+                    <Col md={6}>
+                        <Accordion alwaysOpen>
+                            <Accordion.Item eventKey="0" className="custom-accordion">
+                                <Accordion.Header>Cash Payment</Accordion.Header>
+                                <Accordion.Body>
+                                    <table className="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Item Name</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {transReport.CASH.map((item: any, idx: number) => (
+                                                <tr key={idx}>
+                                                    <td>{item.item_name}</td>
+                                                    <td>{item.total_quantity}</td>
+                                                    <td>₹{item.price}</td>
+                                                    <td>₹{item.total_amount}</td>
+                                                </tr>
+                                            ))}
+                                            <tr className="total-row">
+                                                <td style={{ color: 'white' }}>Total</td>
+                                                <td style={{ color: 'white' }}>
+                                                    {transReport.CASH.reduce(
+                                                        (sum: number, item: any) => sum + item.total_quantity,
+                                                        0
+                                                    )}
+                                                </td>
+                                                <td style={{ color: 'white' }}></td>
+                                                <td style={{ color: 'white' }}>
+                                                    {transReport.CASH.reduce(
+                                                        (sum: number, item: any) => sum + item.total_amount,
+                                                        0
+                                                    )}{' '}
+                                                    RS
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </Col>
                 )}
 
+                {/* ONLINE Accordion */}
                 {transReport?.ONLINE?.length > 0 && (
-                    <Accordion.Item eventKey="1" className="custom-accordion">
-                        <Accordion.Header>Online Payment</Accordion.Header>
-                        <Accordion.Body>
-                            <table className="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Item Name</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Total Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {transReport.ONLINE.map((item: any, idx: number) => (
-                                        <tr key={idx}>
-                                            <td>{item.item_name}</td>
-                                            <td>{item.total_quantity}</td>
-                                            <td>₹{item.price}</td>
-                                            <td>₹{item.total_amount}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </Accordion.Body>
-                    </Accordion.Item>
+                    <Col md={6}>
+                        <Accordion alwaysOpen>
+                            <Accordion.Item eventKey="1" className="custom-accordion">
+                                <Accordion.Header>Online Payment</Accordion.Header>
+                                <Accordion.Body>
+                                    <table className="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Item Name</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {transReport.ONLINE.map((item: any, idx: number) => (
+                                                <tr key={idx}>
+                                                    <td>{item.item_name}</td>
+                                                    <td>{item.total_quantity}</td>
+                                                    <td>₹{item.price}</td>
+                                                    <td>₹{item.total_amount}</td>
+                                                </tr>
+                                            ))}
+                                            <tr className="total-row">
+                                                <td style={{ color: 'white' }}>Total</td>
+                                                <td style={{ color: 'white' }}>
+                                                    {transReport.ONLINE.reduce(
+                                                        (sum: number, item: any) => sum + item.total_quantity,
+                                                        0
+                                                    )}
+                                                </td>
+                                                <td style={{ color: 'white' }}></td>
+                                                <td style={{ color: 'white' }}>
+                                                    {transReport.ONLINE.reduce(
+                                                        (sum: number, item: any) => sum + item.total_amount,
+                                                        0
+                                                    )}{' '}
+                                                    RS
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </Col>
                 )}
-            </Accordion>
+            </Row>
         </div>
     );
 };

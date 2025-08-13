@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { useRedux } from '../../../hooks';
 import { ingredientReportList } from '../../../redux/actions';
 import { Card, Form, Row, Col, Accordion } from 'react-bootstrap';
+import { AppColors } from '../../../utils/Colors';
 
 const IngredientReportList = () => {
     const ingredientReport = useSelector((state: any) => state?.Report?.ingredientReport?.data?.data?.data);
@@ -44,7 +45,7 @@ const IngredientReportList = () => {
             <Row className="align-items-center mb-4">
                 <Col md={5}>
                     <Card>
-                        <Card.Body>
+                        <Card.Body style={{ padding: '0px', height: '15px' }}>
                             <Form.Control
                                 type="date"
                                 value={startDate}
@@ -60,7 +61,7 @@ const IngredientReportList = () => {
 
                 <Col md={5}>
                     <Card>
-                        <Card.Body>
+                        <Card.Body style={{ padding: '0px', height: '15px' }}>
                             <Form.Control type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                         </Card.Body>
                     </Card>
@@ -68,12 +69,12 @@ const IngredientReportList = () => {
             </Row>
             {ingredientReport && ingredientReport.length > 0 ? (
                 <Card>
-                    <Card.Body>
+                    <Card.Body style={{ padding: '0px' }}>
                         <table className="table table-bordered table-striped">
                             <thead>
-                                <tr>
-                                    <th>Ingredient Name</th>
-                                    <th>Usage</th>
+                                <tr style={{ backgroundColor: AppColors.primaryColor }}>
+                                    <th style={{ color: 'white' }}>Ingredient Name</th>
+                                    <th style={{ color: 'white' }}>Usage</th>
                                 </tr>
                             </thead>
                             <tbody>

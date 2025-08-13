@@ -15,3 +15,27 @@
     font-family: sans-serif;
     background-color: #f9f9f9;
 }
+
+/* Active accordion header - red background */
+.accordion-button:not(.collapsed) {
+    background-color: #ff5b5b !important; /* Bootstrap's danger red */
+    color: #fff !important;
+    box-shadow: none;
+}
+
+/* Keep chevron icon white when active */
+.accordion-button:not(.collapsed)::after {
+    filter: brightness(0) invert(1);
+}
+
+/* Optional: hover state to match */
+.accordion-button:hover {
+    background-color: #ff5b5b !important; /* darker red on hover */
+    color: #fff !important;
+}
+
+.total-row {
+    background-color: #ff5b5b !important; /* or AppColors.primaryColor */
+    /* color: white !important; */
+    font-weight: bold;
+}

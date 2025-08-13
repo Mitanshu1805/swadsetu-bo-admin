@@ -54,25 +54,31 @@ const DailyReports: React.FC<Props> = ({ outletId }) => {
         });
     };
     return (
-        <div style={{ padding: '1rem', fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif" }}>
+        <div
+            style={{
+                padding: '1rem',
+                fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif",
+                // display: 'grid',
+                // gridTemplateColumns: 'repeat(2, 1fr)',
+            }}>
             <Row>
-                <Col md={12}>
+                <Col md={6}>
                     <Card style={cardStyle}>
                         <Card.Body style={cardBodyStyle} onClick={() => handleTransactionClick(outletId)}>
                             <div style={cardContentStyle}>
                                 <div style={cardTitleStyle}>Transaction Report</div>
                             </div>
-                            <div style={arrowStyle}>{'>'}</div>
+                            {/* <div style={arrowStyle}>{'>'}</div> */}
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={12}>
+                <Col md={6}>
                     <Card style={cardStyle}>
                         <Card.Body style={cardBodyStyle} onClick={() => handleIngredientClick(outletId)}>
                             <div style={cardContentStyle}>
                                 <div style={cardTitleStyle}>Ingredient Report</div>
                             </div>
-                            <div style={arrowStyle}>{'>'}</div>
+                            {/* <div style={arrowStyle}>{'>'}</div> */}
                         </Card.Body>
                     </Card>
                 </Col>
