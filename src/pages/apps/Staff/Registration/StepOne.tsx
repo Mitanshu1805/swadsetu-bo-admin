@@ -95,18 +95,19 @@ const StepOne: React.FC<{ step: number }> = ({ step }) => {
                     {/* ✅ Default Attendance */}
                     <div className="col-4 mb-3">
                         <label>Default Attendance*</label>
-                        <div className="radio-group d-flex gap-2">
+                        <div className="radio-group d-flex gap-2 flex-wrap">
                             {['Manual', 'Absent', 'Present'].map((option) => {
                                 const isSelected = attendanceValue === option;
 
                                 return (
                                     <label
                                         key={option}
-                                        className="radio-box px-3 py-2 border rounded text-center cursor-pointer"
+                                        className="radio-box px-3 py-2 border rounded text-center cursor-pointer flex-grow-1"
                                         style={{
                                             backgroundColor: isSelected ? AppColors.primaryColor : '#f8f9fa',
                                             color: isSelected ? '#fff' : '#000',
                                             transition: '0.2s ease-in-out',
+                                            minWidth: '80px', // ensures they don’t shrink too much on mobile
                                         }}>
                                         <input
                                             type="radio"

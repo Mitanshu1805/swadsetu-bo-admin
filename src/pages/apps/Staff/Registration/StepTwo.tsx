@@ -89,14 +89,14 @@ const StepTwo: React.FC = () => {
                             <input
                                 type="checkbox"
                                 value={outlet.outlet_id}
-                                {...register('outlet_ids', { required: 'Select at least one outlet' })}
+                                {...register('outlet_ids')}
                                 style={{ marginRight: '12px' }}
                             />
                             {outlet.outlet_name}
                         </label>
                     ))}
                 </div>
-                {errors.outlet_ids && <small className="text-danger">{errors.outlet_ids.message}</small>}
+                {/* {errors.outlet_ids && <small className="text-danger">{errors.outlet_ids.message}</small>} */}
             </Form.Group>
         </div>
     );

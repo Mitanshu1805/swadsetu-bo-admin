@@ -56,6 +56,9 @@ const Staff: React.FC<props> = ({ outletId }) => {
                     business_id: businessId,
                     outlet_id: outletId,
                 };
+                if (payload.outlet_id === 'master') {
+                    delete payload.outlet_id;
+                }
                 if (businessId) dispatch(staffList(payload));
             });
         }
