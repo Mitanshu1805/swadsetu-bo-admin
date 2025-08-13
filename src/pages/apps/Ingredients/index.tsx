@@ -28,6 +28,8 @@ const Ingredients = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
     const [searchTerm, setSearchTerm] = useState('');
+    const [unitError, setUnitError] = useState('');
+    const [nameError, setNameError] = useState('');
 
     const filteredIngredients = ingredients.filter((ingredient: any) =>
         ingredient?.ingredient_name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -57,7 +59,20 @@ const Ingredients = () => {
     };
 
     const handleSaveIngredient = () => {
-        if (!ingredientName.trim()) return;
+        if (!ingredientName.trim()) {
+            setNameError('Please write ingredient name');
+
+            return;
+        } else {
+            setNameError('');
+        }
+
+        if (!unit) {
+            setUnitError('Please select a unit');
+            return;
+        } else {
+            setUnitError(''); // clear error if unit is selected
+        }
 
         const payload = {
             ingredient_name: ingredientName,
@@ -240,6 +255,7 @@ const Ingredients = () => {
                                 onChange={(e) => setIngredientName(e.target.value)}
                                 placeholder="Enter ingredient name"
                             />
+                            {nameError && <Form.Text style={{ color: 'red' }}>{nameError}</Form.Text>}
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Unit</Form.Label>
@@ -251,6 +267,7 @@ const Ingredients = () => {
                                 <option value="l">L</option>
                                 <option value="piece">Piece</option>
                             </Form.Select>
+                            {unitError && <Form.Text style={{ color: 'red' }}>{unitError}</Form.Text>}
                         </Form.Group>
                     </Form>
                 </Modal.Body>

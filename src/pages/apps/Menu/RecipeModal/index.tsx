@@ -9,7 +9,7 @@ import {
     recipeList,
     recipeUpdate,
 } from '../../../../redux/actions';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface Ingredient {
     ingredient_name: string;
@@ -44,6 +44,7 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
     const outletId = location?.state?.outletId;
     const recipeId = location?.state?.recipe_id;
     const ingredientsState = useSelector((state: any) => state?.RecipeIngredients?.ingredients);
+    const navigate = useNavigate();
     console.log(ingredientsState);
 
     useEffect(() => {
@@ -95,22 +96,46 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
     }, [recipeId, businessId, itemId, ingredientsState, dispatch, reset]);
 
     // This effect runs only when recipe details are updated in the store
+    // useEffect(() => {
+    //     if (recipe && recipe.ingredients) {
+    //         console.log(recipe);
+
+    //         reset({
+    //             preparation_time: recipe.preparation_time,
+    //             preparation_type: recipe.preparation_type,
+    //             instructions: recipe.instructions,
+    //             ingredients: recipe.ingredients.map((ing: any) => ({
+    //                 selected: true,
+    //                 ingredient_id: ing.ingredient_id,
+    //                 ingredient_name: ing.ingredient_name,
+    //                 unit: ing.unit,
+    //                 quantity: ing.quantity,
+    //             })),
+    //         });
+    //     }
+    // }, [recipe, reset]);
+
     useEffect(() => {
-        if (recipe && recipe.ingredients) {
-            reset({
-                preparation_time: recipe.preparation_time,
-                preparation_type: recipe.preparation_type,
-                instructions: recipe.instructions,
-                ingredients: recipe.ingredients.map((ing: any) => ({
-                    selected: true,
+        if (ingredientsState?.length) {
+            const fullIngredients = ingredientsState.map((ing: any) => {
+                const recipeIng = recipe?.ingredients?.find((r: any) => r.ingredient_id === ing.ingredient_id);
+                return {
                     ingredient_id: ing.ingredient_id,
                     ingredient_name: ing.ingredient_name,
                     unit: ing.unit,
-                    quantity: ing.quantity,
-                })),
+                    quantity: recipeIng ? recipeIng.quantity : '',
+                    selected: !!recipeIng,
+                };
+            });
+
+            reset({
+                preparation_time: recipe?.preparation_time || '',
+                preparation_type: recipe?.preparation_type || '',
+                instructions: recipe?.instructions || '',
+                ingredients: fullIngredients,
             });
         }
-    }, [recipe, reset]);
+    }, [ingredientsState, recipe, reset]);
 
     // useEffect(() => {
     //     if (recipeId) {
@@ -186,8 +211,10 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
 
         console.log(payload);
 
+        // navigate('/item-details');
+
         // onSubmit(data);
-        dispatch(recipeAdd(payload));
+        // dispatch(recipeAdd(payload));
 
         reset();
         // onClose();
@@ -225,36 +252,28 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Ingredients</label>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        {ingredientsState?.map((ing: any, index: number) => {
+                        {fields.map((field, index) => {
+                            const isSelected = watch(`ingredients.${index}.selected`);
                             return (
-                                <div
-                                    key={ing.ingredient_id}
-                                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <div key={field.id} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <input type="checkbox" {...register(`ingredients.${index}.selected`)} />
                                     <span>
-                                        {ing.ingredient_name} ({ing.unit})
+                                        {field.ingredient_name} ({field.unit})
                                     </span>
 
-                                    {/* Hidden fields to keep ingredient info */}
-                                    <input
-                                        type="hidden"
-                                        value={ing.ingredient_id}
-                                        {...register(`ingredients.${index}.ingredient_id`)}
-                                    />
-                                    <input
-                                        type="hidden"
-                                        value={ing.ingredient_name}
-                                        {...register(`ingredients.${index}.ingredient_name`)}
-                                    />
-                                    <input type="hidden" value={ing.unit} {...register(`ingredients.${index}.unit`)} />
+                                    {/* Hidden fields */}
+                                    <input type="hidden" {...register(`ingredients.${index}.ingredient_id`)} />
+                                    <input type="hidden" {...register(`ingredients.${index}.ingredient_name`)} />
+                                    <input type="hidden" {...register(`ingredients.${index}.unit`)} />
 
-                                    {/* Quantity input shows only if selected */}
-                                    {watch(`ingredients.${index}.selected`) && (
+                                    {/* Quantity input only if selected */}
+                                    {isSelected && (
                                         <input
                                             type="number"
                                             placeholder="Qty"
-                                            {...register(`ingredients.${index}.quantity`, { required: true })}
+                                            {...register(`ingredients.${index}.quantity`, { required: isSelected })}
                                             style={{ width: '80px' }}
+                                            disabled={!isSelected}
                                         />
                                     )}
                                 </div>
