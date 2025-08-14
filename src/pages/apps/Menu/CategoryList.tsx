@@ -161,98 +161,142 @@ const CategoryList = () => {
                 className="category-heading"
                 style={{
                     // position: 'sticky',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                     top: 0,
                     zIndex: 1000000, // make sure it stays on top
                     backgroundColor: AppColors.backgroundColor, // so it doesn't look transparent
                     paddingBottom: '16px',
                     paddingTop: '8px', // optional padding
-                    borderBottom: '1px solid #ddd', // optional border
+                    // borderBottom: '1px solid #ddd', // optional border
                 }}>
-                <h3>Category List</h3>
-                <h5>{outlet_name}</h5>
+                <div>
+                    <h3 style={{ margin: 0 }}>Category List</h3>
+                    <h5 style={{ margin: 0 }}>{outlet_name}</h5>
+                </div>
+
+                {outletId === 'master' && (
+                    <Button
+                        variant="danger"
+                        onClick={() => {
+                            handleRegisterCategory(businessId, outletId);
+                        }}>
+                        + Add Category
+                    </Button>
+                )}
             </div>
 
             <Row>
                 {categoryState.map((category: any, index: number) => (
-                    <Col key={index} md={12}>
-                        <Card style={cardStyle}>
-                            <Card.Body style={cardBodyStyle}>
-                                {/* Category Image */}
-                                {category.logo_image && (
-                                    <img src={category.logo_image} alt="Outlet Logo" style={logoStyle} />
-                                )}
+                    <Col key={index} xs="auto" style={{ marginBottom: '1rem' }}>
+                        <Card
+                            style={{
+                                width: '180px', // standing rectangle
+                                height: '230px',
+                                borderRadius: '12px',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                padding: '1rem',
+                                textAlign: 'center',
+                            }}>
+                            {/* Logo */}
+                            {category.logo_image && (
+                                <img
+                                    src={category.logo_image}
+                                    alt="Category Logo"
+                                    style={{
+                                        width: '60px',
+                                        height: '60px',
+                                        borderRadius: '50%',
+                                        objectFit: 'cover',
+                                        marginBottom: '0.75rem',
+                                    }}
+                                />
+                            )}
 
-                                {/* Name */}
-                                <div style={cardContentStyle}>
-                                    <div style={cardTitleStyle}>
-                                        {category.category_names.english || 'Unnamed Outlet'}
-                                    </div>
-                                </div>
-                                {/* Edit/Delete Button Column */}
+                            {/* Name */}
+                            <div
+                                style={{
+                                    fontSize: '1rem',
+                                    fontWeight: 600,
+                                    // marginBottom: '0.75rem',
+                                    minHeight: '40px', // keep height consistent
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                {category.category_names?.english || 'Unnamed'}
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    gap: '0.5rem',
+                                    // marginBottom: '0.75rem',
+                                }}>
+                                {outletId === 'master' && (
+                                    <>
+                                        <button
+                                            style={{
+                                                backgroundColor: AppColors.borderColor,
+                                                color: AppColors.iconColor,
+                                                border: 'none',
+                                                borderRadius: '4px',
+                                                padding: '6px',
+                                                cursor: 'pointer',
+                                                height: '36px',
+                                                width: '36px',
+                                            }}
+                                            onClick={() =>
+                                                handleEditCategory(businessId, outletId, category.category_id)
+                                            }>
+                                            <FaRegEdit />
+                                        </button>
+
+                                        <button
+                                            style={{
+                                                backgroundColor: AppColors.borderColor,
+                                                color: AppColors.iconColor,
+                                                height: '36px',
+                                                width: '36px',
+                                                border: 'none',
+                                                borderRadius: '4px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                            }}
+                                            onClick={() => handleCategoryDelete(category.category_id)}>
+                                            <FaRegTrashAlt />
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Status */}
+                            <div style={{ marginTop: '10px' }}>
+                                <ToggleSwitch
+                                    checked={category.is_active}
+                                    onChange={(checked) => handleCategoryToggle(category.category_id, checked)}
+                                />
                                 <div
                                     style={{
-                                        display: 'flex',
-                                        gap: '0.5rem',
-                                        marginLeft: 'auto',
-                                        alignItems: 'center',
+                                        fontSize: '0.85rem',
+                                        marginTop: '10px',
+                                        color: category.is_active ? 'green' : 'red',
                                     }}>
-                                    {outletId == 'master' && (
-                                        <>
-                                            <button
-                                                style={{
-                                                    backgroundColor: AppColors.borderColor,
-                                                    color: AppColors.iconColor,
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    padding: '8px',
-                                                    cursor: 'pointer',
-                                                    height: '40px',
-                                                    width: '40px',
-                                                }}
-                                                onClick={() =>
-                                                    handleEditCategory(businessId, outletId, category.category_id)
-                                                }>
-                                                <FaRegEdit />
-                                            </button>
-
-                                            <button
-                                                style={{
-                                                    backgroundColor: AppColors.borderColor,
-                                                    color: AppColors.iconColor,
-                                                    height: '40px',
-                                                    width: '40px',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    cursor: 'pointer',
-                                                }}
-                                                onClick={() => handleCategoryDelete(category.category_id)}>
-                                                <FaRegTrashAlt />
-                                            </button>
-                                            <ConfirmDeleteModal
-                                                show={showDeleteModal}
-                                                onClose={() => setShowDeleteModal(false)}
-                                                onConfirm={confirmDelete}
-                                                title="Delete this Category"
-                                                message="Are you sure you want to delete this category? This action cannot be undone."
-                                            />
-                                        </>
-                                    )}
-                                    <div onClick={(e) => e.stopPropagation()}>
-                                        <ToggleSwitch
-                                            checked={category.is_active}
-                                            onChange={(checked) => handleCategoryToggle(category.category_id, checked)}
-                                        />
-                                    </div>
+                                    {/* {category.is_active ? 'Active' : 'Inactive'} */}
                                 </div>
-                            </Card.Body>
+                            </div>
                         </Card>
                     </Col>
                 ))}
             </Row>
-            <div
+            {/* <div
                 style={{
                     // paddingTop: '16px',
                     // borderTop: '1px solid #ddd',
@@ -272,7 +316,7 @@ const CategoryList = () => {
                         + Add Category
                     </Button>
                 )}
-            </div>
+            </div> */}
         </div>
     );
 };

@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import AuthLayout from './AuthLayout';
 import { useSelector } from 'react-redux';
 import BusinessSelector from '../BusinessSelector';
+import './Login.css';
+import SwadSetuLogo from '../../assets/images/logoImage.svg';
 
 type LocationState = {
     from?: Location;
@@ -120,53 +122,62 @@ const Login = () => {
         <>
             {userLoggedIn && user && <Navigate to={redirectUrl} replace />}
 
-            <AuthLayout bottomLinks={<BottomLink />}>
-                <div className="text-center mb-4">
-                    <h4 className="text-uppercase mt-0">{t('Login')}</h4>
-                </div>
+            <div className="login-wrapper">
+                <div className="login-card">
+                    <Link to="/" className="logo logo-light text-center">
+                        <span className="logo-lg">
+                            <img src={SwadSetuLogo} alt="" height="50" />
+                        </span>
+                    </Link>
+                    <div className="text-center mb-4">
+                        <h4 className="text-uppercase mt-0">{t('Login')}</h4>
+                        <p className="text-muted">
+                            {!showOtpForm ? t('Sign in with your phone number') : t('Enter OTP to continue')}
+                        </p>
+                    </div>
 
-                {error && <Alert variant="danger">{error}</Alert>}
-                {loading && <Loader />}
+                    {error && <Alert variant="danger">{error}</Alert>}
+                    {loading && <Loader />}
 
-                {!showOtpForm ? (
-                    <VerticalForm<UserData> onSubmit={handleSendOtp} resolver={phoneSchema}>
-                        <FormInput
-                            name="phone_number"
-                            label={t('Enter your Mobile Number for Login')}
-                            placeholder={t('Phone number')}
-                            containerClass="mb-3"
-                        />
-                        <div className="text-center d-grid mb-3">
-                            <Button variant="danger" type="submit" disabled={loading}>
-                                {t('Get OTP')}
-                            </Button>
-                        </div>
-                    </VerticalForm>
-                ) : (
-                    <VerticalForm<OtpData>
-                        onSubmit={handleVerifyOtp}
-                        resolver={otpSchema}
-                        defaultValues={{ phone_number: phoneNumber }}>
-                        <FormInput
-                            name="otp"
-                            label={t('Enter OTP')}
-                            placeholder={t('6-digit code')}
-                            containerClass="mb-3"
-                        />
-
-                        {otp && (
-                            <div className="text-center mt-3">
-                                <span className="fw-classic fs-7 text-danger">OTP : {otp}</span>
+                    {!showOtpForm ? (
+                        <VerticalForm<UserData> onSubmit={handleSendOtp} resolver={phoneSchema}>
+                            <FormInput
+                                name="phone_number"
+                                label={t('Mobile Number')}
+                                placeholder={t('Enter your phone number')}
+                                containerClass="mb-3"
+                            />
+                            <div className="d-grid">
+                                <Button className="custom-btn" type="submit" disabled={loading}>
+                                    {t('Get OTP')}
+                                </Button>
                             </div>
-                        )}
-                        <div className="text-center d-grid mb-3">
-                            <Button variant="danger" type="submit" disabled={loading}>
-                                {t('Verify OTP')}
-                            </Button>
-                        </div>
-                    </VerticalForm>
-                )}
-            </AuthLayout>
+                        </VerticalForm>
+                    ) : (
+                        <VerticalForm<OtpData>
+                            onSubmit={handleVerifyOtp}
+                            resolver={otpSchema}
+                            defaultValues={{ phone_number: phoneNumber }}>
+                            <FormInput
+                                name="otp"
+                                label={t('OTP')}
+                                placeholder={t('6-digit code')}
+                                containerClass="mb-3"
+                            />
+                            {otp && (
+                                <div className="text-center mt-2">
+                                    <span className="otp-display">OTP: {otp}</span>
+                                </div>
+                            )}
+                            <div className="d-grid">
+                                <Button className="custom-btn" type="submit" disabled={loading}>
+                                    {t('Verify OTP')}
+                                </Button>
+                            </div>
+                        </VerticalForm>
+                    )}
+                </div>
+            </div>
         </>
     );
 };

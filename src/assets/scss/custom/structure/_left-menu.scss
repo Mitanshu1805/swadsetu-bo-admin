@@ -21,22 +21,32 @@
 
 // Sidemenu
 .left-side-menu {
+    z-index: 1001; // above overlay
     width: $leftbar-width;
-    // background: $bg-leftbar;
-    background: '#fefcf7';
+    background: #fefcf7; // no quotes
     bottom: 0;
     padding: 20px 0;
     position: fixed;
     transition: all 0.1s ease-out;
     top: $topbar-height;
     box-shadow: $box-shadow;
-    .user-box {
-        display: none;
-        .img-thumbnail {
-            background-color: inherit;
-            border-color: $left-menu-user-box-border;
-        }
-    }
+}
+
+// The dimmed background
+.sidebar-overlay {
+    position: fixed;
+    top: $topbar-height; // same as sidebar
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); // darken
+    z-index: 1000; // just below sidebar
+    display: none; // hidden by default
+}
+
+// Show overlay when sidebar is active
+.sidebar-open .sidebar-overlay {
+    display: block;
 }
 
 // Leftbar with user

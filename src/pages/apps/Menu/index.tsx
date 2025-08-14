@@ -2,80 +2,76 @@ import React from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-type props = {
+type Props = {
     outletId: string;
 };
 
-const Menu: React.FC<props> = ({ outletId }) => {
+const Menu: React.FC<Props> = ({ outletId }) => {
     const location = useLocation();
     const outlet_name = location.state.outlet_name;
-    console.log(outlet_name);
-    console.log('Daily reports called for outletId:', outletId);
     const navigate = useNavigate();
-    const cardStyle: React.CSSProperties = {
-        boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-        marginBottom: '20px',
+
+    const cardBaseStyle: React.CSSProperties = {
+        borderRadius: '16px',
         cursor: 'pointer',
-        transition: 'background 0.2s',
+        height: '200px', // tall card
+        width: '160px', // narrow card
+        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        position: 'relative',
+        margin: 'auto',
     };
 
-    const cardBodyStyle: React.CSSProperties = {
-        padding: '12px 16px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    const cardHoverStyle: React.CSSProperties = {
+        transform: 'translateY(-4px)',
+        boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
     };
 
-    const cardTitleStyle: React.CSSProperties = {
-        // fontWeight: 'bold',
-        fontSize: '1.25rem',
-        marginBottom: '0.25rem',
+    const textContainerStyle: React.CSSProperties = {
+        position: 'absolute',
+        top: '12px',
+        left: '12px',
+        textAlign: 'left',
+        fontSize: '1.1rem',
+        fontWeight: 600,
     };
 
-    const cardContentStyle: React.CSSProperties = {
-        display: 'flex',
-        flexDirection: 'column',
-    };
-
-    const arrowStyle: React.CSSProperties = {
-        fontSize: '1.2rem',
-        // color: '#888',
-        marginLeft: '1rem',
-    };
-
-    const handleCategoryClick = (outletId: string) => {
-        console.log('category checking needed for outlet_id: ', outletId);
+    const handleCategoryClick = () => {
         navigate('/category-list', {
             state: { outletId, outlet_name },
         });
     };
-    const handleItemClick = (outletId: string) => {
-        console.log('item checking needed for outlet_id: ', outletId);
+
+    const handleItemClick = () => {
         navigate('/item-list', {
             state: { outletId },
         });
     };
+
     return (
-        <div style={{ padding: '1rem', fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif" }}>
-            <Row>
-                <Col md={12}>
-                    <Card style={cardStyle}>
-                        <Card.Body style={cardBodyStyle} onClick={() => handleCategoryClick(outletId)}>
-                            <div style={cardContentStyle}>
-                                <div style={cardTitleStyle}>Category</div>
-                            </div>
-                            <div style={arrowStyle}>{'>'}</div>
-                        </Card.Body>
+        <div style={{ padding: '1rem' }}>
+            <Row className="g-4 justify-content-start">
+                <Col xs="auto">
+                    <Card
+                        style={cardBaseStyle}
+                        onMouseEnter={(e) => Object.assign(e.currentTarget.style, cardHoverStyle)}
+                        onMouseLeave={(e) => Object.assign(e.currentTarget.style, cardBaseStyle)}
+                        onClick={handleCategoryClick}>
+                        <div style={textContainerStyle}>
+                            <div>Category</div>
+                        </div>
                     </Card>
                 </Col>
-                <Col md={12}>
-                    <Card style={cardStyle}>
-                        <Card.Body style={cardBodyStyle} onClick={() => handleItemClick(outletId)}>
-                            <div style={cardContentStyle}>
-                                <div style={cardTitleStyle}>Item</div>
-                            </div>
-                            <div style={arrowStyle}>{'>'}</div>
-                        </Card.Body>
+
+                <Col xs="auto">
+                    <Card
+                        style={cardBaseStyle}
+                        onMouseEnter={(e) => Object.assign(e.currentTarget.style, cardHoverStyle)}
+                        onMouseLeave={(e) => Object.assign(e.currentTarget.style, cardBaseStyle)}
+                        onClick={handleItemClick}>
+                        <div style={textContainerStyle}>
+                            <div>Item</div>
+                        </div>
                     </Card>
                 </Col>
             </Row>

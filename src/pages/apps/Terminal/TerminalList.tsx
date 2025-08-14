@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
 import { terminalDelete, terminalList } from '../../../redux/actions';
-import { useParams } from 'react-router-dom';
 import { Card, Col, Row } from 'react-bootstrap';
 import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
@@ -15,15 +14,12 @@ type Props = {
 
 const TerminalList: React.FC<Props> = ({ outletId }) => {
     const { dispatch } = useRedux();
-
     const terminal = useSelector((state: any) => state?.Terminal?.data);
 
     const [showTermEditModal, setShowTermEditModal] = useState(false);
     const [selectedTerminalData, setSelectedTerminalData] = useState<any>(null);
     const [terminalToDelete, setTerminalToDelete] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    console.log('outletId', outletId);
 
     useEffect(() => {
         if (outletId) {
@@ -32,9 +28,7 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
     }, [dispatch, outletId]);
 
     const handleTerminalEdit = (terminal_id: string) => {
-        const terminalData = terminal.find((item: any) => item.terminal_id == terminal_id);
-        console.log(terminalData);
-
+        const terminalData = terminal.find((item: any) => item.terminal_id === terminal_id);
         setSelectedTerminalData(terminalData);
         setShowTermEditModal(true);
     };
@@ -54,90 +48,105 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
         setShowDeleteModal(false);
     };
 
+    const cardBaseStyle: React.CSSProperties = {
+        borderRadius: '12px',
+        cursor: 'pointer',
+        minHeight: '220px',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    };
+
+    const cardHoverStyle: React.CSSProperties = {
+        transform: 'translateY(-3px)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+    };
+
     return (
         <div style={{ padding: '1rem' }}>
-            <Row>
+            <Row className="g-4">
                 {terminal?.length > 0 ? (
                     terminal.map((item: any) => (
-                        <Col key={item.terminal_id} md={6}>
-                            <Card style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.1)', marginBottom: '20px' }}>
-                                <Card.Body style={{ padding: '0px 12px 8px 12px' }}>
-                                    <Card.Title
-                                        style={{
-                                            fontWeight: 'bold',
-                                            fontSize: '1.25rem',
-                                            marginBottom: '0.5rem',
-                                        }}>
-                                        {item.terminal_name}
-                                    </Card.Title>
-
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'flex-start',
-                                            flexWrap: 'wrap',
-                                        }}>
-                                        <div style={{ marginRight: '1rem', minWidth: '200px' }}>
-                                            <div>Device Name: {item.device_name || 'N/A'}</div>
-                                            <div>Expires: {item.session_duration || 'no_expiry'}</div>
-                                            <div>
-                                                {item.created_at
-                                                    ? new Date(item.created_at).toLocaleString('en-US', {
-                                                          year: 'numeric',
-                                                          month: 'long',
-                                                          day: 'numeric',
-                                                          hour: 'numeric',
-                                                          minute: '2-digit',
-                                                          hour12: true,
-                                                      })
-                                                    : 'N/A'}
-                                            </div>
+                        <Col key={item.terminal_id} xs={12} sm={6} md={4}>
+                            <Card
+                                className="shadow-sm h-100"
+                                style={cardBaseStyle}
+                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, cardHoverStyle)}
+                                onMouseLeave={(e) => Object.assign(e.currentTarget.style, cardBaseStyle)}>
+                                <Card.Body className="d-flex flex-column justify-content-between p-3">
+                                    <div>
+                                        <Card.Title
+                                            style={{
+                                                fontWeight: 'bold',
+                                                fontSize: '1.2rem',
+                                                marginBottom: '0.5rem',
+                                            }}>
+                                            {item.terminal_name}
+                                        </Card.Title>
+                                        <div style={{ fontSize: '0.95rem', marginBottom: '0.25rem' }}>
+                                            Device Name: {item.device_name || 'N/A'}
                                         </div>
-
-                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                            <button
-                                                style={{
-                                                    backgroundColor: AppColors.borderColor,
-                                                    color: AppColors.iconColor,
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    padding: '8px',
-                                                    cursor: 'pointer',
-                                                    height: '40px',
-                                                    width: '40px',
-                                                }}
-                                                onClick={() => handleTerminalEdit(item.terminal_id)}>
-                                                <FaRegEdit />
-                                            </button>
-
-                                            <button
-                                                style={{
-                                                    backgroundColor: AppColors.borderColor,
-                                                    color: AppColors.iconColor,
-                                                    height: '40px',
-                                                    width: '40px',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    cursor: 'pointer',
-                                                }}
-                                                onClick={() => handleTerminalDelete(item.terminal_id)}>
-                                                <FaRegTrashAlt />
-                                            </button>
-                                            <ConfirmDeleteModal
-                                                show={showDeleteModal}
-                                                onClose={() => setShowDeleteModal(false)}
-                                                onConfirm={confirmDelete}
-                                                title="Delete this Terminal"
-                                                message="Are you sure you want to delete this terminal? This action cannot be undone."
-                                            />
+                                        <div style={{ fontSize: '0.95rem', marginBottom: '0.25rem' }}>
+                                            Expires: {item.session_duration || 'no_expiry'}
                                         </div>
+                                        <div style={{ fontSize: '0.9rem', color: '#666' }}>
+                                            {item.created_at
+                                                ? new Date(item.created_at).toLocaleString('en-US', {
+                                                      year: 'numeric',
+                                                      month: 'long',
+                                                      day: 'numeric',
+                                                      hour: 'numeric',
+                                                      minute: '2-digit',
+                                                      hour12: true,
+                                                  })
+                                                : 'N/A'}
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="d-flex gap-2 justify-content-end">
+                                        <button
+                                            style={{
+                                                backgroundColor: AppColors.borderColor,
+                                                color: AppColors.iconColor,
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                padding: '8px',
+                                                cursor: 'pointer',
+                                                height: '40px',
+                                                width: '40px',
+                                            }}
+                                            onClick={() => handleTerminalEdit(item.terminal_id)}>
+                                            <FaRegEdit />
+                                        </button>
+
+                                        <button
+                                            style={{
+                                                backgroundColor: AppColors.borderColor,
+                                                color: AppColors.iconColor,
+                                                height: '40px',
+                                                width: '40px',
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                            }}
+                                            onClick={() => handleTerminalDelete(item.terminal_id)}>
+                                            <FaRegTrashAlt />
+                                        </button>
                                     </div>
                                 </Card.Body>
                             </Card>
+
+                            {/* Delete Modal */}
+                            <ConfirmDeleteModal
+                                show={showDeleteModal}
+                                onClose={() => setShowDeleteModal(false)}
+                                onConfirm={confirmDelete}
+                                title="Delete this Terminal"
+                                message="Are you sure you want to delete this terminal? This action cannot be undone."
+                            />
                         </Col>
                     ))
                 ) : (

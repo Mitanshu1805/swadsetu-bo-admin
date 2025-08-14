@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import { usersBusinesses } from '../redux/actions';
-import { AppColors } from '../utils/Colors';
+import './BusinessSelector.css';
 
 const BusinessSelector = () => {
     const navigate = useNavigate();
@@ -24,30 +24,24 @@ const BusinessSelector = () => {
 
     const selectedBusiness = JSON.parse(localStorage.getItem('selected_business') || '{}');
     const businessId = selectedBusiness.business_id;
-    console.log(businessId);
 
     return (
-        <div className="container mt-5">
-            <h3 className="mb-4">Select a Business</h3>
-            <div className="row">
+        <div className="business-selector-container">
+            <h3 className="title">Select a Business</h3>
+            <div className="row justify-content-center">
                 {businesses?.list?.map((business: any) => (
-                    <div className="col-md-4 mb-4" key={business.business_id} onClick={() => handleSelect(business)}>
-                        <Card
-                            style={{
-                                cursor: 'pointer',
-                                backgroundColor: businessId === business.business_id ? AppColors.primaryColor : 'white',
-                            }}>
-                            <Card.Body>
-                                <Card.Title
-                                    style={{
-                                        cursor: 'pointer',
-                                        color:
-                                            selectedBusiness.business_name === business.business_name
-                                                ? 'white'
-                                                : 'black',
-                                    }}>
-                                    {business.business_name}
-                                </Card.Title>
+                    <div
+                        className="col-sm-6 col-md-4 col-lg-3 mb-4"
+                        key={business.business_id}
+                        onClick={() => handleSelect(business)}>
+                        <Card className={`business-card ${businessId === business.business_id ? 'selected' : ''}`}>
+                            {business.logo && (
+                                <div className="business-logo">
+                                    <img src={business.logo} alt={business.business_name} />
+                                </div>
+                            )}
+                            <Card.Body className="text-center">
+                                <Card.Title>{business.business_name}</Card.Title>
                             </Card.Body>
                         </Card>
                     </div>

@@ -2,24 +2,16 @@ import { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-// hooks
 import { useRedux } from '../../hooks/';
-
-//actions
 import { logoutUser, resetAuth } from '../../redux/actions';
-
-// components
 import AuthLayout from './AuthLayout';
-
-// images
-import LogoDark from '../../assets/images/logo-dark.png';
-import LogoLight from '../../assets/images/logo-light.png';
 import SwadSetuLogo from '../../assets/images/logoImage.svg';
+import './Logout.css'; // for custom styles
+import { AppColors } from '../../utils/Colors';
 
 const LogoutIcon = () => {
     return (
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+        <svg className="logout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
             <circle
                 className="path circle"
                 fill="none"
@@ -43,18 +35,15 @@ const LogoutIcon = () => {
     );
 };
 
-/* bottom link */
 const BottomLink = () => {
     const { t } = useTranslation();
-    console.log('Rendering BottomLink...');
-
     return (
-        <Row className="mt-3">
+        <Row className="mt-4">
             <Col xs={12} className="text-center">
-                <p className="text-muted">
+                <p className="text-black">
                     {t('Back to')}{' '}
-                    <Link to={'/auth/login'} className="text-dark ms-1">
-                        <b>{t('Sign In')}</b>
+                    <Link to="/auth/login" style={{ color: AppColors.primaryColor }} className="fw-bold">
+                        {t('Sign In')}
                     </Link>
                 </p>
             </Col>
@@ -76,32 +65,19 @@ const Logout = () => {
     }, [dispatch]);
 
     return (
-        <AuthLayout hasLogo={false} bottomLinks={<BottomLink />}>
-            <div className="text-center w-75 m-auto">
-                <div className="auth-logo">
-                    <Link to="/" className="logo logo-dark text-center">
-                        <span className="logo-lg">
-                            <img src={SwadSetuLogo} alt="" height="50" />
-                        </span>
-                    </Link>
-
-                    <Link to="/" className="logo logo-light text-center">
-                        <span className="logo-lg">{/* <img src={SwadSetuLogo} alt="" height="22" /> */}</span>
-                    </Link>
+        <div className="logout-page">
+            <div className="logout-card text-center">
+                <div className="mb-4">
+                    <img src={SwadSetuLogo} alt="Logo" height="60" />
                 </div>
-            </div>
-            <div className="text-center">
-                <div className="mt-4">
-                    <div className="logout-checkmark">
-                        <LogoutIcon />
-                    </div>
+                <div className="logout-checkmark mb-3">
+                    <LogoutIcon />
                 </div>
-
-                <h3>{t('See you again !')}</h3>
-
-                <p className="text-muted"> {t('You are now successfully sign out.')} </p>
+                <h3 className="text-black mb-2">{t('See you again !')}</h3>
+                <p className="text-black">{t('You are now successfully sign out.')}</p>
+                <BottomLink />
             </div>
-        </AuthLayout>
+        </div>
     );
 };
 

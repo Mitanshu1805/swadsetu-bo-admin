@@ -1,84 +1,102 @@
 import React from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { FaFileInvoiceDollar } from 'react-icons/fa';
+import { GiWheat } from 'react-icons/gi';
 
 type Props = {
     outletId: string;
 };
 
 const DailyReports: React.FC<Props> = ({ outletId }) => {
-    console.log('Daily reports called for outletId:', outletId);
     const navigate = useNavigate();
 
-    const cardStyle: React.CSSProperties = {
-        boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-        marginBottom: '20px',
+    const cardBaseStyle: React.CSSProperties = {
+        borderRadius: '12px',
         cursor: 'pointer',
-        transition: 'background 0.2s',
-    };
-
-    const cardBodyStyle: React.CSSProperties = {
-        padding: '12px 16px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    };
-
-    const cardTitleStyle: React.CSSProperties = {
-        // fontWeight: 'bold',
-        fontSize: '1.25rem',
-        marginBottom: '0.25rem',
-    };
-
-    const cardContentStyle: React.CSSProperties = {
+        minHeight: '120px',
+        minWidth: '200px',
+        border: '2px solid #EEEEEE',
+        boxShadow: '0 2px 8px rgba(255, 77, 79, 0.15)',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        backgroundColor: '#fff',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
+        textAlign: 'center',
     };
 
-    const arrowStyle: React.CSSProperties = {
-        fontSize: '1.2rem',
-        // color: '#888',
-        marginLeft: '1rem',
+    const iconStyle: React.CSSProperties = {
+        fontSize: '2.5rem',
+        color: '#ff4d4f',
+        marginBottom: '0.75rem',
     };
 
-    const handleTransactionClick = (outletId: string) => {
-        console.log('transaction checking needed for outlet_id: ', outletId);
-        navigate('/trans-report-list', {
-            state: { outletId },
-        });
+    const handleCardHover = (e: React.MouseEvent<HTMLDivElement>) => {
+        const target = e.currentTarget as HTMLDivElement;
+        target.style.transform = 'translateY(-6px)';
+        target.style.boxShadow = '0 8px 20px rgba(255, 77, 79, 0.25)';
     };
-    const handleIngredientClick = (outletId: string) => {
-        console.log('ingredient checking needed for outlet_id: ', outletId);
-        navigate('/ingredient-report-list', {
-            state: { outletId },
-        });
+
+    const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+        const target = e.currentTarget as HTMLDivElement;
+        target.style.transform = 'translateY(0)';
+        target.style.boxShadow = '0 2px 8px rgba(255, 77, 79, 0.15)';
     };
+
+    const handleTransactionClick = () => {
+        navigate('/trans-report-list', { state: { outletId } });
+    };
+
+    const handleIngredientClick = () => {
+        navigate('/ingredient-report-list', { state: { outletId } });
+    };
+
     return (
         <div
             style={{
                 padding: '1rem',
                 fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif",
-                // display: 'grid',
-                // gridTemplateColumns: 'repeat(2, 1fr)',
             }}>
-            <Row>
-                <Col md={6}>
-                    <Card style={cardStyle}>
-                        <Card.Body style={cardBodyStyle} onClick={() => handleTransactionClick(outletId)}>
-                            <div style={cardContentStyle}>
-                                <div style={cardTitleStyle}>Transaction Report</div>
-                            </div>
-                            {/* <div style={arrowStyle}>{'>'}</div> */}
+            <Row className="g-4">
+                <Col xs={12} sm={6} md={3} lg={2}>
+                    <Card
+                        style={cardBaseStyle}
+                        onMouseEnter={handleCardHover}
+                        onMouseLeave={handleCardLeave}
+                        onClick={handleTransactionClick}>
+                        <FaFileInvoiceDollar style={iconStyle} />
+                        <Card.Body className="p-0">
+                            <Card.Title
+                                style={{
+                                    fontWeight: 'bold',
+                                    fontSize: '1.1rem',
+                                    fontFamily: 'sans-serif',
+                                }}>
+                                Transaction Report
+                            </Card.Title>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={6}>
-                    <Card style={cardStyle}>
-                        <Card.Body style={cardBodyStyle} onClick={() => handleIngredientClick(outletId)}>
-                            <div style={cardContentStyle}>
-                                <div style={cardTitleStyle}>Ingredient Report</div>
-                            </div>
-                            {/* <div style={arrowStyle}>{'>'}</div> */}
+
+                <Col xs={12} sm={6} md={3} lg={2}>
+                    <Card
+                        style={cardBaseStyle}
+                        onMouseEnter={handleCardHover}
+                        onMouseLeave={handleCardLeave}
+                        onClick={handleIngredientClick}>
+                        <GiWheat style={iconStyle} />
+                        <Card.Body className="p-0">
+                            <Card.Title
+                                style={{
+                                    fontWeight: 'bold',
+                                    fontSize: '1.1rem',
+                                    fontFamily: 'sans-serif',
+                                }}>
+                                Ingredient Report
+                            </Card.Title>
                         </Card.Body>
                     </Card>
                 </Col>

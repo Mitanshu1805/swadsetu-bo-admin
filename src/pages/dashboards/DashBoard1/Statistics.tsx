@@ -15,8 +15,9 @@ const Statistics = () => {
     const dashboardEarningReports = useSelector(
         (state: any) => state?.Report?.dashboardEarningReport?.data?.data?.data
     );
-    const totalEarnings = dashboardEarningReports?.total_amount;
-    const totalOrders = dashboardEarningReports?.total_orders;
+    const totalEarnings = dashboardEarningReports?.total_amount ? dashboardEarningReports?.total_amount : '0';
+    const totalOrders = dashboardEarningReports?.total_orders ? dashboardEarningReports?.total_orders : '0';
+    console.log(totalOrders);
 
     const { dispatch } = useRedux();
 
