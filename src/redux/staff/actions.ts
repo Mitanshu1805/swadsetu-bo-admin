@@ -41,9 +41,9 @@ export const staffRegisterError = (error: any) => ({
     payload: { error },
 });
 
-export const staffDelete = (data: StaffDelete) => ({
+export const staffDelete = (business_id: string, business_staff_id: string) => ({
     type: StaffActionTypes.STAFF_DELETE,
-    payload: { data },
+    payload: { business_id, business_staff_id },
 });
 export const staffDeleteSuccess = (message: string) => ({
     type: StaffActionTypes.STAFF_DELETE_SUCCESS,

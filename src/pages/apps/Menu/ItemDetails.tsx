@@ -5,11 +5,12 @@ import { useLocation } from 'react-router-dom';
 import { categoryItemList } from '../../../redux/actions';
 import WhiteColorLogo from '../../../assets/images/pure-white-color-onn79dldw0gujsoa.jpg';
 import { AppColors } from '../../../utils/Colors';
-import { recipeList } from '../../../redux/recipe/actions';
+import { recipeDelete, recipeList } from '../../../redux/recipe/actions';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { RecipeManagementActionTypes } from '../../../redux/recipe/constants';
 
 import { useNavigate } from 'react-router-dom';
+import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 // import AddRecipeModal from './RecipeModal';
 
 const ItemDetails = () => {
@@ -29,7 +30,8 @@ const ItemDetails = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'general' | 'tax' | 'quantity'>('general');
 
-    // const [modalOpen, setModalOpen] = useState(false);
+    const [recipeToDelete, setRecipeToDelete] = useState<string | null>(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
@@ -86,6 +88,38 @@ const ItemDetails = () => {
                 outletId,
             },
         });
+    };
+
+    const handleRecipeDelete = (recipe_id: string) => {
+        console.log(recipe_id);
+
+        setRecipeToDelete(recipe_id);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = () => {
+        console.log('here');
+
+        if (recipeToDelete) {
+            console.log('here');
+
+            dispatch(recipeDelete(recipeToDelete));
+            setTimeout(() => {
+                const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+                const business_id = business.business_id;
+                setBusinessId(business_id);
+
+                const payload = {
+                    business_id,
+                    outlet_id: outletId,
+                };
+                if (payload.outlet_id === 'master') {
+                    delete payload.outlet_id;
+                }
+                if (outletId) dispatch(recipeList(business_id, itemId));
+            }, 500);
+        }
+        setShowDeleteModal(false);
     };
 
     return (
@@ -324,10 +358,16 @@ const ItemDetails = () => {
                                             justifyContent: 'center',
                                             cursor: 'pointer',
                                         }}
-                                        // onClick={() => handleDelete(recipeState.id)}
-                                    >
+                                        onClick={() => handleRecipeDelete(recipeState.recipe_id)}>
                                         <FaRegTrashAlt />
                                     </button>
+                                    <ConfirmDeleteModal
+                                        show={showDeleteModal}
+                                        onClose={() => setShowDeleteModal(false)}
+                                        onConfirm={confirmDelete}
+                                        title="Delete this Terminal"
+                                        message={`Are you sure you want to delete this recipe? This action cannot be undone.`}
+                                    />
                                 </div>
 
                                 <p>

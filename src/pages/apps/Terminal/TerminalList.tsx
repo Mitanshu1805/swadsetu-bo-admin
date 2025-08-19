@@ -14,6 +14,11 @@ type Props = {
     outletId: string;
 };
 
+type TerminalData = {
+    terminal_name: string;
+    terminal_id: string;
+};
+
 const TerminalList: React.FC<Props> = ({ outletId }) => {
     const { dispatch } = useRedux();
     const terminal = useSelector((state: any) => state?.Terminal?.data);
@@ -24,7 +29,7 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
 
     const [showTermEditModal, setShowTermEditModal] = useState(false);
     const [selectedTerminalData, setSelectedTerminalData] = useState<any>(null);
-    const [terminalToDelete, setTerminalToDelete] = useState<string | null>(null);
+    const [terminalToDelete, setTerminalToDelete] = useState<TerminalData | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
@@ -39,14 +44,14 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
         setShowTermEditModal(true);
     };
 
-    const handleTerminalDelete = (terminal_id: string) => {
-        setTerminalToDelete(terminal_id);
+    const handleTerminalDelete = (data: TerminalData) => {
+        setTerminalToDelete(data);
         setShowDeleteModal(true);
     };
 
     const confirmDelete = () => {
         if (terminalToDelete) {
-            dispatch(terminalDelete(terminalToDelete));
+            dispatch(terminalDelete(terminalToDelete.terminal_id));
             setTimeout(() => {
                 if (outletId) dispatch(terminalList(outletId));
             }, 500);
@@ -155,7 +160,12 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
                                             }}
-                                            onClick={() => handleTerminalDelete(item.terminal_id)}>
+                                            onClick={() =>
+                                                handleTerminalDelete({
+                                                    terminal_id: item.terminal_id,
+                                                    terminal_name: item.terminal_name,
+                                                })
+                                            }>
                                             <FaRegTrashAlt />
                                         </button>
                                     </div>
@@ -168,7 +178,7 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
                                 onClose={() => setShowDeleteModal(false)}
                                 onConfirm={confirmDelete}
                                 title="Delete this Terminal"
-                                message="Are you sure you want to delete this terminal? This action cannot be undone."
+                                message={`Are you sure you want to delete ${terminalToDelete?.terminal_name}? This action cannot be undone.`}
                             />
                         </Col>
                     ))

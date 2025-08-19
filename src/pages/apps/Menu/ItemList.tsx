@@ -13,6 +13,11 @@ import Lottie from 'lottie-react';
 import error404 from '../../../assets/lottie/404-notfound.json';
 import { Col, Row } from 'react-bootstrap';
 
+type ItemData = {
+    item_id: string;
+    item_name: string;
+};
+
 const ItemList = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
     console.log(itemState);
@@ -24,7 +29,7 @@ const ItemList = () => {
     const outlet_name = location?.state?.outlet_name;
     console.log(outletId, outlet_name);
 
-    const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+    const [itemToDelete, setItemToDelete] = useState<ItemData | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -86,14 +91,14 @@ const ItemList = () => {
         }, 100);
     };
 
-    const handleItemDelete = (item_id: string) => {
-        setItemToDelete(item_id);
+    const handleItemDelete = (data: ItemData) => {
+        setItemToDelete(data);
         setShowDeleteModal(true);
     };
 
     const confirmDelete = () => {
         if (itemToDelete) {
-            dispatch(deleteItem(itemToDelete));
+            dispatch(deleteItem(itemToDelete.item_id));
             setTimeout(() => {
                 const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
                 const business_id = business.business_id;
@@ -510,7 +515,7 @@ const ItemList = () => {
                                             }}
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleItemDelete(item.item_id);
+                                                handleItemDelete({ item_id: item.item_id, item_name: item.item_name });
                                             }}>
                                             <FaRegTrashAlt />
                                         </button>
@@ -530,7 +535,7 @@ const ItemList = () => {
                         onClose={() => setShowDeleteModal(false)}
                         onConfirm={confirmDelete}
                         title="Delete this Item"
-                        message="Are you sure you want to delete this item? This action cannot be undone."
+                        message={`Are you sure you want to delete ${itemToDelete?.item_name}? This action cannot be undone.`}
                     />
                 </div>
             </div>

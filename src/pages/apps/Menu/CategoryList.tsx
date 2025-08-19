@@ -10,6 +10,12 @@ import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import Lottie from 'lottie-react';
 import error404 from '../../../assets/lottie/404-notfound.json';
+import { StringOptionsWithImporter } from 'sass';
+
+type CategoryData = {
+    category_id: string;
+    category_name: string;
+};
 
 const CategoryList = () => {
     const categoryState = useSelector((state: any) => state?.Menu?.categories || []);
@@ -19,7 +25,7 @@ const CategoryList = () => {
     const location = useLocation();
     const outletId = location?.state?.outletId;
     const outlet_name = location?.state?.outlet_name;
-    const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
+    const [categoryToDelete, setCategoryToDelete] = useState<CategoryData | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
 
@@ -89,14 +95,14 @@ const CategoryList = () => {
         // Navigate or open modal etc.
     };
 
-    const handleCategoryDelete = (category_id: string) => {
-        setCategoryToDelete(category_id);
+    const handleCategoryDelete = (data: CategoryData) => {
+        setCategoryToDelete(data);
         setShowDeleteModal(true);
     };
 
     const confirmDelete = () => {
         if (categoryToDelete) {
-            dispatch(deleteCategory(categoryToDelete));
+            dispatch(deleteCategory(categoryToDelete.category_id));
             setTimeout(() => {
                 const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
                 const business_id = business.business_id;
@@ -284,9 +290,21 @@ const CategoryList = () => {
                                                     justifyContent: 'center',
                                                     cursor: 'pointer',
                                                 }}
-                                                onClick={() => handleCategoryDelete(category.category_id)}>
+                                                onClick={() =>
+                                                    handleCategoryDelete({
+                                                        category_id: category.category_id,
+                                                        category_name: category.category_name,
+                                                    })
+                                                }>
                                                 <FaRegTrashAlt />
                                             </button>
+                                            <ConfirmDeleteModal
+                                                show={showDeleteModal}
+                                                onClose={() => setShowDeleteModal(false)}
+                                                onConfirm={confirmDelete}
+                                                title="Delete this Terminal"
+                                                message={`Are you sure you want to delete ${categoryToDelete?.category_name}? This action cannot be undone.`}
+                                            />
                                         </>
                                     )}
                                 </div>

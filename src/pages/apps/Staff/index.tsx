@@ -16,6 +16,7 @@ type props = {
 type StaffDelete = {
     business_staff_id: string;
     business_id: string;
+    staff_name?: string;
 };
 
 const Staff: React.FC<props> = ({ outletId }) => {
@@ -45,18 +46,21 @@ const Staff: React.FC<props> = ({ outletId }) => {
         dispatch(staffList(payload));
     }, [dispatch]);
 
-    const handleStaffDelete = (business_staff_id: string, businessId: string) => {
-        console.log('staff delete btn clicked for staff id:', business_staff_id);
+    const handleStaffDelete = (data: StaffDelete) => {
+        console.log(data);
+
+        console.log('staff delete btn clicked for staff id:', data.business_staff_id);
         const payload = {
-            business_staff_id: business_staff_id,
+            business_staff_id: data.business_staff_id,
             business_id: businessId,
+            staff_name: data.staff_name,
         };
         setStaffToDelete(payload);
         setShowDeleteModal(true);
     };
     const confirmDelete = () => {
         if (staffToDelete) {
-            dispatch(staffDelete(staffToDelete));
+            dispatch(staffDelete(staffToDelete.business_id, staffToDelete.business_staff_id));
             setTimeout(() => {
                 const payload = {
                     business_id: businessId,
@@ -171,7 +175,11 @@ const Staff: React.FC<props> = ({ outletId }) => {
                                             }}
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleStaffDelete(item.business_staff_id, businessId);
+                                                handleStaffDelete({
+                                                    business_staff_id: item.business_staff_id,
+                                                    business_id: businessId,
+                                                    staff_name: item.staff_name,
+                                                });
                                             }}>
                                             <FaRegTrashAlt />
                                         </button>
@@ -182,7 +190,7 @@ const Staff: React.FC<props> = ({ outletId }) => {
                                         onClose={() => setShowDeleteModal(false)}
                                         onConfirm={confirmDelete}
                                         title="Delete this Staff"
-                                        message="Are you sure you want to delete this staff? This action cannot be undone."
+                                        message={`Are you sure you want to delete ${staffToDelete?.staff_name}? This action cannot be undone.`}
                                     />
                                 </Card.Body>
                             </Card>

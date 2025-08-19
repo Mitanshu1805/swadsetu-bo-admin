@@ -17,18 +17,23 @@ import ToggleSwitch from '../../../components/ToggleSwitch';
 import Lottie from 'lottie-react';
 import error404 from '../../../assets/lottie/404-notfound.json';
 
+type IngredientDelete = {
+    ingredient_name: string;
+    ingredient_id: string;
+};
+
 const Ingredients = () => {
     const { dispatch } = useRedux();
     const ingredients = useSelector((state: any) => state?.RecipeIngredients?.ingredients || []);
     const ingredientsError = useSelector((state: any) => state?.RecipeIngredients?.error);
-    console.log(ingredientsError);
+    // console.log(ingredientsError);
 
     const [showFormModal, setShowFormModal] = useState(false);
     const [editData, setEditData] = useState<any>(null);
     const [ingredientName, setIngredientName] = useState('');
     const [unit, setUnit] = useState('');
 
-    const [ingredientToDelete, setIngredientToDelete] = useState<string | null>(null);
+    const [ingredientToDelete, setIngredientToDelete] = useState<IngredientDelete | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -98,14 +103,15 @@ const Ingredients = () => {
         }, 200);
     };
 
-    const handleIngredientDelete = (ingredient_id: string) => {
-        setIngredientToDelete(ingredient_id);
+    const handleIngredientDelete = (data: IngredientDelete) => {
+        setIngredientToDelete(data);
         setShowDeleteModal(true);
+        console.log(ingredientToDelete);
     };
 
     const confirmDelete = () => {
         if (ingredientToDelete) {
-            dispatch(recipeIngredientDelete(ingredientToDelete));
+            dispatch(recipeIngredientDelete(ingredientToDelete.ingredient_id));
             setTimeout(() => {
                 dispatch(recipeIngredientList(businessId));
             }, 200);
@@ -224,17 +230,14 @@ const Ingredients = () => {
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
                                             }}
-                                            onClick={() => handleIngredientDelete(ingredient.ingredient_id)}>
+                                            onClick={() =>
+                                                handleIngredientDelete({
+                                                    ingredient_id: ingredient.ingredient_id,
+                                                    ingredient_name: ingredient.ingredient_name,
+                                                })
+                                            }>
                                             <FaRegTrashAlt />
                                         </button>
-
-                                        <ConfirmDeleteModal
-                                            show={showDeleteModal}
-                                            onClose={() => setShowDeleteModal(false)}
-                                            onConfirm={confirmDelete}
-                                            title="Delete this Ingredient"
-                                            message="Are you sure you want to delete this ingredient? This action cannot be undone."
-                                        />
 
                                         <div onClick={(e) => e.stopPropagation()}>
                                             <ToggleSwitch
@@ -247,6 +250,13 @@ const Ingredients = () => {
                                     </div>
                                 </Card.Body>
                             </Card>
+                            <ConfirmDeleteModal
+                                show={showDeleteModal}
+                                onClose={() => setShowDeleteModal(false)}
+                                onConfirm={confirmDelete}
+                                title="Delete this Ingredient"
+                                message={`Are you sure you want to delete ${ingredientToDelete?.ingredient_name}? This action cannot be undone.`}
+                            />
                         </Col>
                     ))}
                 </Row>
