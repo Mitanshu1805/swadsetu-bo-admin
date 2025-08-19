@@ -53,13 +53,15 @@ const StaffDetails = () => {
     };
 
     const handleAttendanceUpdate = (date: string, status: 'present' | 'absent') => {
+        const record = staffAttendance.find((r: any) => r.date === date);
+        if (!record) return;
+
+        if (record.status === status) return;
+
         const payload = {
-            // business_id: businessId,
             business_staff_id,
-            date, // The date of the record you're updating
-            status, // 'present' or 'absent'
-            // check_in: null,
-            // check_out: null,
+            date,
+            status,
         };
 
         console.log('payload>>', payload);
