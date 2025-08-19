@@ -14,8 +14,6 @@ const DailyReports: React.FC<Props> = ({ outletId }) => {
     const cardBaseStyle: React.CSSProperties = {
         borderRadius: '12px',
         cursor: 'pointer',
-        minHeight: '120px',
-        minWidth: '200px',
         border: '2px solid #EEEEEE',
         boxShadow: '0 2px 8px rgba(255, 77, 79, 0.15)',
         transition: 'transform 0.25s ease, box-shadow 0.25s ease',
@@ -24,8 +22,10 @@ const DailyReports: React.FC<Props> = ({ outletId }) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1rem',
+        padding: '1.25rem',
         textAlign: 'center',
+        flex: 1,
+        height: '100%',
     };
 
     const iconStyle: React.CSSProperties = {
@@ -61,7 +61,7 @@ const DailyReports: React.FC<Props> = ({ outletId }) => {
                 fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif",
             }}>
             <Row className="g-4">
-                <Col xs={12} sm={6} md={3} lg={2}>
+                <Col xs={12} sm={6} md={4} lg={3}>
                     <Card
                         style={cardBaseStyle}
                         onMouseEnter={handleCardHover}
@@ -72,8 +72,7 @@ const DailyReports: React.FC<Props> = ({ outletId }) => {
                             <Card.Title
                                 style={{
                                     fontWeight: 'bold',
-                                    fontSize: '1.1rem',
-                                    fontFamily: 'sans-serif',
+                                    fontSize: '1.05rem',
                                 }}>
                                 Transaction Report
                             </Card.Title>
@@ -81,7 +80,7 @@ const DailyReports: React.FC<Props> = ({ outletId }) => {
                     </Card>
                 </Col>
 
-                <Col xs={12} sm={6} md={3} lg={2}>
+                <Col xs={12} sm={6} md={4} lg={3}>
                     <Card
                         style={cardBaseStyle}
                         onMouseEnter={handleCardHover}
@@ -92,8 +91,7 @@ const DailyReports: React.FC<Props> = ({ outletId }) => {
                             <Card.Title
                                 style={{
                                     fontWeight: 'bold',
-                                    fontSize: '1.1rem',
-                                    fontFamily: 'sans-serif',
+                                    fontSize: '1.05rem',
                                 }}>
                                 Ingredient Report
                             </Card.Title>

@@ -44,7 +44,7 @@ const Menu: React.FC<Props> = ({ outletId }) => {
 
     const handleItemClick = () => {
         navigate('/item-list', {
-            state: { outletId },
+            state: { outletId, outlet_name },
         });
     };
 

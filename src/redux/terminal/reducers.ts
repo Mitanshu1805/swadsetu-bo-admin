@@ -15,14 +15,15 @@ const initialState: TerminalState = {
 };
 
 const Terminal = (state = initialState, action: any): TerminalState => {
+    console.log(action);
     switch (action.type) {
         //Read
         case TerminalActionTypes.TERMINAL_LIST:
-            return { ...state, loading: true, error: null, success: null };
+            return { ...state, loading: true, error: null, success: null, data: [] };
         case TerminalActionTypes.TERMINAL_LIST_SUCCESS:
             return { ...state, loading: false, data: action.payload, success: 'Terminal List successfully.' };
         case TerminalActionTypes.TERMINAL_LIST_ERROR:
-            return { ...state, loading: false, error: action.payload };
+            return { ...state, loading: false, error: action.payload, data: [] };
 
         // CREATE
         case TerminalActionTypes.TERMINAL_CREATE:

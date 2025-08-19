@@ -13,6 +13,9 @@ axios.interceptors.response.use(
         let message;
 
         if (error && error.response) {
+            console.log(error);
+            console.log(error.response);
+
             const { status } = error.response;
 
             switch (status) {
@@ -33,7 +36,8 @@ axios.interceptors.response.use(
             message = error.message || 'Something went wrong!';
         }
 
-        return Promise.reject(message);
+        // return Promise.reject(message);
+        return Promise.reject(error.response.data?.message);
     }
 );
 

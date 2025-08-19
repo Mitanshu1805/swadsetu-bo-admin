@@ -9,6 +9,9 @@ import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 import ToggleSwitch from '../../../components/ToggleSwitch';
 import { deleteItem, itemUpdateIsActive, updateOutletPrice } from '../../../redux/item/actions';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
+import { Col, Row } from 'react-bootstrap';
 
 const ItemList = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
@@ -19,6 +22,8 @@ const ItemList = () => {
     const navigate = useNavigate();
     const outletId = location?.state?.outletId;
     const outlet_name = location?.state?.outlet_name;
+    console.log(outletId, outlet_name);
+
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [businessId, setBusinessId] = useState<string>('');
@@ -187,7 +192,41 @@ const ItemList = () => {
     };
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div
+            style={{
+                padding: '0rem 1rem',
+                fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif",
+                paddingTop: '0px',
+            }}>
+            <div
+                className="category-heading"
+                style={{
+                    // position: 'sticky',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    top: 0,
+                    zIndex: 1000000, // make sure it stays on top
+                    backgroundColor: AppColors.backgroundColor, // so it doesn't look transparent
+                    paddingBottom: '16px',
+                    paddingTop: '8px', // optional padding
+                    // borderBottom: '1px solid #ddd', // optional border
+                }}>
+                <div>
+                    <h3 style={{ margin: 0 }}>Item List</h3>
+                    <h5 style={{ margin: 0 }}>{outlet_name}</h5>
+                </div>
+
+                {/* {outletId === 'master' && (
+                    <Button
+                        variant="danger"
+                        onClick={() => {
+                            handleRegisterCategory(businessId, outletId);
+                        }}>
+                        + Add Category
+                    </Button>
+                )} */}
+            </div>
             <div
                 style={{
                     display: 'flex',
@@ -197,41 +236,55 @@ const ItemList = () => {
                     msOverflowStyle: 'none', // IE & Edge
                 }}
                 className="category-scroll-container">
-                {itemState.map((category: any) => (
-                    <div
-                        key={category.category_id}
-                        onClick={() => handleCategoryClick(category.category_id)}
+                {itemState.length === 0 ? (
+                    <Col
                         style={{
-                            // minWidth: '150px',
-                            border: '1px solid #ddd',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            textAlign: 'center',
-                            // backgroundColor: '#fff',
-                            backgroundColor:
-                                selectedCategoryId === category.category_id ? AppColors.primaryColor : '#fff',
-                            color: selectedCategoryId === category.category_id ? '#fff' : '#000',
-                            boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-                            flexShrink: 0,
-                            height: '150px',
-                            width: '110px',
-                            cursor: 'pointer',
-                            transition: 'background-color 0.3s ease',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '70vh', // centers in the visible area
                         }}>
-                        <img
-                            src={category.logo_image || WhiteColorLogo}
-                            // alt={WhiteColorLogo}
-                            style={{
-                                width: '100%',
-                                height: '90px',
-                                objectFit: 'contain',
-                                borderRadius: '50px',
-                            }}
-                        />
+                        <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                    </Col>
+                ) : (
+                    <Row>
+                        {itemState.map((category: any) => (
+                            <div
+                                key={category.category_id}
+                                onClick={() => handleCategoryClick(category.category_id)}
+                                style={{
+                                    // minWidth: '150px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '8px',
+                                    padding: '10px',
+                                    textAlign: 'center',
+                                    // backgroundColor: '#fff',
+                                    backgroundColor:
+                                        selectedCategoryId === category.category_id ? AppColors.primaryColor : '#fff',
+                                    color: selectedCategoryId === category.category_id ? '#fff' : '#000',
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                                    flexShrink: 0,
+                                    height: '150px',
+                                    width: '110px',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.3s ease',
+                                }}>
+                                <img
+                                    src={category.logo_image || WhiteColorLogo}
+                                    // alt={WhiteColorLogo}
+                                    style={{
+                                        width: '100%',
+                                        height: '90px',
+                                        objectFit: 'contain',
+                                        borderRadius: '50px',
+                                    }}
+                                />
 
-                        <p style={{ marginTop: '8px', fontWeight: 'bold' }}>{category.category_name}</p>
-                    </div>
-                ))}
+                                <p style={{ marginTop: '8px', fontWeight: 'bold' }}>{category.category_name}</p>
+                            </div>
+                        ))}
+                    </Row>
+                )}
             </div>
 
             <div

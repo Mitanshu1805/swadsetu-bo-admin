@@ -27,7 +27,7 @@ function* terminalListSaga(action: any): SagaIterator {
             yield put(terminalListError('No terminals found.'));
         }
     } catch (error: any) {
-        yield put(terminalListError(error.message || 'Something went wrong'));
+        yield put(terminalListError(error || 'Something went wrong'));
     }
 }
 
@@ -40,7 +40,9 @@ function* terminalCreateSaga(action: any): SagaIterator {
             yield put(terminalCreateError('Terminal creation failed.'));
         }
     } catch (error: any) {
-        yield put(terminalCreateError(error.message || 'Something went wrong'));
+        console.log('error>>>', error);
+
+        yield put(terminalCreateError(error || 'Something went wrong'));
     }
 }
 

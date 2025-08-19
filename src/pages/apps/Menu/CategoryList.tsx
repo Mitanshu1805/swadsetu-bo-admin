@@ -8,9 +8,13 @@ import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 import ToggleSwitch from '../../../components/ToggleSwitch';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
 
 const CategoryList = () => {
     const categoryState = useSelector((state: any) => state?.Menu?.categories || []);
+    console.log('categoryState>>>>>', categoryState);
+
     const { dispatch } = useRedux();
     const location = useLocation();
     const outletId = location?.state?.outletId;
@@ -186,137 +190,125 @@ const CategoryList = () => {
                     </Button>
                 )}
             </div>
-
-            <Row>
-                {categoryState.map((category: any, index: number) => (
-                    <Col key={index} xs="auto" style={{ marginBottom: '1rem' }}>
-                        <Card
-                            style={{
-                                width: '180px', // standing rectangle
-                                height: '230px',
-                                borderRadius: '12px',
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                padding: '1rem',
-                                textAlign: 'center',
-                            }}>
-                            {/* Logo */}
-                            {category.logo_image && (
-                                <img
-                                    src={category.logo_image}
-                                    alt="Category Logo"
-                                    style={{
-                                        width: '60px',
-                                        height: '60px',
-                                        borderRadius: '50%',
-                                        objectFit: 'cover',
-                                        marginBottom: '0.75rem',
-                                    }}
-                                />
-                            )}
-
-                            {/* Name */}
-                            <div
+            {categoryState.length === 0 ? (
+                <Col
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '70vh', // centers in the visible area
+                    }}>
+                    <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                </Col>
+            ) : (
+                <Row>
+                    {categoryState.map((category: any, index: number) => (
+                        <Col key={index} xs="auto" style={{ marginBottom: '1rem' }}>
+                            <Card
                                 style={{
-                                    fontSize: '1rem',
-                                    fontWeight: 600,
-                                    // marginBottom: '0.75rem',
-                                    minHeight: '40px', // keep height consistent
+                                    width: '180px', // standing rectangle
+                                    height: '230px',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                                     display: 'flex',
+                                    flexDirection: 'column',
                                     alignItems: 'center',
-                                    justifyContent: 'center',
+                                    padding: '1rem',
+                                    textAlign: 'center',
                                 }}>
-                                {category.category_names?.english || 'Unnamed'}
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    gap: '0.5rem',
-                                    // marginBottom: '0.75rem',
-                                }}>
-                                {outletId === 'master' && (
-                                    <>
-                                        <button
-                                            style={{
-                                                backgroundColor: AppColors.borderColor,
-                                                color: AppColors.iconColor,
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                padding: '6px',
-                                                cursor: 'pointer',
-                                                height: '36px',
-                                                width: '36px',
-                                            }}
-                                            onClick={() =>
-                                                handleEditCategory(businessId, outletId, category.category_id)
-                                            }>
-                                            <FaRegEdit />
-                                        </button>
-
-                                        <button
-                                            style={{
-                                                backgroundColor: AppColors.borderColor,
-                                                color: AppColors.iconColor,
-                                                height: '36px',
-                                                width: '36px',
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                            }}
-                                            onClick={() => handleCategoryDelete(category.category_id)}>
-                                            <FaRegTrashAlt />
-                                        </button>
-                                    </>
+                                {/* Logo */}
+                                {category.logo_image && (
+                                    <img
+                                        src={category.logo_image}
+                                        alt="Category Logo"
+                                        style={{
+                                            width: '60px',
+                                            height: '60px',
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            marginBottom: '0.75rem',
+                                        }}
+                                    />
                                 )}
-                            </div>
 
-                            {/* Status */}
-                            <div style={{ marginTop: '10px' }}>
-                                <ToggleSwitch
-                                    checked={category.is_active}
-                                    onChange={(checked) => handleCategoryToggle(category.category_id, checked)}
-                                />
+                                {/* Name */}
                                 <div
                                     style={{
-                                        fontSize: '0.85rem',
-                                        marginTop: '10px',
-                                        color: category.is_active ? 'green' : 'red',
+                                        fontSize: '1rem',
+                                        fontWeight: 600,
+                                        // marginBottom: '0.75rem',
+                                        minHeight: '40px', // keep height consistent
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
                                     }}>
-                                    {/* {category.is_active ? 'Active' : 'Inactive'} */}
+                                    {category.category_names?.english || 'Unnamed'}
                                 </div>
-                            </div>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
-            {/* <div
-                style={{
-                    // paddingTop: '16px',
-                    // borderTop: '1px solid #ddd',
-                    marginTop: '12px',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                }}>
-                {outletId == 'master' && (
-                    <Button
-                        variant="danger"
-                        style={{
-                            width: '100%',
-                        }}
-                        onClick={() => {
-                            handleRegisterCategory(businessId, outletId);
-                        }}>
-                        + Add Category
-                    </Button>
-                )}
-            </div> */}
+
+                                {/* Action Buttons */}
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        gap: '0.5rem',
+                                        // marginBottom: '0.75rem',
+                                    }}>
+                                    {outletId === 'master' && (
+                                        <>
+                                            <button
+                                                style={{
+                                                    backgroundColor: AppColors.borderColor,
+                                                    color: AppColors.iconColor,
+                                                    border: 'none',
+                                                    borderRadius: '4px',
+                                                    padding: '6px',
+                                                    cursor: 'pointer',
+                                                    height: '36px',
+                                                    width: '36px',
+                                                }}
+                                                onClick={() =>
+                                                    handleEditCategory(businessId, outletId, category.category_id)
+                                                }>
+                                                <FaRegEdit />
+                                            </button>
+
+                                            <button
+                                                style={{
+                                                    backgroundColor: AppColors.borderColor,
+                                                    color: AppColors.iconColor,
+                                                    height: '36px',
+                                                    width: '36px',
+                                                    border: 'none',
+                                                    borderRadius: '4px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    cursor: 'pointer',
+                                                }}
+                                                onClick={() => handleCategoryDelete(category.category_id)}>
+                                                <FaRegTrashAlt />
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+
+                                {/* Status */}
+                                <div style={{ marginTop: '10px' }}>
+                                    <ToggleSwitch
+                                        checked={category.is_active}
+                                        onChange={(checked) => handleCategoryToggle(category.category_id, checked)}
+                                    />
+                                    <div
+                                        style={{
+                                            fontSize: '0.85rem',
+                                            marginTop: '10px',
+                                            color: category.is_active ? 'green' : 'red',
+                                        }}></div>
+                                </div>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            )}
         </div>
     );
 };

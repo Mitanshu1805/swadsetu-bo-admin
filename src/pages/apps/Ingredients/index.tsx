@@ -14,10 +14,14 @@ import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 import ToggleSwitch from '../../../components/ToggleSwitch';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
 
 const Ingredients = () => {
     const { dispatch } = useRedux();
     const ingredients = useSelector((state: any) => state?.RecipeIngredients?.ingredients || []);
+    const ingredientsError = useSelector((state: any) => state?.RecipeIngredients?.error);
+    console.log(ingredientsError);
 
     const [showFormModal, setShowFormModal] = useState(false);
     const [editData, setEditData] = useState<any>(null);
@@ -152,9 +156,19 @@ const Ingredients = () => {
                 style={{ marginBottom: '1rem' }}
             />
 
-            <Row>
-                {filteredIngredients.length > 0 ? (
-                    filteredIngredients.map((ingredient: any, index: number) => (
+            {ingredientsError ? (
+                <Col
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '70vh', // centers in the visible area
+                    }}>
+                    <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                </Col>
+            ) : (
+                <Row>
+                    {filteredIngredients.map((ingredient: any, index: number) => (
                         <Col key={index} md={12}>
                             <Card style={cardStyle}>
                                 <Card.Body style={{ display: 'flex', alignItems: 'center' }}>
@@ -234,11 +248,9 @@ const Ingredients = () => {
                                 </Card.Body>
                             </Card>
                         </Col>
-                    ))
-                ) : (
-                    <p>No ingredients found.</p>
-                )}
-            </Row>
+                    ))}
+                </Row>
+            )}
 
             {/* Add/Edit Modal */}
             <Modal show={showFormModal} onHide={() => setShowFormModal(false)} centered>

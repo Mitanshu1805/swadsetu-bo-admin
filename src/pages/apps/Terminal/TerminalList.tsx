@@ -7,6 +7,8 @@ import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
 import TerminalUpdateModal from './TerminalUpdateModal';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
 
 type Props = {
     outletId: string;
@@ -15,6 +17,10 @@ type Props = {
 const TerminalList: React.FC<Props> = ({ outletId }) => {
     const { dispatch } = useRedux();
     const terminal = useSelector((state: any) => state?.Terminal?.data);
+    console.log(terminal);
+
+    const terminalError = useSelector((state: any) => state?.Terminal?.error);
+    console.log(terminalError);
 
     const [showTermEditModal, setShowTermEditModal] = useState(false);
     const [selectedTerminalData, setSelectedTerminalData] = useState<any>(null);
@@ -64,7 +70,24 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
     return (
         <div style={{ padding: '1rem' }}>
             <Row className="g-4">
-                {terminal?.length > 0 ? (
+                {terminalError ? (
+                    <Col
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                    </Col>
+                ) : // <Col style={{ textAlign: 'center' }}>
+                //     <Lottie
+                //         animationData={error404}
+                //         loop={true}
+                //         style={{ height: 300, width: 300, margin: '0 auto' }}
+                //     />
+                //     <div style={{ marginTop: '1rem', color: 'red', fontWeight: 'bold' }}>{terminalError}</div>
+                // </Col>
+                terminal?.length > 0 ? (
                     terminal.map((item: any) => (
                         <Col key={item.terminal_id} xs={12} sm={6} md={4}>
                             <Card
@@ -150,9 +173,7 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
                         </Col>
                     ))
                 ) : (
-                    <Col>
-                        <p>No terminals found.</p>
-                    </Col>
+                    <Col style={{ textAlign: 'center', color: '#888', marginTop: '2rem' }}>Loading terminals...</Col>
                 )}
             </Row>
 

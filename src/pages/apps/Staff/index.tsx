@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { FaPlus, FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
 
 type props = {
     outletId?: string;
@@ -20,9 +22,13 @@ const Staff: React.FC<props> = ({ outletId }) => {
     const navigate = useNavigate();
     const staffState = useSelector((state: any) => state?.Staff?.staffList);
     console.log('staffList>>>>', staffState);
+    const staffListError = useSelector((state: any) => state?.Staff?.error);
+    console.log(staffListError);
+
     const { dispatch } = useRedux();
     const location = useLocation();
     const outlet_name = location.state.outlet_name;
+
     console.log(outlet_name);
     const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
     const businessId = business.business_id;
@@ -113,9 +119,19 @@ const Staff: React.FC<props> = ({ outletId }) => {
                 </Button>
             </div>
 
-            <Row>
-                {staffState?.length > 0 ? (
-                    staffState.map((item: any) => (
+            {staffListError ? (
+                <Col
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '70vh', // centers in the visible area
+                    }}>
+                    <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                </Col>
+            ) : (
+                <Row>
+                    {staffState.map((item: any) => (
                         <Col key={item.staff_id} md={6}>
                             <Card
                                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.1)', marginBottom: '20px' }}
@@ -171,13 +187,9 @@ const Staff: React.FC<props> = ({ outletId }) => {
                                 </Card.Body>
                             </Card>
                         </Col>
-                    ))
-                ) : (
-                    <Col>
-                        <p>No terminals found.</p>
-                    </Col>
-                )}
-            </Row>
+                    ))}
+                </Row>
+            )}
         </div>
     );
 };

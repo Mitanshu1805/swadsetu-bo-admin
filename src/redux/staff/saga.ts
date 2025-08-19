@@ -41,7 +41,7 @@ function* staffListSaga(action: any): SagaIterator {
             yield put(staffListError('No staff found'));
         }
     } catch (error: any) {
-        yield put(staffListError(error.message || 'Something went wrong'));
+        yield put(staffListError(error || 'Something went wrong'));
     }
 }
 

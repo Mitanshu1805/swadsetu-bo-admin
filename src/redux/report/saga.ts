@@ -51,7 +51,7 @@ function* ingredientReportListSaga(action: any): SagaIterator {
         const response = yield call(ingredientReportList, action.payload);
         yield put(ingredientReportListSuccess(response));
     } catch (error: any) {
-        yield put(ingredientReportListError(error.message || 'Something went wrong'));
+        yield put(ingredientReportListError(error || 'Something went wrong'));
     }
 }
 

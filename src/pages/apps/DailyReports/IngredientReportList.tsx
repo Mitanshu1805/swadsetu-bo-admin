@@ -5,10 +5,14 @@ import { useRedux } from '../../../hooks';
 import { ingredientReportList } from '../../../redux/actions';
 import { Card, Form, Row, Col, Accordion } from 'react-bootstrap';
 import { AppColors } from '../../../utils/Colors';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
 
 const IngredientReportList = () => {
     const ingredientReport = useSelector((state: any) => state?.Report?.ingredientReport?.data?.data?.data);
     console.log('ingredient>>>', ingredientReport);
+    const ingredientError = useSelector((state: any) => state?.Report?.ingredientReport?.error);
+    console.log('ingredientError>>>>', ingredientError);
 
     const { state } = useLocation();
     const outletId = state?.outletId;
@@ -91,8 +95,19 @@ const IngredientReportList = () => {
                         </table>
                     </Card.Body>
                 </Card>
+            ) : ingredientError ? (
+                <Col style={{ textAlign: 'center' }}>
+                    <Lottie
+                        animationData={error404}
+                        loop={true}
+                        style={{ height: 300, width: 300, margin: '0 auto' }}
+                    />
+                    <div style={{ marginTop: '1rem', color: 'red', fontWeight: 'bold' }}>{ingredientError}</div>
+                </Col>
             ) : (
-                <div className="text-center mt-3">No data available</div>
+                <Col style={{ textAlign: 'center', color: '#888', marginTop: '2rem' }}>
+                    Loading ingredient report...
+                </Col>
             )}
         </div>
     );
