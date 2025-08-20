@@ -155,9 +155,15 @@ const CategoryModal = () => {
                     </button>
                 )}
 
+                {/* Step Indicator */}
                 <div className="step-indicator">
-                    <div className={`step-circle ${step === 1 ? 'active' : ''}`}>1</div>
-                    <div className="step-line"></div>
+                    {/* Step 1 */}
+                    <div className={`step-circle ${step >= 1 ? 'active' : ''}`}>{step > 1 ? '✔' : '1'}</div>
+
+                    {/* Line after Step 1 */}
+                    <div className={`step-line ${step > 1 ? 'completed' : ''}`}></div>
+
+                    {/* Step 2 */}
                     <div className={`step-circle ${step === 2 ? 'active' : ''}`}>2</div>
                 </div>
 

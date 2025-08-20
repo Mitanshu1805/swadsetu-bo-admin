@@ -49,7 +49,7 @@ const StepTwo: React.FC = () => {
             <Form.Group className="mb-4">
                 <Form.Label>Active/Inactive Item</Form.Label>
                 <div className="radio-group">
-                    <label className="radio-box active">
+                    <label className="radio-box active" style={{ display: 'flex', alignItems: 'center' }}>
                         <input type="radio" value="master" checked readOnly />
                         Master
                     </label>

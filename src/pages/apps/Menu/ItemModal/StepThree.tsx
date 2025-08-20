@@ -22,7 +22,7 @@ const StepThree: React.FC<StepThreeProps> = ({ selectedOutlets }) => {
         if (selectedOutlets.length > 0) {
             const updated = selectedOutlets.map((outlet) => {
                 const existing = outlet_prices.find((p: any) => p.outlet_id === outlet.outlet_id);
-                return existing || { outlet_id: outlet.outlet_id, price: 0 };
+                return existing || { outlet_id: outlet.outlet_id, price: undefined };
             });
             setValue('outlet_prices', updated);
         }
@@ -72,27 +72,27 @@ const StepThree: React.FC<StepThreeProps> = ({ selectedOutlets }) => {
             </Row>
 
             {selectedOutlets.length > 0 ? (
-                selectedOutlets.map((outlet) => {
-                    const outletPrice = outlet_prices.find((entry: any) => entry.outlet_id === outlet.outlet_id)?.price;
+                <Row>
+                    {selectedOutlets.map((outlet) => {
+                        const outletPrice = outlet_prices.find(
+                            (entry: any) => entry.outlet_id === outlet.outlet_id
+                        )?.price;
 
-                    return (
-                        <Card key={outlet.outlet_id} className="mb-3 shadow-sm p-3">
-                            <Row className="align-items-center">
-                                <Col md={6}>
+                        return (
+                            <Col md={6} key={outlet.outlet_id} className="mb-3">
+                                <Card className="shadow-sm p-3">
                                     <h5>{outlet.outlet_name}</h5>
-                                </Col>
-                                <Col md={6}>
                                     <Form.Control
                                         type="number"
                                         value={outletPrice || ''}
                                         onChange={(e) => handleOutletPriceChange(e, outlet.outlet_id)}
                                         placeholder="Enter Outlet Price"
                                     />
-                                </Col>
-                            </Row>
-                        </Card>
-                    );
-                })
+                                </Card>
+                            </Col>
+                        );
+                    })}
+                </Row>
             ) : (
                 <p className="text-center text-muted">No outlets selected.</p>
             )}
