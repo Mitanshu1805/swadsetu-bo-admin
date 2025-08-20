@@ -65,7 +65,7 @@ const StepThree: React.FC<StepThreeProps> = ({ selectedOutlets }) => {
                     </Form.Group>
                 </Col>
                 <Col md={6} className="d-flex justify-content-start">
-                    <Button variant="primary" onClick={applyMasterPrice}>
+                    <Button variant="danger" onClick={applyMasterPrice}>
                         Apply All
                     </Button>
                 </Col>

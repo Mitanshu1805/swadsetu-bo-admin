@@ -35,12 +35,16 @@
     justify-content: center;
     font-weight: bold;
     border: 2px solid #dcdcdc;
+    background-color: #fff;
+    color: #666;
+    transition: all 0.3s ease;
 }
 
 .step-circle.active {
+    border-color: #28a745;
     background-color: #f44336; /* Red */
     color: white;
-    border: none;
+    /* border: none; */
 }
 
 .step-line {
@@ -48,6 +52,10 @@
     height: 2px;
     background-color: #dcdcdc;
     margin: 0 8px;
+}
+
+.step-line.completed {
+    background-color: #f44336;
 }
 
 .bottom-btn {

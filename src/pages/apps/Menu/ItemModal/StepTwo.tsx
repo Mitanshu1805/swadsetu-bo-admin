@@ -71,14 +71,18 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
         }
     }, [dispatch, outlet_id]);
 
-    useEffect(() => {
-        if (category && outletListData?.length) {
-            const initialSelected = outletListData.filter((o: Outlet) => category.outlets.includes(o.outlet_id));
-            setSelectedOutlets(initialSelected);
-        }
-    }, [category, outletListData]);
+    // useEffect(() => {
+    //     // Only preselect in edit mode
+    //     const isEditMode = !!location.state?.item_id; // or however you detect editing
+    //     if (isEditMode && category && outletListData?.length) {
+    //         const initialSelected = outletListData.filter((o: Outlet) => category.outlets.includes(o.outlet_id));
+    //         setSelectedOutlets(initialSelected);
+    //     }
+    // }, [category, outletListData, location.state]);
 
     useEffect(() => {
+        console.log('selectedOutlets>>', selectedOutlets);
+
         setValue(
             'outlets',
             selectedOutlets.map((o) => o.outlet_id)
@@ -113,7 +117,7 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <label className="fw-bold fs-5 mb-0">Select Outlets</label>
                 {filteredOutlets.length > 0 && (
-                    <button type="button" className="btn btn-sm btn-outline-primary" onClick={selectAll}>
+                    <button type="button" className="btn btn-sm btn-outline-danger" onClick={selectAll}>
                         {selectedOutlets.length === filteredOutlets.length ? 'Inactive All' : 'Active All'}
                     </button>
                 )}

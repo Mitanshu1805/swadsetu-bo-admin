@@ -1,8 +1,21 @@
-// Styles
+// Theme.scss
 
-// Main styles
-
+// Imports
 @import './app.scss';
-
-// Adminto Icons
 @import './icons.scss';
+
+// ✅ Global checkbox & radio overrides
+.form-check-input {
+    accent-color: #ff565e !important;
+}
+
+.form-check-input:checked {
+    background-color: #ff565e !important;
+    border-color: #ff565e !important;
+    // background-image: none !important;
+}
+
+.form-check-input[type='radio']:checked {
+    background-color: #ff565e !important;
+    border-color: #ff565e !important;
+}

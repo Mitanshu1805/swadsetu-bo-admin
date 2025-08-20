@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 const StepOne = () => {
     const {
         register,
+        getValues,
         watch,
         setValue,
         formState: { errors },
@@ -13,14 +14,14 @@ const StepOne = () => {
     const [swiggyPreview, setSwiggyPreview] = useState<string | null>(null);
     const [bannerPreview, setBannerPreview] = useState<string | null>(null);
 
-    // Watching loose_quantity and unit_type to control conditional UI
-    const looseQuantity = watch('loose_quantity', false);
-    const unitType = watch('unit_type', 'piece');
+    // Watching is_loose and quantity_type to control conditional UI
+    const looseQuantity = watch('is_loose', false);
+    const unitType = watch('quantity_type', 'piece');
 
     // When loose quantity is checked, default to piece
     useEffect(() => {
         if (looseQuantity && !unitType) {
-            setValue('unit_type', 'piece');
+            setValue('quantity_type', 'piece');
         }
     }, [looseQuantity, unitType, setValue]);
 
@@ -128,13 +129,8 @@ const StepOne = () => {
             <div className="row mt-3">
                 <div className="col-12 mb-3">
                     <div className="form-check">
-                        <input
-                            type="checkbox"
-                            className="form-check-input"
-                            {...register('loose_quantity')}
-                            id="loose_quantity"
-                        />
-                        <label htmlFor="loose_quantity" className="form-check-label">
+                        <input type="checkbox" className="form-check-input" {...register('is_loose')} id="is_loose" />
+                        <label htmlFor="is_loose" className="form-check-label">
                             Loose Quantity
                         </label>
                     </div>
@@ -156,7 +152,7 @@ const StepOne = () => {
                                 <input
                                     type="radio"
                                     value="piece"
-                                    {...register('unit_type')}
+                                    {...register('quantity_type')}
                                     className="form-check-input"
                                 />
                                 Piece
@@ -166,7 +162,7 @@ const StepOne = () => {
                                 <input
                                     type="radio"
                                     value="weight"
-                                    {...register('unit_type')}
+                                    {...register('quantity_type')}
                                     className="form-check-input"
                                 />
                                 Weight
@@ -176,7 +172,7 @@ const StepOne = () => {
                                 <input
                                     type="radio"
                                     value="volume"
-                                    {...register('unit_type')}
+                                    {...register('quantity_type')}
                                     className="form-check-input"
                                 />
                                 Volume
@@ -188,20 +184,20 @@ const StepOne = () => {
                         <input
                             type="number"
                             placeholder="Enter quantity"
-                            {...register('quantity', { required: true })}
+                            {...register('quantity_value', { required: true })}
                             className="form-control"
                             style={{ width: '100px' }}
                         />
 
                         {/* Conditional Unit Dropdown */}
-                        {watch('unit_type') === 'weight' && (
+                        {watch('quantity_type') === 'weight' && (
                             <select {...register('quantity_params')} className="form-select" style={{ width: '90px' }}>
                                 <option value="gm">GM</option>
                                 <option value="kg">KG</option>
                             </select>
                         )}
 
-                        {watch('unit_type') === 'volume' && (
+                        {watch('quantity_type') === 'volume' && (
                             <select {...register('quantity_params')} className="form-select" style={{ width: '90px' }}>
                                 <option value="ml">ML</option>
                                 <option value="l">L</option>
@@ -237,10 +233,23 @@ const StepOne = () => {
                 {/* Dietary Type */}
                 <div style={{ flex: 1 }}>
                     <label className="fw-bold">Dietary Type</label>
-                    <select {...register('dietary_type', { required: true })} className="form-control">
+                    <select
+                        {...register('dietary_type', { required: 'Please select a dietary type' })}
+                        className="form-control"
+                        defaultValue="">
+                        <option value="" disabled>
+                            -- Select Dietary Type --
+                        </option>
                         <option value="veg">Veg</option>
                         <option value="non-veg">Non Veg</option>
                     </select>
+
+                    {/* Show error if exists */}
+                    {errors.dietary_type && (
+                        <span className="text-danger" style={{ fontSize: '0.9rem' }}>
+                            {errors.dietary_type.message}
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -248,12 +257,16 @@ const StepOne = () => {
                 {/* GST Type */}
                 <div style={{ flex: 1 }}>
                     <label className="fw-bold">GST Type</label>
-                    <select {...register('gst_type')} className="form-control">
+                    <select {...register('gst_type', { required: true })} className="form-control" defaultValue="">
+                        <option value="" disabled>
+                            -- Select GST Type --
+                        </option>
                         <option value="services">Services</option>
                         <option value="goods">Goods</option>
                     </select>
                 </div>
 
+                {/* Item Order Type */}
                 {/* Item Order Type */}
                 <div style={{ flex: 2 }}>
                     <label className="fw-bold">Item Order Type</label>
@@ -269,7 +282,12 @@ const StepOne = () => {
                                     className="form-check-input"
                                     type="checkbox"
                                     value={value}
-                                    {...register('item_order_type', { required: true })}
+                                    style={{
+                                        accentColor: 'red',
+                                    }}
+                                    {...register('available_order_type', {
+                                        validate: (val) => val?.length > 0 || 'Select at least one order type',
+                                    })}
                                     id={`order-${value}`}
                                 />
                                 <label className="form-check-label" htmlFor={`order-${value}`}>
@@ -278,6 +296,10 @@ const StepOne = () => {
                             </div>
                         ))}
                     </div>
+
+                    {errors['available_order_type'] && (
+                        <p className="text-danger">{errors.available_order_type.message}</p>
+                    )}
                 </div>
             </div>
         </div>

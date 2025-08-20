@@ -25,14 +25,17 @@ type FormData = {
     images: string[];
     is_active: boolean;
     outlet_prices: [];
+    available_order_type: [];
     online_display_name: string;
     dietary_type: string;
     item_order_type: string;
     gst_type: string;
     loose_quantity: boolean;
-    quantity: string;
-    unit_type: string;
+    quantity_value: string;
+    quantity_type: string;
+    quantity_params: string;
     volume_unit: string;
+    is_loose: boolean;
 };
 
 interface Outlet {
@@ -111,12 +114,27 @@ const ItemModal = () => {
                     category_id: toEdit.category_id || '',
                     // outlet_id: toEdit.outlets || [],
                     outlet_id: toEdit.outlets?.map((o: any) => o.outlet_id) || [],
+                    available_order_type: toEdit.available_order_type || [],
+                    dietary_type: toEdit.dietary,
+                    gst_type: toEdit.gst_type,
+                    is_loose: !!toEdit.is_loose,
+                    quantity_type: toEdit.quantity_type,
+                    quantity_value: toEdit.quantity_value,
+                    quantity_params: toEdit.quantity_params,
                     images: toEdit.images || [],
                     is_active: Boolean(toEdit.is_active),
                     online_display_name: toEdit.online_display_name,
                 });
             }
-            console.log(toEdit.online_display_name);
+            console.log(toEdit.outlets);
+            if (Array.isArray(toEdit.outlets)) {
+                const mapped = toEdit.outlets.map((o: any) => ({
+                    outlet_id: o.outlet_id,
+                    outlet_name: o.outlet_name, // make sure backend is giving this
+                }));
+                setSelectedOutlets(mapped);
+            }
+            console.log(selectedOutlets);
         }
     }, [editMode, itemId, itemData, methods]);
 
@@ -124,7 +142,8 @@ const ItemModal = () => {
     const nextStep = async () => {
         let fieldsToValidate: (keyof FormData)[] = [];
 
-        if (step === 1) fieldsToValidate = ['item_name', 'description', 'price'];
+        if (step === 1)
+            fieldsToValidate = ['item_name', 'description', 'price', 'available_order_type', 'dietary_type'];
         if (step === 2) fieldsToValidate = ['category_id', 'outlet_id'];
 
         const isValid = await methods.trigger(fieldsToValidate as any);
@@ -135,7 +154,7 @@ const ItemModal = () => {
     };
 
     const onSubmit = (data: any) => {
-        console.log(data, '<<<<<<<data');
+        console.log('data>>', data);
 
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const businessId = business.business_id;
@@ -148,16 +167,16 @@ const ItemModal = () => {
         formDataToSend.append('item_name', JSON.stringify(data.item_name));
         formDataToSend.append('category_id', category_id);
         formDataToSend.append('online_display_name', data.online_display_name);
-        formDataToSend.append('available_order_type', JSON.stringify(data.item_order_type));
+        formDataToSend.append('available_order_type', JSON.stringify(data.available_order_type));
         formDataToSend.append('dietary', data.dietary_type);
         formDataToSend.append('description', data.description ?? '');
         formDataToSend.append('price', String(data.price));
         // formDataToSend.append('category_id', category_id);
         formDataToSend.append('outlet_prices', JSON.stringify(data.outlet_prices));
-        formDataToSend.append('quantity_type', String(data.unit_type) ?? 'none');
+        formDataToSend.append('quantity_type', String(data.quantity_type) ?? 'none');
         formDataToSend.append('quantity_params', data.quantity_params ?? 'none');
-        formDataToSend.append('quantity_value', data.quantity ?? 'none');
-        formDataToSend.append('is_loose', String(data.loose_quantity));
+        formDataToSend.append('quantity_value', data.quantity_value ?? 'none');
+        formDataToSend.append('is_loose', String(data.is_loose));
         formDataToSend.append('gst_type', data.gst_type ?? 'none');
         // formDataToSend.append('is_active', String(data.is_active));
 
@@ -169,7 +188,7 @@ const ItemModal = () => {
         //     if (img instanceof File) formDataToSend.append('images', img);
         // });
 
-        console.log(formDataToSend);
+        console.log('formDataToSend>>>>>>>', formDataToSend);
 
         if (editMode) {
             dispatch(updateItem(formDataToSend));
@@ -196,10 +215,19 @@ const ItemModal = () => {
 
                 {/* Stepper */}
                 <div className="step-indicator">
-                    <div className={`step-circle ${step === 1 ? 'active' : ''}`}>1</div>
-                    <div className="step-line"></div>
-                    <div className={`step-circle ${step === 2 ? 'active' : ''}`}>2</div>
-                    <div className="step-line"></div>
+                    {/* Step 1 */}
+                    <div className={`step-circle ${step >= 1 ? 'active' : ''}`}>{step > 1 ? '✔' : '1'}</div>
+
+                    {/* Line after step 1 */}
+                    <div className={`step-line ${step > 1 ? 'completed' : ''}`}></div>
+
+                    {/* Step 2 */}
+                    <div className={`step-circle ${step >= 2 ? 'active' : ''}`}>{step > 2 ? '✔' : '2'}</div>
+
+                    {/* Line after step 2 */}
+                    <div className={`step-line ${step > 2 ? 'completed' : ''}`}></div>
+
+                    {/* Step 3 */}
                     <div className={`step-circle ${step === 3 ? 'active' : ''}`}>3</div>
                 </div>
 
