@@ -76,9 +76,24 @@ const TransReportList = () => {
                     <Col md={6}>
                         <Accordion alwaysOpen>
                             <Accordion.Item eventKey="0" className="custom-accordion">
-                                <Accordion.Header>Cash Payment</Accordion.Header>
+                                <Accordion.Header>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                        <div>Cash Payment</div>
+                                        <div>
+                                            (₹
+                                            {Math.round(
+                                                transReport.CASH.reduce(
+                                                    (sum: number, item: any) => sum + item.total_amount,
+                                                    0
+                                                )
+                                            )}
+                                            )
+                                        </div>
+                                    </div>
+                                </Accordion.Header>
+
                                 <Accordion.Body>
-                                    <table className="table table-bordered table-striped">
+                                    <table className="table table-bordered ">
                                         <thead>
                                             <tr>
                                                 <th>Item Name</th>
@@ -91,9 +106,28 @@ const TransReportList = () => {
                                             {transReport.CASH.map((item: any, idx: number) => (
                                                 <tr key={idx}>
                                                     <td>{item.item_name}</td>
-                                                    <td>{item.total_quantity}</td>
-                                                    <td>₹{item.price}</td>
-                                                    <td>₹{item.total_amount}</td>
+                                                    <td>
+                                                        {item.total_quantity}{' '}
+                                                        {item?.quantity_params != 'none'
+                                                            ? item.quantity_params
+                                                            : item?.quantity_type != 'none'
+                                                            ? item.quantity_type
+                                                            : ''}
+                                                    </td>
+
+                                                    <td>
+                                                        {parseInt(item.price)}
+                                                        {item.quantity_value !== 'none' && (
+                                                            <>
+                                                                / {item.quantity_value}{' '}
+                                                                {item.quantity_params !== 'none'
+                                                                    ? item.quantity_params
+                                                                    : 'pcs'}
+                                                            </>
+                                                        )}
+                                                    </td>
+
+                                                    <td>{item.total_amount}</td>
                                                 </tr>
                                             ))}
                                             <tr className="total-row">
@@ -126,9 +160,24 @@ const TransReportList = () => {
                     <Col md={6}>
                         <Accordion alwaysOpen>
                             <Accordion.Item eventKey="1" className="custom-accordion">
-                                <Accordion.Header>Online Payment</Accordion.Header>
+                                <Accordion.Header>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                        <div>Online Payment</div>
+                                        <div>
+                                            (₹
+                                            {Math.round(
+                                                transReport.ONLINE.reduce(
+                                                    (sum: number, item: any) => sum + item.total_amount,
+                                                    0
+                                                )
+                                            )}
+                                            )
+                                        </div>
+                                    </div>
+                                </Accordion.Header>
+
                                 <Accordion.Body>
-                                    <table className="table table-bordered table-striped">
+                                    <table className="table table-bordered ">
                                         <thead>
                                             <tr>
                                                 <th>Item Name</th>
@@ -141,9 +190,26 @@ const TransReportList = () => {
                                             {transReport.ONLINE.map((item: any, idx: number) => (
                                                 <tr key={idx}>
                                                     <td>{item.item_name}</td>
-                                                    <td>{item.total_quantity}</td>
-                                                    <td>₹{item.price}</td>
-                                                    <td>₹{item.total_amount}</td>
+                                                    <td>
+                                                        {item.total_quantity}{' '}
+                                                        {item?.quantity_params != 'none'
+                                                            ? item.quantity_params
+                                                            : item?.quantity_type != 'none'
+                                                            ? item.quantity_type
+                                                            : ''}
+                                                    </td>
+                                                    <td>
+                                                        {parseInt(item.price)}
+                                                        {item.quantity_value !== 'none' && (
+                                                            <>
+                                                                / {item.quantity_value}{' '}
+                                                                {item.quantity_params !== 'none'
+                                                                    ? item.quantity_params
+                                                                    : 'pcs'}
+                                                            </>
+                                                        )}
+                                                    </td>
+                                                    <td>{item.total_amount}</td>
                                                 </tr>
                                             ))}
                                             <tr className="total-row">

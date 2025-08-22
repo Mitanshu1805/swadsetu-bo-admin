@@ -1,31 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-// import { useRedux } from '../../../hooks';
-// import { RootState } from '../../../redux/store';
-// import { businessList } from '../../../redux/business/actions';
-// import { categoryItemList } from '../../../redux/menuManagementCategory/actions';
-import { useLocation } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import { useRedux } from '../../../../hooks';
 import { RootState } from '../../../../redux/store';
 import { categoryItemList, outletList } from '../../../../redux/actions';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { AppColors } from '../../../../utils/Colors';
 
 interface Outlet {
     outlet_id: string;
     outlet_name: string;
-}
-
-interface Business {
-    business_id: string;
-    business_name: string;
-    outlets: Outlet[];
-}
-
-interface Category {
-    category_id: string;
-    category_name: string;
-    outlets: string[]; // array of outlet IDs
 }
 
 interface ItemStep2Props {
@@ -38,23 +23,14 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
     const { dispatch, appSelector } = useRedux();
     const location = useLocation();
 
-    // const business_id = location.state?.business_id;
     const category_id = location.state?.category_id;
     const outlet_id = location.state?.outletId;
-    console.log(category_id);
-    console.log(outlet_id);
 
     const categories = appSelector((state: RootState) => state?.Menu?.categories || []);
-    console.log(categories);
-
     const category = categories.find((cat: any) => cat.category_id === category_id);
-    console.log(category);
 
     const outlets = useSelector((state: any) => state.Businesses.outlets);
     const outletListData = outlets?.OutletsLists ?? [];
-    console.log(outletListData);
-
-    // const [selectedOutlets, setSelectedOutlets] = useState<Outlet[]>([]);
 
     useEffect(() => {
         if (!outletListData?.length) {
@@ -71,18 +47,7 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
         }
     }, [dispatch, outlet_id]);
 
-    // useEffect(() => {
-    //     // Only preselect in edit mode
-    //     const isEditMode = !!location.state?.item_id; // or however you detect editing
-    //     if (isEditMode && category && outletListData?.length) {
-    //         const initialSelected = outletListData.filter((o: Outlet) => category.outlets.includes(o.outlet_id));
-    //         setSelectedOutlets(initialSelected);
-    //     }
-    // }, [category, outletListData, location.state]);
-
     useEffect(() => {
-        console.log('selectedOutlets>>', selectedOutlets);
-
         setValue(
             'outlets',
             selectedOutlets.map((o) => o.outlet_id)
@@ -91,9 +56,7 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
 
     const isLoading = !outletListData?.length || !category;
 
-    if (isLoading) {
-        return <p>Loading outlets...</p>;
-    }
+    if (isLoading) return <p>Loading outlets...</p>;
 
     const filteredOutlets = outletListData.filter((o: Outlet) => category.outlets.includes(o.outlet_id));
 
@@ -124,22 +87,38 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
             </div>
 
             {filteredOutlets.length > 0 ? (
-                <div className="list-group">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                     {filteredOutlets.map((outlet: Outlet) => {
                         const isChecked = selectedOutlets.some((o) => o.outlet_id === outlet.outlet_id);
                         return (
-                            <label
+                            <div
                                 key={outlet.outlet_id}
-                                className="list-group-item d-flex align-items-center"
-                                style={{ cursor: 'pointer' }}>
+                                onClick={() => toggleOutletSelection(outlet)}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: '12px 16px',
+                                    borderRadius: '10px',
+                                    border: `1px solid ${isChecked ? AppColors.primaryColor : '#ddd'}`,
+                                    boxShadow: isChecked ? '0 2px 8px rgba(0,0,0,0.15)' : '0 1px 4px rgba(0,0,0,0.08)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    minWidth: '160px',
+                                }}>
                                 <input
-                                    type="checkbox"
-                                    className="form-check-input me-2"
+                                    type="radio"
                                     checked={isChecked}
-                                    onChange={() => toggleOutletSelection(outlet)}
+                                    readOnly
+                                    style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        marginRight: '12px',
+                                        accentColor: AppColors.primaryColor,
+                                        cursor: 'pointer',
+                                    }}
                                 />
-                                {outlet.outlet_name}
-                            </label>
+                                <span>{outlet.outlet_name}</span>
+                            </div>
                         );
                     })}
                 </div>

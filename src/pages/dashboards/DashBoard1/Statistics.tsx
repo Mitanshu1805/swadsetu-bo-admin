@@ -10,6 +10,7 @@ import {
 import { Col, Row } from 'react-bootstrap';
 import { AppColors } from '../../../utils/Colors';
 import './Statistics.css'; // <-- Add this for custom CSS
+import { useNavigate } from 'react-router-dom';
 
 const Statistics = () => {
     const dashboardEarningReports = useSelector(
@@ -20,6 +21,7 @@ const Statistics = () => {
     console.log(totalOrders);
 
     const { dispatch } = useRedux();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
@@ -51,7 +53,10 @@ const Statistics = () => {
             <Row className="mb-3">
                 <h4>Today's Status</h4>
 
-                <Col xs="auto" style={{ padding: '0', margin: '4px' }}>
+                <Col
+                    xs="auto"
+                    style={{ padding: '0', margin: '4px', cursor: 'pointer' }}
+                    onClick={() => navigate('/daily-report/outlets')}>
                     <div
                         style={{
                             backgroundColor: AppColors.primaryColor,
@@ -70,7 +75,10 @@ const Statistics = () => {
                     </div>
                 </Col>
 
-                <Col xs="auto" style={{ padding: '0', margin: '4px' }}>
+                <Col
+                    xs="auto"
+                    style={{ padding: '0', margin: '4px', cursor: 'pointer' }}
+                    onClick={() => navigate('/daily-report/outlets')}>
                     <div
                         style={{
                             backgroundColor: AppColors.primaryColor,

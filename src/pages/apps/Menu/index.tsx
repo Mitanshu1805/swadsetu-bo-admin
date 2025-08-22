@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FaThLarge, FaBoxOpen, FaListAlt, FaUtensils } from 'react-icons/fa'; // Category & Item icons
+import { AppColors } from '../../../utils/Colors';
 
 type Props = {
     outletId: string;
@@ -11,29 +13,31 @@ const Menu: React.FC<Props> = ({ outletId }) => {
     const outlet_name = location.state.outlet_name;
     const navigate = useNavigate();
 
+    const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
     const cardBaseStyle: React.CSSProperties = {
         borderRadius: '16px',
         cursor: 'pointer',
-        height: '200px', // tall card
-        width: '160px', // narrow card
+        height: '200px',
+        width: '160px',
         boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease',
+        border: `1px solid ${AppColors.primaryColor}`,
         position: 'relative',
         margin: 'auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        color: AppColors.primaryColor,
+        fontWeight: 600,
+        fontSize: '1.1rem',
     };
 
     const cardHoverStyle: React.CSSProperties = {
         transform: 'translateY(-4px)',
-        boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
-    };
-
-    const textContainerStyle: React.CSSProperties = {
-        position: 'absolute',
-        top: '12px',
-        left: '12px',
-        textAlign: 'left',
-        fontSize: '1.1rem',
-        fontWeight: 600,
+        boxShadow: `0 8px 20px rgba(0,0,0,0.2)`,
+        borderColor: AppColors.primaryColor,
     };
 
     const handleCategoryClick = () => {
@@ -53,25 +57,29 @@ const Menu: React.FC<Props> = ({ outletId }) => {
             <Row className="g-4 justify-content-start">
                 <Col xs="auto">
                     <Card
-                        style={cardBaseStyle}
-                        onMouseEnter={(e) => Object.assign(e.currentTarget.style, cardHoverStyle)}
-                        onMouseLeave={(e) => Object.assign(e.currentTarget.style, cardBaseStyle)}
+                        style={{
+                            ...cardBaseStyle,
+                            ...(hoveredCard === 'category' ? cardHoverStyle : {}),
+                        }}
+                        onMouseEnter={() => setHoveredCard('category')}
+                        onMouseLeave={() => setHoveredCard(null)}
                         onClick={handleCategoryClick}>
-                        <div style={textContainerStyle}>
-                            <div>Category</div>
-                        </div>
+                        <FaListAlt size={38} style={{ marginBottom: '12px' }} />
+                        <div>Category</div>
                     </Card>
                 </Col>
 
                 <Col xs="auto">
                     <Card
-                        style={cardBaseStyle}
-                        onMouseEnter={(e) => Object.assign(e.currentTarget.style, cardHoverStyle)}
-                        onMouseLeave={(e) => Object.assign(e.currentTarget.style, cardBaseStyle)}
+                        style={{
+                            ...cardBaseStyle,
+                            ...(hoveredCard === 'item' ? cardHoverStyle : {}),
+                        }}
+                        onMouseEnter={() => setHoveredCard('item')}
+                        onMouseLeave={() => setHoveredCard(null)}
                         onClick={handleItemClick}>
-                        <div style={textContainerStyle}>
-                            <div>Item</div>
-                        </div>
+                        <FaUtensils size={38} style={{ marginBottom: '12px' }} />
+                        <div>Item</div>
                     </Card>
                 </Col>
             </Row>

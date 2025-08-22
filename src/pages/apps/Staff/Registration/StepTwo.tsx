@@ -4,63 +4,70 @@ import { Form } from 'react-bootstrap';
 import { outletList } from '../../../../redux/actions';
 import { useRedux } from '../../../../hooks';
 import { useSelector } from 'react-redux';
-import './AddStaff.css';
+import { AppColors } from '../../../../utils/Colors';
 
 const StepTwo: React.FC = () => {
     const { dispatch } = useRedux();
-    const {
-        register,
-        setValue,
-        watch,
-        formState: { errors },
-    } = useFormContext();
+    const { register, setValue, watch } = useFormContext();
 
     const outletsState = useSelector((state: any) => state.Businesses.outlets);
     const outletListData = outletsState?.OutletsLists ?? [];
 
-    // Watch outlet_ids
-    // const outlet_ids = watch('outlet_ids', []);
     const outlet_idsRaw = watch('outlet_ids', []);
     const outlet_ids = Array.isArray(outlet_idsRaw) ? outlet_idsRaw : [outlet_idsRaw];
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const business_id = business.business_id;
-        if (business_id) {
-            dispatch(outletList(business_id));
-        }
+        if (business_id) dispatch(outletList(business_id));
     }, [dispatch]);
 
-    // ✅ Handle "Active All"
-    // const handleActiveAll = () => {
-    //     const allOutletIds = outletListData.map((outlet: any) => outlet.outlet_id);
-    //     setValue('outlet_ids', allOutletIds);
-    // };
     const handleActiveAll = () => {
-        if (outlet_idsRaw.length === outletListData.length) {
-            setValue('outlet_ids', []); // Uncheck all
+        if (outlet_ids.length === outletListData.length) {
+            setValue('outlet_ids', []);
         } else {
             setValue(
                 'outlet_ids',
                 outletListData.map((o: any) => o.outlet_id)
-            ); // Select all
+            );
         }
     };
 
     return (
         <div className="form-container">
-            {/* ✅ Active/Inactive Master */}
+            {/* Active/Inactive Master */}
             <Form.Group className="mb-4">
                 <Form.Label>Active/Inactive Item</Form.Label>
-                <div className="radio-group">
-                    <label className="radio-box active">
-                        <input type="radio" value="master" checked readOnly />
-                        Master
-                    </label>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '12px 16px',
+                        borderRadius: '10px',
+                        border: `1px solid ${AppColors.primaryColor}`,
+                        boxShadow: `0 2px 8px rgba(0,0,0,0.15)`,
+                        cursor: 'pointer',
+                        marginTop: '8px',
+                        width: 'fit-content',
+                    }}>
+                    <input
+                        type="radio"
+                        value="master"
+                        checked
+                        readOnly
+                        style={{
+                            width: '16px',
+                            height: '16px',
+                            marginRight: '12px',
+                            accentColor: AppColors.primaryColor,
+                            cursor: 'pointer',
+                        }}
+                    />
+                    <span>Master</span>
                 </div>
             </Form.Group>
 
-            {/* ✅ Outlet Name List */}
+            {/* Outlet Name List */}
             <Form.Group>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Form.Label>Outlet Name</Form.Label>
@@ -73,30 +80,51 @@ const StepTwo: React.FC = () => {
                     </button>
                 </div>
 
-                <div className="outlet-list">
-                    {outletListData.map((outlet: any) => (
-                        <label
-                            key={outlet.outlet_id}
-                            className={`radio-box ${outlet_ids.includes(outlet.outlet_id) ? 'active' : ''}`}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                padding: '12px',
-                                marginBottom: '10px',
-                                borderRadius: '10px',
-                                border: '1px solid #ddd',
-                            }}>
-                            <input
-                                type="checkbox"
-                                value={outlet.outlet_id}
-                                {...register('outlet_ids')}
-                                style={{ marginRight: '12px' }}
-                            />
-                            {outlet.outlet_name}
-                        </label>
-                    ))}
+                <div className="outlet-list" style={{ marginTop: '10px' }}>
+                    {outletListData.map((outlet: any) => {
+                        const isActive = outlet_ids.includes(outlet.outlet_id);
+                        return (
+                            <div
+                                key={outlet.outlet_id}
+                                onClick={() => {
+                                    if (isActive) {
+                                        setValue(
+                                            'outlet_ids',
+                                            outlet_ids.filter((id: string) => id !== outlet.outlet_id)
+                                        );
+                                    } else {
+                                        setValue('outlet_ids', [...outlet_ids, outlet.outlet_id]);
+                                    }
+                                }}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: '12px 16px',
+                                    marginBottom: '10px',
+                                    borderRadius: '10px',
+                                    border: `1px solid ${isActive ? AppColors.primaryColor : '#ddd'}`,
+                                    boxShadow: isActive ? `0 2px 8px rgba(0,0,0,0.15)` : '0 1px 4px rgba(0,0,0,0.08)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                }}>
+                                <input
+                                    type="radio" // keeps radio style
+                                    value={outlet.outlet_id}
+                                    checked={isActive}
+                                    readOnly // ensures multiple can be selected
+                                    style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        marginRight: '12px',
+                                        accentColor: AppColors.primaryColor,
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                                <span>{outlet.outlet_name}</span>
+                            </div>
+                        );
+                    })}
                 </div>
-                {/* {errors.outlet_ids && <small className="text-danger">{errors.outlet_ids.message}</small>} */}
             </Form.Group>
         </div>
     );

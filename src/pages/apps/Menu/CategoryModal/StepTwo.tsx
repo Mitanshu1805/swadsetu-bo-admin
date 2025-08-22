@@ -5,6 +5,7 @@ import { outletList } from '../../../../redux/actions';
 import { useRedux } from '../../../../hooks';
 import { useSelector } from 'react-redux';
 import './style.css';
+import { AppColors } from '../../../../utils/Colors';
 
 const StepTwo: React.FC = () => {
     const { dispatch } = useRedux();
@@ -48,11 +49,34 @@ const StepTwo: React.FC = () => {
             {/* ✅ Active/Inactive Master */}
             <Form.Group className="mb-4">
                 <Form.Label>Active/Inactive Item</Form.Label>
-                <div className="radio-group">
-                    <label className="radio-box active" style={{ display: 'flex', alignItems: 'center' }}>
-                        <input type="radio" value="master" checked readOnly />
-                        Master
-                    </label>
+                <div
+                    onClick={() => setValue('master', true)} // optional if you want to track in form
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '12px 16px',
+                        borderRadius: '10px',
+                        border: `1px solid ${AppColors.primaryColor}`,
+                        boxShadow: `0 2px 8px rgba(0,0,0,0.15)`,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        marginTop: '8px',
+                        width: 'fit-content',
+                    }}>
+                    <input
+                        type="radio"
+                        value="master"
+                        checked
+                        readOnly
+                        style={{
+                            width: '16px',
+                            height: '16px',
+                            marginRight: '12px',
+                            accentColor: AppColors.primaryColor,
+                            cursor: 'pointer',
+                        }}
+                    />
+                    <span>Master</span>
                 </div>
             </Form.Group>
 
@@ -70,28 +94,52 @@ const StepTwo: React.FC = () => {
                 </div>
 
                 <div className="outlet-list">
-                    {outletListData.map((outlet: any) => (
-                        <label
-                            key={outlet.outlet_id}
-                            className={`radio-box ${outlet_id.includes(outlet.outlet_id) ? 'active' : ''}`}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                padding: '12px',
-                                marginBottom: '10px',
-                                borderRadius: '10px',
-                                border: '1px solid #ddd',
-                            }}>
-                            <input
-                                type="checkbox"
-                                value={outlet.outlet_id}
-                                {...register('outlet_id', { required: 'Select at least one outlet' })}
-                                style={{ marginRight: '12px' }}
-                            />
-                            {outlet.outlet_name}
-                        </label>
-                    ))}
+                    {outletListData.map((outlet: any) => {
+                        const isActive = outlet_id.includes(outlet.outlet_id);
+                        return (
+                            <div
+                                key={outlet.outlet_id}
+                                onClick={() => {
+                                    // toggle selection
+                                    if (isActive) {
+                                        setValue(
+                                            'outlet_id',
+                                            outlet_id.filter((id: string) => id !== outlet.outlet_id)
+                                        );
+                                    } else {
+                                        setValue('outlet_id', [...outlet_id, outlet.outlet_id]);
+                                    }
+                                }}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: '12px 16px',
+                                    marginBottom: '10px',
+                                    borderRadius: '10px',
+                                    border: `1px solid ${isActive ? AppColors.primaryColor : '#ddd'}`,
+                                    boxShadow: isActive ? `0 2px 8px rgba(0,0,0,0.15)` : '0 1px 4px rgba(0,0,0,0.08)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                }}>
+                                <input
+                                    type="radio"
+                                    value={outlet.outlet_id}
+                                    checked={isActive}
+                                    readOnly
+                                    style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        marginRight: '12px',
+                                        accentColor: AppColors.primaryColor,
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                                <span>{outlet.outlet_name}</span>
+                            </div>
+                        );
+                    })}
                 </div>
+
                 {errors.outlet_id && <small className="text-danger">{errors.outlet_id.message}</small>}
             </Form.Group>
         </div>

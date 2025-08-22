@@ -32,6 +32,8 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
     const [terminalToDelete, setTerminalToDelete] = useState<TerminalData | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+    const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+
     useEffect(() => {
         if (outletId) {
             dispatch(terminalList(outletId));
@@ -58,18 +60,27 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
         }
         setShowDeleteModal(false);
     };
+    function hexToRgb(hex: string) {
+        const bigint = parseInt(hex.replace('#', ''), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return `${r}, ${g}, ${b}`;
+    }
 
     const cardBaseStyle: React.CSSProperties = {
         borderRadius: '12px',
         cursor: 'pointer',
         minHeight: '220px',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        border: `1px solid ${AppColors.primaryColor}`, // primary border
+        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`, // subtle shadow
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
     };
 
     const cardHoverStyle: React.CSSProperties = {
-        transform: 'translateY(-3px)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        transform: 'translateY(-4px)',
+        boxShadow: `0 8px 20px rgba($AppColors.primaryColor)}, 0.25)`, // colored shadow
+        borderColor: AppColors.primaryColor,
     };
 
     return (
@@ -96,10 +107,13 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
                     terminal.map((item: any) => (
                         <Col key={item.terminal_id} xs={12} sm={6} md={4}>
                             <Card
-                                className="shadow-sm h-100"
-                                style={cardBaseStyle}
-                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, cardHoverStyle)}
-                                onMouseLeave={(e) => Object.assign(e.currentTarget.style, cardBaseStyle)}>
+                                className="h-100"
+                                style={{
+                                    ...cardBaseStyle,
+                                    ...(hoveredCardId === item.terminal_id ? cardHoverStyle : {}),
+                                }}
+                                onMouseEnter={() => setHoveredCardId(item.terminal_id)}
+                                onMouseLeave={() => setHoveredCardId(null)}>
                                 <Card.Body className="d-flex flex-column justify-content-between p-3">
                                     <div>
                                         <Card.Title

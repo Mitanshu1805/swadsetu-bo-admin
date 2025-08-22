@@ -4,7 +4,6 @@ import {
     recipeIngredientAdd,
     recipeIngredientDelete,
     recipeIngredientList,
-    // recipeIngredientCreate,
     recipeIngredientUpdate,
     recipeIngredientUpdateStatus,
 } from '../../../redux/actions';
@@ -26,15 +25,14 @@ const Ingredients = () => {
     const { dispatch } = useRedux();
     const ingredients = useSelector((state: any) => state?.RecipeIngredients?.ingredients || []);
     const ingredientsError = useSelector((state: any) => state?.RecipeIngredients?.error);
-    // console.log(ingredientsError);
 
     const [showFormModal, setShowFormModal] = useState(false);
     const [editData, setEditData] = useState<any>(null);
     const [ingredientName, setIngredientName] = useState('');
     const [unit, setUnit] = useState('');
-
     const [ingredientToDelete, setIngredientToDelete] = useState<IngredientDelete | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
     const [businessId, setBusinessId] = useState<string>('');
     const [searchTerm, setSearchTerm] = useState('');
     const [unitError, setUnitError] = useState('');
@@ -48,9 +46,7 @@ const Ingredients = () => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const business_id = business.business_id;
         setBusinessId(business_id);
-        if (business_id) {
-            dispatch(recipeIngredientList(business_id));
-        }
+        if (business_id) dispatch(recipeIngredientList(business_id));
     }, [dispatch]);
 
     const handleAddIngredient = () => {
@@ -70,73 +66,63 @@ const Ingredients = () => {
     const handleSaveIngredient = () => {
         if (!ingredientName.trim()) {
             setNameError('Please write ingredient name');
-
             return;
-        } else {
-            setNameError('');
-        }
+        } else setNameError('');
 
         if (!unit) {
             setUnitError('Please select a unit');
             return;
-        } else {
-            setUnitError(''); // clear error if unit is selected
-        }
+        } else setUnitError('');
 
-        const payload = {
-            ingredient_name: ingredientName,
-            unit: unit,
-            business_id: businessId,
-        };
-
+        const payload = { ingredient_name: ingredientName, unit, business_id: businessId };
         if (editData) {
-            // update
             dispatch(recipeIngredientUpdate(editData.ingredient_id, ingredientName, unit, businessId));
         } else {
-            // create
             dispatch(recipeIngredientAdd(payload));
         }
-
         setShowFormModal(false);
-        setTimeout(() => {
-            dispatch(recipeIngredientList(businessId));
-        }, 200);
+        setTimeout(() => dispatch(recipeIngredientList(businessId)), 200);
     };
 
     const handleIngredientDelete = (data: IngredientDelete) => {
         setIngredientToDelete(data);
         setShowDeleteModal(true);
-        console.log(ingredientToDelete);
     };
 
     const confirmDelete = () => {
         if (ingredientToDelete) {
             dispatch(recipeIngredientDelete(ingredientToDelete.ingredient_id));
-            setTimeout(() => {
-                dispatch(recipeIngredientList(businessId));
-            }, 200);
+            setTimeout(() => dispatch(recipeIngredientList(businessId)), 200);
             setShowDeleteModal(false);
         }
     };
 
     const handleIngredientToggle = (ingredient_id: string, is_active: boolean) => {
         dispatch(recipeIngredientUpdateStatus(ingredient_id, is_active));
-        setTimeout(() => {
-            dispatch(recipeIngredientList(businessId));
-        }, 200);
+        setTimeout(() => dispatch(recipeIngredientList(businessId)), 200);
     };
 
-    const cardStyle: React.CSSProperties = {
-        boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-        marginBottom: '20px',
+    function hexToRgb(hex: string) {
+        const bigint = parseInt(hex.replace('#', ''), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return `${r}, ${g}, ${b}`;
+    }
+
+    const cardBaseStyle: React.CSSProperties = {
+        borderRadius: '12px',
+        cursor: 'pointer',
+        minHeight: '140px',
+        border: `1px solid ${AppColors.primaryColor}`,
+        boxShadow: `0 4px 16px rgba(${hexToRgb(AppColors.primaryColor)}, 0.15)`,
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
     };
 
-    const logoStyle: React.CSSProperties = {
-        width: '50px',
-        height: '50px',
-        objectFit: 'cover',
-        borderRadius: '30px',
-        marginLeft: '1rem',
+    const cardHoverStyle: React.CSSProperties = {
+        transform: 'translateY(-4px)',
+        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
+        borderColor: AppColors.primaryColor,
     };
 
     return (
@@ -163,55 +149,42 @@ const Ingredients = () => {
             />
 
             {ingredientsError ? (
-                <Col
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '70vh', // centers in the visible area
-                    }}>
-                    <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
+                    <Lottie animationData={error404} loop style={{ height: 300, width: 300 }} />
                 </Col>
             ) : (
-                <Row>
-                    {filteredIngredients.map((ingredient: any, index: number) => (
-                        <Col key={index} md={12}>
-                            <Card style={cardStyle}>
-                                <Card.Body style={{ display: 'flex', alignItems: 'center' }}>
-                                    {/* {ingredient.image && (
-                                        <img src={ingredient.image} alt="Ingredient" style={logoStyle} />
-                                    )} */}
-
-                                    <div
-                                        style={{
-                                            fontSize: '1.25rem',
-                                            paddingLeft: '14px',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                        }}>
-                                        <div>
-                                            <strong>{ingredient?.ingredient_name || 'Unnamed Ingredient'}</strong>
+                <Row className="g-4">
+                    {filteredIngredients.map((ingredient: any) => (
+                        <Col key={ingredient.ingredient_id} xs={12} sm={6} md={4} lg={3}>
+                            <Card
+                                style={{
+                                    ...cardBaseStyle,
+                                    ...(hoveredCardId === ingredient.ingredient_id ? cardHoverStyle : {}),
+                                }}
+                                onMouseEnter={() => setHoveredCardId(ingredient.ingredient_id)}
+                                onMouseLeave={() => setHoveredCardId(null)}>
+                                <Card.Body className="d-flex flex-column justify-content-between p-3">
+                                    <div>
+                                        <div
+                                            style={{ fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '0.25rem' }}>
+                                            {ingredient.ingredient_name || 'Unnamed'}
                                         </div>
-                                        <div>{ingredient?.unit}</div>
+                                        <div style={{ fontSize: '1rem', color: '#555' }}>{ingredient.unit}</div>
                                     </div>
 
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            gap: '0.5rem',
-                                            marginLeft: 'auto',
-                                            alignItems: 'center',
-                                        }}>
+                                    <div className="d-flex gap-2 justify-content-end align-items-center">
                                         <button
                                             style={{
                                                 backgroundColor: AppColors.borderColor,
                                                 color: AppColors.iconColor,
                                                 border: 'none',
-                                                borderRadius: '4px',
-                                                padding: '8px',
-                                                cursor: 'pointer',
+                                                borderRadius: '6px',
                                                 height: '40px',
                                                 width: '40px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
                                             }}
                                             onClick={() => handleEditIngredient(ingredient)}>
                                             <FaRegEdit />
@@ -221,10 +194,10 @@ const Ingredients = () => {
                                             style={{
                                                 backgroundColor: AppColors.borderColor,
                                                 color: AppColors.iconColor,
+                                                border: 'none',
+                                                borderRadius: '6px',
                                                 height: '40px',
                                                 width: '40px',
-                                                border: 'none',
-                                                borderRadius: '4px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
@@ -239,28 +212,27 @@ const Ingredients = () => {
                                             <FaRegTrashAlt />
                                         </button>
 
-                                        <div onClick={(e) => e.stopPropagation()}>
-                                            <ToggleSwitch
-                                                checked={ingredient?.is_active}
-                                                onChange={(checked) =>
-                                                    handleIngredientToggle(ingredient.ingredient_id, checked)
-                                                }
-                                            />
-                                        </div>
+                                        <ToggleSwitch
+                                            checked={ingredient?.is_active}
+                                            onChange={(checked) =>
+                                                handleIngredientToggle(ingredient.ingredient_id, checked)
+                                            }
+                                        />
                                     </div>
                                 </Card.Body>
                             </Card>
-                            <ConfirmDeleteModal
-                                show={showDeleteModal}
-                                onClose={() => setShowDeleteModal(false)}
-                                onConfirm={confirmDelete}
-                                title="Delete this Ingredient"
-                                message={`Are you sure you want to delete ${ingredientToDelete?.ingredient_name}? This action cannot be undone.`}
-                            />
                         </Col>
                     ))}
                 </Row>
             )}
+
+            <ConfirmDeleteModal
+                show={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={confirmDelete}
+                title="Delete this Ingredient"
+                message={`Are you sure you want to delete ${ingredientToDelete?.ingredient_name}? This action cannot be undone.`}
+            />
 
             {/* Add/Edit Modal */}
             <Modal show={showFormModal} onHide={() => setShowFormModal(false)} centered>

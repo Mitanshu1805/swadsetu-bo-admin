@@ -1,101 +1,92 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Card, Form, Row, Col, Accordion, Button } from 'react-bootstrap';
-import { orderReportList, staffDelete, staffList } from '../../../redux/actions';
+import { Card, Row, Col, Button } from 'react-bootstrap';
+import { staffDelete, staffList } from '../../../redux/actions';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
-import { FaPlus, FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
+import { FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import { AppColors } from '../../../utils/Colors';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
 import Lottie from 'lottie-react';
 import error404 from '../../../assets/lottie/404-notfound.json';
 
-type props = {
+type Props = {
     outletId?: string;
 };
+
 type StaffDelete = {
     business_staff_id: string;
     business_id: string;
     staff_name?: string;
 };
 
-const Staff: React.FC<props> = ({ outletId }) => {
+const Staff: React.FC<Props> = ({ outletId }) => {
     const navigate = useNavigate();
-    const staffState = useSelector((state: any) => state?.Staff?.staffList);
-    console.log('staffList>>>>', staffState);
-    const staffListError = useSelector((state: any) => state?.Staff?.error);
-    console.log(staffListError);
-
     const { dispatch } = useRedux();
+    const staffState = useSelector((state: any) => state?.Staff?.staffList) || [];
+    const staffListError = useSelector((state: any) => state?.Staff?.error);
     const location = useLocation();
-    const outlet_name = location.state.outlet_name;
-
-    console.log(outlet_name);
+    const outlet_name = location.state?.outlet_name;
     const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
     const businessId = business.business_id;
+
+    const [hoveredCard, setHoveredCard] = useState<string | null>(null);
     const [staffToDelete, setStaffToDelete] = useState<StaffDelete | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+
     useEffect(() => {
-        const payload = {
-            business_id: businessId,
-            outlet_id: outletId,
-        };
-        if (payload.outlet_id === 'master') {
-            delete payload.outlet_id;
-        }
+        const payload = { business_id: businessId, outlet_id: outletId };
+        if (payload.outlet_id === 'master') delete payload.outlet_id;
         dispatch(staffList(payload));
     }, [dispatch]);
 
-    const handleStaffDelete = (data: StaffDelete) => {
-        console.log(data);
+    const handleAddStaff = () => {
+        navigate('/staff-register', { state: { outlet_name, outletId } });
+    };
 
-        console.log('staff delete btn clicked for staff id:', data.business_staff_id);
-        const payload = {
-            business_staff_id: data.business_staff_id,
-            business_id: businessId,
-            staff_name: data.staff_name,
-        };
-        setStaffToDelete(payload);
+    const handleStaffDelete = (data: StaffDelete) => {
+        setStaffToDelete(data);
         setShowDeleteModal(true);
     };
+
     const confirmDelete = () => {
         if (staffToDelete) {
             dispatch(staffDelete(staffToDelete.business_id, staffToDelete.business_staff_id));
             setTimeout(() => {
-                const payload = {
-                    business_id: businessId,
-                    outlet_id: outletId,
-                };
-                if (payload.outlet_id === 'master') {
-                    delete payload.outlet_id;
-                }
-                if (businessId) dispatch(staffList(payload));
-            });
+                const payload = { business_id: businessId, outlet_id: outletId };
+                if (payload.outlet_id === 'master') delete payload.outlet_id;
+                dispatch(staffList(payload));
+            }, 500);
         }
         setShowDeleteModal(false);
     };
 
-    const handleAddStaff = () => {
-        navigate('/staff-register', {
-            state: {
-                outlet_name,
-                outletId,
-            },
+    const handleStaffClick = (staff_id: string, business_staff_id: string) => {
+        if (showDeleteModal) return;
+        navigate('/staff-details', {
+            state: { staff_id, business_staff_id, outlet_name, outletId },
         });
     };
 
-    const handleStaffClicked = (staff_id: string, business_staff_id: string) => {
-        console.log('businessStaffID:', business_staff_id);
-        console.log('staffID:', staff_id);
-        navigate('/staff-details', {
-            state: {
-                staff_id,
-                business_staff_id,
-                outlet_name,
-                outletId,
-            },
-        });
+    const cardBaseStyle: React.CSSProperties = {
+        borderRadius: '16px',
+        cursor: 'pointer',
+        boxShadow: `0 1px 4px rgba(0,0,0,0.1)`,
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease',
+        border: `1px solid ${AppColors.primaryColor}`,
+        padding: '16px',
+        minHeight: '120px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     };
+
+    const cardHoverStyle: React.CSSProperties = {
+        transform: 'translateY(-4px)',
+        boxShadow: `0 6px 16px rgba(0,0,0,0.2)`,
+        borderColor: AppColors.primaryColor,
+    };
+
     return (
         <div style={{ padding: '1rem' }}>
             <div
@@ -124,79 +115,65 @@ const Staff: React.FC<props> = ({ outletId }) => {
             </div>
 
             {staffListError ? (
-                <Col
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '70vh', // centers in the visible area
-                    }}>
-                    <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
+                    <Lottie animationData={error404} loop style={{ height: 300, width: 300 }} />
                 </Col>
             ) : (
-                <Row>
+                <Row className="g-4">
                     {staffState.map((item: any) => (
-                        <Col key={item.staff_id} md={6}>
+                        <Col key={item.staff_id} md={6} lg={4}>
                             <Card
-                                style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.1)', marginBottom: '20px' }}
-                                onClick={() => {
-                                    if (showDeleteModal) return;
-                                    handleStaffClicked(item.staff_id, item.business_staff_id);
-                                }}>
-                                <Card.Body style={{ padding: '12px' }}>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'flex-start',
-                                        }}>
-                                        <div>
-                                            <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>
-                                                {item.staff_name}
-                                            </div>
-                                            <div style={{ fontSize: '1rem', marginTop: '4px' }}>
-                                                {item.role || 'N/A'}
-                                            </div>
-                                        </div>
+                                style={{
+                                    ...cardBaseStyle,
+                                    ...(hoveredCard === item.business_staff_id ? cardHoverStyle : {}),
+                                }}
+                                onMouseEnter={() => setHoveredCard(item.business_staff_id)}
+                                onMouseLeave={() => setHoveredCard(null)}
+                                onClick={() => handleStaffClick(item.staff_id, item.business_staff_id)}>
+                                <div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{item.staff_name}</div>
+                                    <div style={{ fontSize: '1rem', marginTop: '4px' }}>{item.role || 'N/A'}</div>
+                                </div>
 
-                                        <button
-                                            style={{
-                                                backgroundColor: AppColors.borderColor,
-                                                color: AppColors.iconColor,
-                                                height: '40px',
-                                                width: '40px',
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                marginTop: '8px',
-                                            }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleStaffDelete({
-                                                    business_staff_id: item.business_staff_id,
-                                                    business_id: businessId,
-                                                    staff_name: item.staff_name,
-                                                });
-                                            }}>
-                                            <FaRegTrashAlt />
-                                        </button>
-                                    </div>
-
-                                    <ConfirmDeleteModal
-                                        show={showDeleteModal}
-                                        onClose={() => setShowDeleteModal(false)}
-                                        onConfirm={confirmDelete}
-                                        title="Delete this Staff"
-                                        message={`Are you sure you want to delete ${staffToDelete?.staff_name}? This action cannot be undone.`}
-                                    />
-                                </Card.Body>
+                                <button
+                                    style={{
+                                        backgroundColor: AppColors.borderColor,
+                                        color: AppColors.iconColor,
+                                        height: '36px',
+                                        width: '36px',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        alignSelf: 'flex-end',
+                                        marginTop: '12px',
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleStaffDelete({
+                                            business_staff_id: item.business_staff_id,
+                                            business_id: businessId,
+                                            staff_name: item.staff_name,
+                                        });
+                                    }}>
+                                    <FaRegTrashAlt />
+                                </button>
                             </Card>
                         </Col>
                     ))}
                 </Row>
+            )}
+
+            {showDeleteModal && (
+                <ConfirmDeleteModal
+                    show={showDeleteModal}
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={confirmDelete}
+                    title="Delete this Staff"
+                    message={`Are you sure you want to delete ${staffToDelete?.staff_name}? This action cannot be undone.`}
+                />
             )}
         </div>
     );

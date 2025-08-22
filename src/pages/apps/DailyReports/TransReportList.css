@@ -36,6 +36,6 @@
 
 .total-row {
     background-color: #ff5b5b !important; /* or AppColors.primaryColor */
-    /* color: white !important; */
+    color: white !important;
     font-weight: bold;
 }
