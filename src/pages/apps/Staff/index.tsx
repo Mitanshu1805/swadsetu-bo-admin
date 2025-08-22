@@ -68,12 +68,20 @@ const Staff: React.FC<Props> = ({ outletId }) => {
         });
     };
 
+    function hexToRgb(hex: string) {
+        const bigint = parseInt(hex.replace('#', ''), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return `${r}, ${g}, ${b}`;
+    }
+
     const cardBaseStyle: React.CSSProperties = {
         borderRadius: '16px',
         cursor: 'pointer',
-        boxShadow: `0 1px 4px rgba(0,0,0,0.1)`,
+        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
         transition: 'transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease',
-        border: `1px solid ${AppColors.primaryColor}`,
+        // border: `1px solid ${AppColors.primaryColor}`,
         padding: '16px',
         minHeight: '120px',
         display: 'flex',
@@ -83,8 +91,8 @@ const Staff: React.FC<Props> = ({ outletId }) => {
 
     const cardHoverStyle: React.CSSProperties = {
         transform: 'translateY(-4px)',
-        boxShadow: `0 6px 16px rgba(0,0,0,0.2)`,
-        borderColor: AppColors.primaryColor,
+        boxShadow: `0 8px 20px rgba($AppColors.primaryColor)}, 0.25)`,
+        // borderColor: AppColors.primaryColor,
     };
 
     return (

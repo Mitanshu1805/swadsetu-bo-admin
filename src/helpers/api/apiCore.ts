@@ -103,6 +103,7 @@ class APICore {
      */
     isUserAuthenticated = () => {
         const user = getUserFromLocalStorage();
+        console.log(user);
 
         if (!user) {
             console.warn('No user data found in localStorage');
@@ -157,6 +158,7 @@ const user = getUserFromLocalStorage();
 const token = user?.data?.auth_token || user?.data?.detail?.auth_token;
 if (token) {
     setAuthorization(token);
+    console.log(token);
 } else {
     console.warn('No valid auth_token found in localStorage');
 }

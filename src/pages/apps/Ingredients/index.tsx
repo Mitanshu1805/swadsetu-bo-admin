@@ -114,7 +114,7 @@ const Ingredients = () => {
         borderRadius: '12px',
         cursor: 'pointer',
         minHeight: '140px',
-        border: `1px solid ${AppColors.primaryColor}`,
+        // border: `1px solid ${AppColors.primaryColor}`,
         boxShadow: `0 4px 16px rgba(${hexToRgb(AppColors.primaryColor)}, 0.15)`,
         transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
     };
@@ -122,7 +122,7 @@ const Ingredients = () => {
     const cardHoverStyle: React.CSSProperties = {
         transform: 'translateY(-4px)',
         boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
-        borderColor: AppColors.primaryColor,
+        // borderColor: AppColors.primaryColor,
     };
 
     return (
