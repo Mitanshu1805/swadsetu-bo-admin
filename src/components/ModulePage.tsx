@@ -4,6 +4,7 @@ import TerminalList from '../pages/apps/Terminal/TerminalList';
 import DailyReports from '../pages/apps/DailyReports';
 import Menu from '../pages/apps/Menu';
 import Staff from '../pages/apps/Staff';
+import OrderHistory from '../pages/apps/OrderHistory';
 
 const ModulePage = () => {
     const { module, outletId } = useParams();
@@ -24,6 +25,10 @@ const ModulePage = () => {
         case 'staff':
             if (!outletId) return <div>Please select an outlet</div>;
             return <Staff outletId={outletId} />;
+
+        case 'order-history':
+            if (!outletId) return <div>Please select an outlet</div>;
+            return <OrderHistory outletId={outletId} />;
 
         // case 'staff':
         //     return <StaffModule outletId={outletId} />;

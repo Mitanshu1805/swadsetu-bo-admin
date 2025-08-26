@@ -66,7 +66,7 @@ const MENU_ITEMS: MenuItemTypes[] = [
     },
     {
         key: 'drawer-table',
-        label: 'drawer.table',
+        label: 'Table Mapping',
         icon: 'mdi mdi-view-list',
         url: '/drawer-table/outlets',
     },

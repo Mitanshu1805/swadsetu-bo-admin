@@ -9,7 +9,8 @@ import { SagaIterator } from 'redux-saga';
 function* orderListSaga(action: any): SagaIterator {
     try {
         const response = yield call(orderList, action.payload);
-        yield put(orderListSuccess(response.data.message));
+
+        yield put(orderListSuccess(response.data));
     } catch (error: any) {
         yield put(orderListError(error || 'Something went wrong'));
     }

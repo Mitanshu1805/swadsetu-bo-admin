@@ -215,6 +215,26 @@ export function orderList(data: any) {
     return api.create('/order/list', data);
 }
 
+export function areaCreate(data: any) {
+    return api.create('/area/create', data);
+}
+
+export function areaDelete(data: any) {
+    return api.create('/area/delete', data);
+}
+
+export function areaUpdate(data: any) {
+    return api.create('/area/create', data);
+}
+
+export function areaTables(data: any) {
+    return api.create('/area/tables', data);
+}
+
+export function areaAdd(data: any) {
+    return api.create('/area/add', data);
+}
+
 export {
     login,
     logout,

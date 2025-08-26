@@ -5,7 +5,7 @@ import { OrderManagementActionTypes } from './constants';
 export interface OrderList {
     date: string;
     business_id: string;
-    outlet_id: string;
+    outlet_id?: string;
     page: number;
 }
 
