@@ -10,6 +10,7 @@ import menu from './menu/saga';
 import item from './item/saga';
 import recipe from './recipe/saga';
 import recipeIngredients from './recipeIngredients/saga';
+import orderManagementSaga from './order/saga';
 
 export default function* rootSaga() {
     yield all([
@@ -23,5 +24,6 @@ export default function* rootSaga() {
         item(),
         recipe(),
         recipeIngredients(),
+        orderManagementSaga(),
     ]);
 }

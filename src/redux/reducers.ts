@@ -11,6 +11,7 @@ import Menu from './menu/reducers';
 import Item from './item/reducers';
 import Recipe from './recipe/reducers';
 import RecipeIngredients from './recipeIngredients/reducers';
+import OrderManagementReducer from './order/reducers';
 
 export default combineReducers({
     Auth,
@@ -24,4 +25,5 @@ export default combineReducers({
     Item,
     Recipe,
     RecipeIngredients,
+    OrderManagementReducer,
 });

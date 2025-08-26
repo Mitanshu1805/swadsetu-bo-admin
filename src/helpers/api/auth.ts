@@ -211,6 +211,10 @@ export function recipeIngredientUpdate(data: any) {
     return api.update('/recipe/ingredient/update', data);
 }
 
+export function orderList(data: any) {
+    return api.create('/order/list', data);
+}
+
 export {
     login,
     logout,
