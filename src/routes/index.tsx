@@ -37,6 +37,7 @@ const RecipeModal = React.lazy(() => import('../pages/apps/Menu/RecipeModal'));
 const ItemModal = React.lazy(() => import('../pages/apps/Menu/ItemModal'));
 const OrderHistory = React.lazy(() => import('../pages/apps/OrderHistory'));
 const OrderDetails = React.lazy(() => import('../pages/apps/OrderHistory/OrderDetails'));
+const TableMapping = React.lazy(() => import('../pages/apps/TableMapping'));
 
 // dashboards
 const DashBoard1 = React.lazy(() => import('../pages/dashboards/DashBoard1/'));
@@ -285,6 +286,10 @@ const AllRoutes = () => {
                 {
                     path: '/order-details',
                     element: <LoadComponent component={OrderDetails} />,
+                },
+                {
+                    path: '/table-mapping',
+                    element: <LoadComponent component={TableMapping} />,
                 },
 
                 {

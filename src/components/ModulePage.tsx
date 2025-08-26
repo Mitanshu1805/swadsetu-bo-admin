@@ -5,6 +5,7 @@ import DailyReports from '../pages/apps/DailyReports';
 import Menu from '../pages/apps/Menu';
 import Staff from '../pages/apps/Staff';
 import OrderHistory from '../pages/apps/OrderHistory';
+import TableMapping from '../pages/apps/TableMapping';
 
 const ModulePage = () => {
     const { module, outletId } = useParams();
@@ -29,6 +30,10 @@ const ModulePage = () => {
         case 'order-history':
             if (!outletId) return <div>Please select an outlet</div>;
             return <OrderHistory outletId={outletId} />;
+
+        case 'table-mapping':
+            if (!outletId) return <div>Please select an outlet</div>;
+            return <TableMapping outletId={outletId} />;
 
         // case 'staff':
         //     return <StaffModule outletId={outletId} />;
