@@ -36,7 +36,7 @@ type TableMappingAction =
     | { type: TableMappingActionTypes.AREA_ADD_SUCCESS; payload: Area }
     | { type: TableMappingActionTypes.AREA_ADD_ERROR; payload: string };
 
-export const tableMappingReducer = (state = initialState, action: TableMappingAction): TableMappingState => {
+const TableMappingReducer = (state = initialState, action: TableMappingAction): TableMappingState => {
     switch (action.type) {
         case TableMappingActionTypes.AREA_CREATE:
         case TableMappingActionTypes.AREA_DELETE:
@@ -91,3 +91,5 @@ export const tableMappingReducer = (state = initialState, action: TableMappingAc
             return state;
     }
 };
+
+export default TableMappingReducer;

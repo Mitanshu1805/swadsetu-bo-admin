@@ -10,3 +10,4 @@ export * from './item/actions';
 export * from './recipe/actions';
 export * from './recipeIngredients/actions';
 export * from './order/actions';
+export * from './tableMapping/actions';

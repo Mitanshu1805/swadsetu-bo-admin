@@ -76,7 +76,7 @@ function* watchAreaTabes() {
     yield takeEvery(TableMappingActionTypes.AREA_TABLES, areaTables);
 }
 
-export default function* TableMappingSaga() {
+export default function* tableMappingSaga() {
     yield all([
         fork(watchAreaAdd),
         fork(watchAreaDelete),
