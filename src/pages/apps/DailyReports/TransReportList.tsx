@@ -6,6 +6,8 @@ import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
 import './TransReportList.css';
 import { AppColors } from '../../../utils/Colors';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
 
 const TransReportList = () => {
     const transReport = useSelector((state: any) => state?.Report?.orderReport?.data?.data?.data?.report);
@@ -72,7 +74,7 @@ const TransReportList = () => {
 
             <Row>
                 {/* CASH Accordion */}
-                {transReport?.CASH?.length > 0 && (
+                {transReport?.CASH?.length > 0 ? (
                     <Col md={6}>
                         <Accordion alwaysOpen>
                             <Accordion.Item eventKey="0" className="custom-accordion">
@@ -152,6 +154,15 @@ const TransReportList = () => {
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
+                    </Col>
+                ) : (
+                    <Col
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
                     </Col>
                 )}
 

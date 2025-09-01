@@ -102,7 +102,7 @@ const IngredientReportList = () => {
                         loop={true}
                         style={{ height: 300, width: 300, margin: '0 auto' }}
                     />
-                    <div style={{ marginTop: '1rem', color: 'red', fontWeight: 'bold' }}>{ingredientError}</div>
+                    {/* <div style={{ marginTop: '1rem', color: 'red', fontWeight: 'bold' }}>{ingredientError}</div> */}
                 </Col>
             ) : (
                 <Col style={{ textAlign: 'center', color: '#888', marginTop: '2rem' }}>
