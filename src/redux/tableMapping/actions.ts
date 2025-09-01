@@ -24,9 +24,9 @@ export const areaCreateError = (error: string): Action => ({
 });
 
 /* -------- AREA DELETE -------- */
-export const areaDelete = (id: string | number): Action => ({
+export const areaDelete = (area_id: string | number): Action => ({
     type: TableMappingActionTypes.AREA_DELETE,
-    payload: id,
+    payload: { area_id },
 });
 
 export const areaDeleteSuccess = (response: any): Action => ({
@@ -56,9 +56,9 @@ export const areaUpdateError = (error: string): Action => ({
 });
 
 /* -------- AREA TABLES (Fetch) -------- */
-export const areaTables = (areaId?: string | number): Action => ({
+export const areaTables = (outlet_id: string): Action => ({
     type: TableMappingActionTypes.AREA_TABLES,
-    payload: areaId,
+    payload: { outlet_id },
 });
 
 export const areaTablesSuccess = (response: any): Action => ({

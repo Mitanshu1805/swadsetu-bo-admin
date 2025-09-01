@@ -220,7 +220,7 @@ export function areaCreate(data: any) {
 }
 
 export function areaDelete(data: any) {
-    return api.create('/area/delete', data);
+    return api.delete('/area/delete', data);
 }
 
 export function areaUpdate(data: any) {
@@ -232,7 +232,7 @@ export function areaTables(data: any) {
 }
 
 export function areaAdd(data: any) {
-    return api.create('/area/add', data);
+    return api.create('/table/add', data);
 }
 
 export {

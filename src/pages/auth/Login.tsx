@@ -91,15 +91,14 @@ const Login = () => {
     const handleVerifyOtp = (data: OtpData) => {
         dispatch(verifyOtp(data.phone_number, data.otp));
         setVerified(true);
-        console.log(verified);
     };
 
     useEffect(() => {
         console.log('useEffect triggered');
 
         if (verified && businesses && businesses.count > 1) {
-            console.log(verified);
-            console.log(businesses);
+            console.log('verified>>>>>>>>', verified);
+            console.log('businesses>>>>', businesses);
             console.log(businesses.count);
 
             setShowBusinessSelector(true);

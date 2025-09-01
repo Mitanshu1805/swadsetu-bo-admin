@@ -5,6 +5,8 @@ import { orderList, OrderList } from '../../../redux/actions';
 import { Card, Row, Col } from 'react-bootstrap';
 import { AppColors } from '../../../utils/Colors';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Lottie from 'lottie-react';
+import error404 from '../../../assets/lottie/404-notfound.json';
 
 type Props = {
     outletId?: string;
@@ -96,7 +98,15 @@ const OrderHistory: React.FC<Props> = ({ outletId }) => {
             />
 
             {orders.length === 0 ? (
-                <p>No orders found for selected date.</p>
+                <Col
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '70vh', // centers in the visible area
+                    }}>
+                    <Lottie animationData={error404} loop={true} style={{ height: 300, width: 300 }} />
+                </Col>
             ) : (
                 <Row className="g-4">
                     {orders.map((order: any) => (

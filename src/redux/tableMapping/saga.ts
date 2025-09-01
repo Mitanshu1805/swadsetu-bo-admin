@@ -73,7 +73,7 @@ function* watchAreaCreate() {
     yield takeEvery(TableMappingActionTypes.AREA_CREATE, areaCreateSaga);
 }
 function* watchAreaTabes() {
-    yield takeEvery(TableMappingActionTypes.AREA_TABLES, areaTables);
+    yield takeEvery(TableMappingActionTypes.AREA_TABLES, areaTablesSaga);
 }
 
 export default function* tableMappingSaga() {
