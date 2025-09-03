@@ -135,7 +135,7 @@ const CategoryModal = () => {
         }
 
         setTimeout(() => {
-            navigate('/category-list', { state: { from: 'category-modal' } });
+            navigate('/category-list', { state: { outletId } });
         }, 500);
     };
 

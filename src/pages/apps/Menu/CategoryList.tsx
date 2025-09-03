@@ -24,6 +24,8 @@ const CategoryList = () => {
     const { dispatch } = useRedux();
     const location = useLocation();
     const outletId = location?.state?.outletId;
+    console.log('outletId>>>', outletId);
+
     const outlet_name = location?.state?.outlet_name;
     const [categoryToDelete, setCategoryToDelete] = useState<CategoryData | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);

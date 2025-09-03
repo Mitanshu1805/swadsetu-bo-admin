@@ -54,6 +54,8 @@ const ItemModal = () => {
     const editMode = location?.state?.editMode || false;
     const itemId = location?.state?.item_id || null;
     const category_id = location?.state?.category_id;
+    const outletId = location?.state?.outletId;
+    console.log('outletId>>>', outletId);
 
     const itemData = useSelector((state: any) => state?.Menu?.categories);
 
@@ -197,7 +199,7 @@ const ItemModal = () => {
             dispatch(registerItem(formDataToSend));
         }
 
-        navigate('/item-list', { state: { from: 'item-modal' } });
+        navigate('/item-list', { state: { outletId } });
     };
 
     return (
