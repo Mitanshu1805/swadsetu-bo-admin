@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
-import {
-    dashboardEarningReport,
-    dashboardSalesReport,
-    ingredientReportList,
-    orderReportList,
-} from '../../../redux/actions';
+import { dashboardEarningReport, orderReportList, ingredientReportList } from '../../../redux/actions';
 import { Col, Row } from 'react-bootstrap';
 import { AppColors } from '../../../utils/Colors';
-import './Statistics.css'; // <-- Add this for custom CSS
+import './Statistics.css';
 import { useNavigate } from 'react-router-dom';
 
-const Statistics = () => {
+type StatisticsProps = {
+    sales: any;
+};
+
+const Statistics: React.FC<StatisticsProps> = ({ sales }) => {
     const dashboardEarningReports = useSelector(
         (state: any) => state?.Report?.dashboardEarningReport?.data?.data?.data
     );
-    const totalEarnings = dashboardEarningReports?.total_amount ? dashboardEarningReports?.total_amount : '0';
-    const totalOrders = dashboardEarningReports?.total_orders ? dashboardEarningReports?.total_orders : '0';
-    console.log(totalOrders);
+
+    const totalEarnings = dashboardEarningReports?.total_amount
+        ? dashboardEarningReports.total_amount.toLocaleString()
+        : '0';
+    const totalOrders = dashboardEarningReports?.total_orders
+        ? dashboardEarningReports.total_orders.toLocaleString()
+        : '0';
 
     const { dispatch } = useRedux();
     const navigate = useNavigate();
@@ -29,7 +32,6 @@ const Statistics = () => {
 
         if (business_id) {
             dispatch(dashboardEarningReport(business_id));
-            dispatch(dashboardSalesReport(business_id));
 
             const today = new Date().toISOString().split('T')[0];
             const payload = {
@@ -43,9 +45,7 @@ const Statistics = () => {
         }
     }, [dispatch]);
 
-    const salesReport = useSelector(
-        (state: any) => state?.Report?.dashboardSalesReport?.data?.data?.data?.last_order_details
-    );
+    const salesReport = sales?.last_order_details;
     const ingredientReport = useSelector((state: any) => state?.Report?.ingredientReport?.data?.data?.data);
 
     return (
@@ -128,7 +128,9 @@ const Statistics = () => {
                                     justifyContent: 'space-between',
                                 }}>
                                 <div>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>₹{order.amount}</div>
+                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                                        ₹{order.amount.toLocaleString()}
+                                    </div>
                                     <div style={{ fontSize: '0.9rem' }}>{order.outlet_name}</div>
                                 </div>
                                 <div>
@@ -165,7 +167,9 @@ const Statistics = () => {
                                     justifyContent: 'space-between',
                                 }}>
                                 <div>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{order.total_quantity}</div>
+                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                                        {order.total_quantity.toLocaleString()}
+                                    </div>
                                     <div style={{ fontSize: '0.9rem' }}>{order.unit}</div>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>

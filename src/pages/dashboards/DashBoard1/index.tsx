@@ -10,6 +10,10 @@ import StatisticsChart from './StatisticsChart';
 import RevenueChart from './RevenueChart';
 import Users from './Users';
 import Inbox from './Inbox';
+import { useRedux } from '../../../hooks';
+import { useEffect } from 'react';
+import { dashboardSalesReport } from '../../../redux/actions';
+import { useSelector } from 'react-redux';
 import Projects from './Projects';
 
 // dummy data
@@ -17,6 +21,16 @@ import { messages, projectDetails } from './data';
 import { AppColors } from '../../../utils/Colors';
 
 const DashBoard1 = () => {
+    const { dispatch, appSelector } = useRedux();
+    const selected_business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+    const business_id = selected_business.business_id;
+    const sales = useSelector((state: any) => state?.Report?.dashboardSalesReport?.data?.data?.data);
+    console.log('sales', sales);
+
+    useEffect(() => {
+        dispatch(dashboardSalesReport(business_id));
+    }, [dispatch]);
+
     // set pagetitle
     usePageTitle({
         title: 'Reports DashBoard',
@@ -31,17 +45,17 @@ const DashBoard1 = () => {
 
     return (
         <div>
-            <Statistics />
+            <Statistics sales={sales} />
 
             <Row>
                 {/* <Col xl={4}>
                     <SalesChart />
                 </Col> */}
                 <Col xl={4}>
-                    <StatisticsChart />
+                    <StatisticsChart sales={sales} />
                 </Col>
                 <Col xl={4}>
-                    <RevenueChart />
+                    <RevenueChart sales={sales} />
                 </Col>
             </Row>
 
