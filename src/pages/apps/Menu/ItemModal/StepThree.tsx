@@ -54,7 +54,7 @@ const StepThree: React.FC<StepThreeProps> = ({ selectedOutlets }) => {
     };
 
     return (
-        <Card className="shadow-sm p-3">
+        <Card className="shadow-sm p-3" style={{ background: 'transparent' }}>
             <h2 className="text-center mb-4">Outlet Prices</h2>
 
             <Row className="mb-3 align-items-end">
@@ -80,7 +80,7 @@ const StepThree: React.FC<StepThreeProps> = ({ selectedOutlets }) => {
 
                         return (
                             <Col md={6} key={outlet.outlet_id} className="mb-3">
-                                <Card className="shadow-sm p-3">
+                                <Card className="shadow-sm" style={{ background: 'transparent' }}>
                                     <h5>{outlet.outlet_name}</h5>
                                     <Form.Control
                                         type="number"
