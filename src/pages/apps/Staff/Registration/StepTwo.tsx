@@ -44,7 +44,7 @@ const StepTwo: React.FC = () => {
                         alignItems: 'center',
                         padding: '12px 16px',
                         borderRadius: '10px',
-                        // border: `1px solid ${AppColors.primaryColor}`,
+                        border: `1px solid ${AppColors.primaryColor}`,
                         boxShadow: `0 2px 8px rgba(0,0,0,0.15)`,
                         cursor: 'pointer',
                         marginTop: '8px',
@@ -103,10 +103,11 @@ const StepTwo: React.FC = () => {
                                     padding: '12px 16px',
                                     marginBottom: '10px',
                                     borderRadius: '10px',
-                                    // border: `1px solid ${isActive ? AppColors.primaryColor : '#ddd'}`,
+                                    border: `1px solid ${isActive ? AppColors.primaryColor : '#ddd'}`,
                                     boxShadow: isActive ? `0 2px 8px rgba(0,0,0,0.15)` : '0 1px 4px rgba(0,0,0,0.08)',
                                     cursor: 'pointer',
-                                    // transition: 'all 0.2s ease',
+                                    transition: 'all 0.2s ease',
+                                    background: 'white',
                                 }}>
                                 <input
                                     type="radio" // keeps radio style

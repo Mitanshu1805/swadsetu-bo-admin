@@ -76,7 +76,7 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
     };
 
     return (
-        <Card className="shadow-sm p-3">
+        <Card className="shadow-sm p-3" style={{ backgroundColor: 'transparent', border: 'none' }}>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <label className="fw-bold fs-5 mb-0">Select Outlets</label>
                 {filteredOutlets.length > 0 && (
@@ -104,6 +104,7 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
                                     minWidth: '160px',
+                                    background: 'white',
                                 }}>
                                 <input
                                     type="radio"
