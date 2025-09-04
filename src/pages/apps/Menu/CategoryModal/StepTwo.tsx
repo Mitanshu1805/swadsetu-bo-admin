@@ -124,8 +124,8 @@ const StepTwo: React.FC = () => {
                                 }}>
                                 <input
                                     type="radio"
-                                    value={outlet.outlet_id}
                                     checked={isActive}
+                                    value={outlet.outlet_id}
                                     readOnly
                                     style={{
                                         width: '16px',

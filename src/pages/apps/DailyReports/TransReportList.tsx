@@ -44,6 +44,11 @@ const TransReportList = () => {
         }
     }, [dispatch, startDate, endDate, outletId, businessId]);
 
+    const totalAmount =
+        transReport?.CASH?.reduce((sum: number, item: any) => sum + item.total_amount, 0) +
+        transReport?.ONLINE?.reduce((sum: number, item: any) => sum + item.total_amount, 0);
+    // console.log('totalAmount', Math.round(totalAmount));
+
     return (
         <div className="p-4" style={{ fontFamily: 'sans-serif' }}>
             <Row className="align-items-center mb-4">
@@ -72,6 +77,16 @@ const TransReportList = () => {
                 </Col>
             </Row>
 
+            <div
+                style={{
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    // marginBottom: '20px',
+                    color: '#1a1a1a',
+                }}>
+                Total Amount: ₹{Math.round(totalAmount).toLocaleString()}
+            </div>
+
             <Row>
                 {/* CASH Accordion */}
                 {transReport?.CASH?.length > 0 ? (
@@ -88,7 +103,7 @@ const TransReportList = () => {
                                                     (sum: number, item: any) => sum + item.total_amount,
                                                     0
                                                 )
-                                            )}
+                                            ).toLocaleString()}
                                             )
                                         </div>
                                     </div>
@@ -129,7 +144,7 @@ const TransReportList = () => {
                                                         )}
                                                     </td>
 
-                                                    <td>{item.total_amount}</td>
+                                                    <td>{item.total_amount.toLocaleString()}</td>
                                                 </tr>
                                             ))}
                                             <tr className="total-row">
@@ -181,7 +196,7 @@ const TransReportList = () => {
                                                     (sum: number, item: any) => sum + item.total_amount,
                                                     0
                                                 )
-                                            )}
+                                            ).toLocaleString()}
                                             )
                                         </div>
                                     </div>
@@ -220,7 +235,7 @@ const TransReportList = () => {
                                                             </>
                                                         )}
                                                     </td>
-                                                    <td>{item.total_amount}</td>
+                                                    <td>{item.total_amount.toLocaleString()}</td>
                                                 </tr>
                                             ))}
                                             <tr className="total-row">
