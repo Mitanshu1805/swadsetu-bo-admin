@@ -71,6 +71,13 @@ const MENU_ITEMS: MenuItemTypes[] = [
         url: '/table-mapping/outlets',
     },
 
+    {
+        key: 'logout',
+        label: 'Logout',
+        icon: 'fe-log-out',
+        url: '/auth/logout',
+    },
+
     // { key: 'apps', label: 'Apps', isTitle: true },
     // {
     //     key: 'apps-calendar',

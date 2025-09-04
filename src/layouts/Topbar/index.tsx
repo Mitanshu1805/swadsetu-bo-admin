@@ -72,10 +72,10 @@ const Topbar = ({ openLeftMenuCallBack, containerClass }: TopbarProps) => {
                     {/* <li className="dropdown notification-list topbar-dropdown">
                         <NotificationDropdown notifications={notifications} />
                     </li> */}
-                    <li className="dropdown notification-list topbar-dropdown">
-                        {/* User */}
-                        <ProfileDropdown userImage={avatar1} username={firstName} menuItems={profileMenus} />
-                    </li>
+                    {/* <li className="dropdown notification-list topbar-dropdown"> */}
+                    {/* User */}
+                    {/* <ProfileDropdown userImage={avatar1} username={firstName} menuItems={profileMenus} />
+                    </li> */}
                     {/* <li className="dropdown notification-list">
                         <ThemeSetting handleRightSideBar={handleRightSideBar} />
                     </li> */}

@@ -8,6 +8,7 @@ import { findAllParent, findMenuItem } from '../helpers/menu';
 
 // constants
 import { MenuItemTypes } from '../constants/menu';
+import { AppColors } from '../utils/Colors';
 
 type SubMenus = {
     item: MenuItemTypes;
@@ -42,8 +43,7 @@ const MenuItemWithChildren = ({ item, linkClassName, subMenuClassNames, activeMe
                 aria-expanded={open}
                 className={classNames('has-arrow', 'side-sub-nav-link', linkClassName, {
                     'menuitem-active': activeMenuItems!.includes(item.key) ? 'active' : '',
-                })}
-            >
+                })}>
                 {item.icon && <i className={item.icon} />}
                 {!item.badge ? (
                     <span className="menu-arrow"></span>
@@ -61,27 +61,19 @@ const MenuItemWithChildren = ({ item, linkClassName, subMenuClassNames, activeMe
                             return (
                                 <React.Fragment key={i}>
                                     {child.children ? (
-                                        <>
-                                            {/* parent */}
-                                            <MenuItemWithChildren
-                                                item={child}
-                                                linkClassName={activeMenuItems!.includes(child.key) ? 'active' : ''}
-                                                activeMenuItems={activeMenuItems}
-                                                subMenuClassNames="side-nav-third-level"
-                                                toggleMenu={toggleMenu}
-                                            />
-                                        </>
+                                        <MenuItemWithChildren
+                                            item={child}
+                                            linkClassName={activeMenuItems!.includes(child.key) ? 'active' : ''}
+                                            activeMenuItems={activeMenuItems}
+                                            subMenuClassNames="side-nav-third-level"
+                                            toggleMenu={toggleMenu}
+                                        />
                                     ) : (
-                                        <>
-                                            {/* child */}
-                                            <MenuItem
-                                                item={child}
-                                                className={
-                                                    activeMenuItems!.includes(child.key) ? 'menuitem-active' : ''
-                                                }
-                                                linkClassName={activeMenuItems!.includes(child.key) ? 'active' : ''}
-                                            />
-                                        </>
+                                        <MenuItem
+                                            item={child}
+                                            className={activeMenuItems!.includes(child.key) ? 'menuitem-active' : ''}
+                                            linkClassName={activeMenuItems!.includes(child.key) ? 'active' : ''}
+                                        />
                                     )}
                                 </React.Fragment>
                             );
@@ -102,21 +94,79 @@ const MenuItem = ({ item, className, linkClassName }: SubMenus) => {
 };
 
 const MenuItemLink = ({ item, className }: SubMenus) => {
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+    const handleLogoutClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setShowLogoutModal(true);
+    };
+
+    const confirmLogout = () => {
+        window.location.href = item.url!;
+    };
+
     return (
-        <Link
-            to={item.url!}
-            target={item.target}
-            className={classNames('side-nav-link-ref', 'side-sub-nav-link', className)}
-            data-menu-key={item.key}
-        >
-            {item.icon && <i className={item.icon} />}
-            {item.badge && (
-                <span className={classNames('badge', 'bg-' + item.badge.variant, 'rounded-pill', 'float-end')}>
-                    {item.badge.text}
-                </span>
+        <>
+            {item.key === 'logout' ? (
+                <a
+                    href="#"
+                    onClick={handleLogoutClick}
+                    className={classNames('side-nav-link-ref', 'side-sub-nav-link', className)}
+                    data-menu-key={item.key}>
+                    {item.icon && <i className={item.icon} />}
+                    <span> {item.label} </span>
+                </a>
+            ) : (
+                <Link
+                    to={item.url!}
+                    target={item.target}
+                    className={classNames('side-nav-link-ref', 'side-sub-nav-link', className)}
+                    data-menu-key={item.key}>
+                    {item.icon && <i className={item.icon} />}
+                    {item.badge && (
+                        <span className={classNames('badge', 'bg-' + item.badge.variant, 'rounded-pill', 'float-end')}>
+                            {item.badge.text}
+                        </span>
+                    )}
+                    <span> {item.label} </span>
+                </Link>
             )}
-            <span> {item.label} </span>
-        </Link>
+
+            {/* Logout confirmation modal */}
+            {showLogoutModal && (
+                <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content rounded-3 shadow-lg">
+                            <div className="modal-header border-0">
+                                <h5 className="modal-title d-flex align-items-center gap-2">
+                                    <i className="fe-alert-triangle" style={{ color: AppColors.primaryColor }}></i>
+                                    Confirm Logout
+                                </h5>
+                                <button type="button" className="btn-close" onClick={() => setShowLogoutModal(false)} />
+                            </div>
+                            <div className="modal-body text-center">
+                                <p className="mb-0">Are you sure you want to logout from your account?</p>
+                            </div>
+                            <div className="modal-footer justify-content-center border-0">
+                                <button className="btn btn-outline-secondary" onClick={() => setShowLogoutModal(false)}>
+                                    Cancel
+                                </button>
+                                <button
+                                    className="btn"
+                                    onClick={confirmLogout}
+                                    style={{
+                                        backgroundColor: AppColors.primaryColor,
+                                        color: '#fff',
+                                        border: 'none',
+                                    }}>
+                                    Logout <i className="fe-log-out ms-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 
@@ -131,19 +181,12 @@ const AppMenu = ({ menuItems }: AppMenuProps) => {
     let location = useLocation();
 
     const menuRef: any = useRef(null);
-
     const [activeMenuItems, setActiveMenuItems] = useState<Array<string>>([]);
 
-    /*
-     * toggle the menus
-     */
     const toggleMenu = (menuItem: MenuItemTypes, show: boolean) => {
         if (show) setActiveMenuItems([menuItem['key'], ...findAllParent(menuItems, menuItem)]);
     };
 
-    /**
-     * activate the menuitems
-     */
     const activeMenu = useCallback(() => {
         const div = document.getElementById('side-menu');
         let matchingMenuItem = null;
@@ -172,43 +215,40 @@ const AppMenu = ({ menuItems }: AppMenuProps) => {
     }, [activeMenu]);
 
     return (
-        <>
-            <ul className="side-menu" ref={menuRef} id="side-menu">
-                {(menuItems || []).map((item, idx) => {
-                    return (
-                        <React.Fragment key={idx}>
-                            {item.isTitle ? (
-                                <li
-                                    className={classNames('menu-title', {
-                                        'mt-2': idx !== 0,
-                                    })}
-                                >
-                                    {item.label}
-                                </li>
-                            ) : (
-                                <>
-                                    {item.children ? (
-                                        <MenuItemWithChildren
-                                            item={item}
-                                            toggleMenu={toggleMenu}
-                                            subMenuClassNames="nav-second-level"
-                                            activeMenuItems={activeMenuItems}
-                                            linkClassName="side-nav-link"
-                                        />
-                                    ) : (
-                                        <MenuItem
-                                            item={item}
-                                            linkClassName="side-nav-link"
-                                            className={activeMenuItems!.includes(item.key) ? 'menuitem-active' : ''}
-                                        />
-                                    )}
-                                </>
-                            )}
-                        </React.Fragment>
-                    );
-                })}
-            </ul>
-        </>
+        <ul className="side-menu" ref={menuRef} id="side-menu">
+            {(menuItems || []).map((item, idx) => {
+                return (
+                    <React.Fragment key={idx}>
+                        {item.isTitle ? (
+                            <li
+                                className={classNames('menu-title', {
+                                    'mt-2': idx !== 0,
+                                })}>
+                                {item.label}
+                            </li>
+                        ) : (
+                            <>
+                                {item.children ? (
+                                    <MenuItemWithChildren
+                                        item={item}
+                                        toggleMenu={toggleMenu}
+                                        subMenuClassNames="nav-second-level"
+                                        activeMenuItems={activeMenuItems}
+                                        linkClassName="side-nav-link"
+                                    />
+                                ) : (
+                                    <MenuItem
+                                        item={item}
+                                        linkClassName="side-nav-link"
+                                        className={activeMenuItems!.includes(item.key) ? 'menuitem-active' : ''}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </React.Fragment>
+                );
+            })}
+        </ul>
     );
 };
 

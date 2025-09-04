@@ -241,7 +241,7 @@ const StepOne = () => {
                             -- Select Dietary Type --
                         </option>
                         <option value="veg">Veg</option>
-                        <option value="non-veg">Non Veg</option>
+                        <option value="non_veg">Non Veg</option>
                     </select>
 
                     {/* Show error if exists */}
