@@ -84,7 +84,7 @@ const TransReportList = () => {
                     // marginBottom: '20px',
                     color: '#1a1a1a',
                 }}>
-                Total Amount: ₹{Math.round(totalAmount).toLocaleString()}
+                Total Amount: ₹{totalAmount ? Math.round(totalAmount).toLocaleString() : 0}
             </div>
 
             <Row>

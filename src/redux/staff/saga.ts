@@ -82,7 +82,7 @@ function* staffUpdateSaga(action: any): SagaIterator {
  */
 function* staffDeleteSaga(action: any): SagaIterator {
     try {
-        const response = yield call(staffDelete, action.payload.data);
+        const response = yield call(staffDelete, action.payload);
         if (response?.data?.message) {
             yield put(staffDeleteSuccess(response.data.message));
         } else {
