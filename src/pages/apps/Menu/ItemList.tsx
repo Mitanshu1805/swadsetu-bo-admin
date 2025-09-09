@@ -46,7 +46,7 @@ const ItemList = () => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const business_id = business.business_id;
         setBusinessId(business_id);
-        dispatch(outletList(business_id));
+        dispatch(outletList(business_id, 'abc'));
 
         const payload = {
             business_id: business_id,

@@ -28,7 +28,7 @@ const Menu: React.FC<Props> = ({ outletId }) => {
         cursor: 'pointer',
         height: '200px',
         width: '160px',
-        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
+        // boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
         transition: 'transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease',
         // border: `1px solid ${AppColors.primaryColor}`,
         position: 'relative',
@@ -44,7 +44,7 @@ const Menu: React.FC<Props> = ({ outletId }) => {
 
     const cardHoverStyle: React.CSSProperties = {
         transform: 'translateY(-4px)',
-        boxShadow: `0 8px 20px rgba($AppColors.primaryColor)}, 0.25)`,
+        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
         // borderColor: AppColors.primaryColor,
     };
 

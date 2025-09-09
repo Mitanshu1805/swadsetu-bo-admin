@@ -28,7 +28,7 @@ const StepTwo: React.FC = () => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const business_id = business.business_id;
         if (business_id) {
-            dispatch(outletList(business_id));
+            dispatch(outletList(business_id, 'abc'));
         }
     }, [dispatch]);
 

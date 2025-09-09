@@ -36,7 +36,7 @@ const StepTwo: React.FC<ItemStep2Props> = ({ selectedOutlets, setSelectedOutlets
         if (!outletListData?.length) {
             const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
             const business_id = business.business_id;
-            dispatch(outletList(business_id));
+            dispatch(outletList(business_id, 'abc'));
         }
         if (!category) {
             const business = JSON.parse(localStorage.getItem('selected_business') || '{}');

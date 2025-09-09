@@ -20,7 +20,7 @@ const Terminal = () => {
         console.log(business_id);
 
         if (business_id) {
-            dispatch(outletList(business_id));
+            dispatch(outletList(business_id, 'abc'));
         }
     }, [dispatch]);
 

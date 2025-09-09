@@ -73,14 +73,14 @@ const TerminalList: React.FC<Props> = ({ outletId }) => {
         cursor: 'pointer',
         minHeight: '220px',
         // border: `1px solid ${AppColors.primaryColor}`, // primary border
-        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`, // subtle shadow
+        // boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`, // subtle shadow
         transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
     };
 
     const cardHoverStyle: React.CSSProperties = {
         transform: 'translateY(-4px)',
-        boxShadow: `0 8px 20px rgba($AppColors.primaryColor)}, 0.25)`,
-        // borderColor: AppColors.primaryColor,
+        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
+        borderColor: AppColors.primaryColor,
     };
 
     return (

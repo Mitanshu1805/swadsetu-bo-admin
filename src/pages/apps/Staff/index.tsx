@@ -81,7 +81,7 @@ const Staff: React.FC<Props> = ({ outletId }) => {
     const cardBaseStyle: React.CSSProperties = {
         borderRadius: '16px',
         cursor: 'pointer',
-        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
+        // boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
         transition: 'transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease',
         // border: `1px solid ${AppColors.primaryColor}`,
         padding: '16px',
@@ -93,7 +93,7 @@ const Staff: React.FC<Props> = ({ outletId }) => {
 
     const cardHoverStyle: React.CSSProperties = {
         transform: 'translateY(-4px)',
-        boxShadow: `0 8px 20px rgba($AppColors.primaryColor)}, 0.25)`,
+        boxShadow: `0 8px 20px rgba(${hexToRgb(AppColors.primaryColor)}, 0.25)`,
         // borderColor: AppColors.primaryColor,
     };
 

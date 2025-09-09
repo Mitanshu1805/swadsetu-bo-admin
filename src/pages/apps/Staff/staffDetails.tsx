@@ -84,7 +84,7 @@ const StaffDetails = () => {
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h4 className="mb-0">Staff Personal Details</h4>
                     <Button
-                        variant="outline-primary"
+                        variant="outline-danger"
                         size="sm"
                         onClick={() =>
                             navigate('/staff-register', {
@@ -112,8 +112,9 @@ const StaffDetails = () => {
                         <strong>Salary:</strong> ₹{staff.salary}
                     </Col>
                     <Col md={6}>
-                        <strong>Status:</strong>{' '}
-                        <Badge bg={staff.is_active ? 'success' : 'secondary'}>{staff.status}</Badge>
+                        <strong>Status:</strong> {/* <Badge bg={staff.is_active ? 'success' : 'secondary'}> */}
+                        {staff.status}
+                        {/* </Badge> */}
                     </Col>
                 </Row>
                 <Row className="mb-2">
@@ -205,7 +206,7 @@ const StaffDetails = () => {
                         {allocatedOutlets && allocatedOutlets.length > 0 && (
                             <div className="d-flex justify-content-end mt-3">
                                 <Button
-                                    variant="outline-secondary"
+                                    variant="outline-danger"
                                     size="sm"
                                     onClick={() =>
                                         navigate('/staff-register', {

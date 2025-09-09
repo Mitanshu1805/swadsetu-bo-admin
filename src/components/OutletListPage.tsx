@@ -19,7 +19,7 @@ const OutletList = () => {
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         if (business.business_id) {
-            dispatch(outletList(business.business_id));
+            dispatch(outletList(business.business_id, 'abc'));
         }
     }, [dispatch]);
 

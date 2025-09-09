@@ -27,9 +27,9 @@ export const usersBusinessesError = (error: string): BusinessActionType => ({
     payload: { error },
 });
 
-export const outletList = (business_id: string): BusinessActionType => ({
+export const outletList = (business_id: string, module_key: string): BusinessActionType => ({
     type: BusinessActionTypes.OUTLET_LIST,
-    payload: { business_id },
+    payload: { business_id, module_key },
 });
 
 export const outletListSuccess = (message: string): BusinessActionType => ({
