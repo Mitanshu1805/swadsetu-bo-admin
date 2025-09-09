@@ -38,9 +38,7 @@ function* updateOutletPriceSaga(action: any): SagaIterator {
 
 function* registerItemSaga(action: any): SagaIterator {
     try {
-        console.log('Saga received action:', action);
         const response = yield call(registerItem, action.payload);
-        console.log('API response:', response);
 
         yield put(registerItemSuccess(response.data.message));
     } catch (error: any) {
@@ -109,7 +107,6 @@ function* watchItemUpdateDisable() {
 }
 
 function* menuManagementItemSaga() {
-    console.log('rootSaga is running!');
     yield all([
         fork(watchUpdateOutletPrice),
         fork(watchRegisterItem),

@@ -32,8 +32,6 @@ const CategoryModal = () => {
     const categoryId = location?.state?.category_id || null;
     const outletId = location?.state?.outletId;
     const categoryData = useSelector((state: any) => state?.Menu?.categories);
-    console.log('categoryData>>', categoryData);
-    console.log('categoryID>>>', categoryId);
 
     useEffect(() => {
         if (editMode && categoryId) {
@@ -72,8 +70,6 @@ const CategoryModal = () => {
             const categoriesArray = Array.isArray(categoryData) ? categoryData : categoryData?.data || [];
 
             const categoryToEdit = categoriesArray.find((cat: any) => String(cat.category_id) === String(categoryId));
-
-            console.log(categoryToEdit);
 
             if (categoryToEdit) {
                 methods.reset({
@@ -124,8 +120,6 @@ const CategoryModal = () => {
         if (data.logo_image) formDataToSend.append('logo_image', data.logo_image);
         if (data.swiggy_image) formDataToSend.append('swiggy_image', data.swiggy_image);
         if (data.banner_image) formDataToSend.append('banner_image', data.banner_image);
-
-        console.log(formDataToSend);
 
         if (editMode) {
             formDataToSend.append('category_id', categoryId);

@@ -245,7 +245,6 @@ const MenuManagementCategoryReducer = (state = initialState, action: MenuManagem
             };
 
         case MenuManagementCategoryActionTypes.CATEGORY_ITEM_LIST_SUCCESS:
-            console.log('Categories:', action.payload.categories);
             return {
                 ...state,
                 loading: false,

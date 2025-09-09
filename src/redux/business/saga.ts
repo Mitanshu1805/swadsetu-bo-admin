@@ -29,10 +29,8 @@ function* usersBusinessesSaga(): SagaIterator {
 function* outletListSaga(action: any): SagaIterator {
     try {
         const response = yield call(outletList, action.payload);
-        console.log('outletList>>', response);
         if (response.data?.data) {
             const outlets = response.data.data;
-            console.log('businesses>>', outlets);
 
             yield put(outletListSuccess(outlets));
         } else {

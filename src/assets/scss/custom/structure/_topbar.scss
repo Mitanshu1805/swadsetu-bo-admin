@@ -58,8 +58,8 @@
     position: fixed;
     left: 0;
     right: 0;
-    // height: $topbar-height;
-    height: 0px;
+    height: $topbar-height;
+    // height: 0px;
     z-index: 1001;
 
     .topnav-menu {

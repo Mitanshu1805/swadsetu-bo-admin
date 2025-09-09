@@ -15,7 +15,6 @@ const initialState: TerminalState = {
 };
 
 const Terminal = (state = initialState, action: any): TerminalState => {
-    console.log(action);
     switch (action.type) {
         //Read
         case TerminalActionTypes.TERMINAL_LIST:

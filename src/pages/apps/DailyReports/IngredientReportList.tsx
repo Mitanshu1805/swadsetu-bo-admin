@@ -10,9 +10,8 @@ import error404 from '../../../assets/lottie/404-notfound.json';
 
 const IngredientReportList = () => {
     const ingredientReport = useSelector((state: any) => state?.Report?.ingredientReport?.data?.data?.data);
-    console.log('ingredient>>>', ingredientReport);
+
     const ingredientError = useSelector((state: any) => state?.Report?.ingredientReport?.error);
-    console.log('ingredientError>>>>', ingredientError);
 
     const { state } = useLocation();
     const outletId = state?.outletId;

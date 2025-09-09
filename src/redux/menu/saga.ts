@@ -76,15 +76,10 @@ function* categoryUpdateSaga(action: any): SagaIterator {
 
 function* categoryItemListSaga(action: any): SagaIterator {
     try {
-        console.log('we are here');
-
         const response = yield call(categoryItemList, action.payload);
 
-
         if (response.data && Array.isArray(response.data.data)) {
-            
             yield put(categoryItemListSuccess(response.data.data, response.data.message));
-            
         } else {
             yield put(categoryItemListError('No categories found'));
         }

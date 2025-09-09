@@ -25,7 +25,6 @@ const DashBoard1 = () => {
     const selected_business = JSON.parse(localStorage.getItem('selected_business') || '{}');
     const business_id = selected_business.business_id;
     const sales = useSelector((state: any) => state?.Report?.dashboardSalesReport?.data?.data?.data);
-    console.log('sales', sales);
 
     useEffect(() => {
         dispatch(dashboardSalesReport(business_id));

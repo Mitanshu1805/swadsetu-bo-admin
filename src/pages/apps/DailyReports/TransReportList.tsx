@@ -11,7 +11,6 @@ import error404 from '../../../assets/lottie/404-notfound.json';
 
 const TransReportList = () => {
     const transReport = useSelector((state: any) => state?.Report?.orderReport?.data?.data?.data?.report);
-    console.log('transReport>>', transReport);
 
     const { state } = useLocation();
     const outletId = state?.outletId;
@@ -47,7 +46,6 @@ const TransReportList = () => {
     const totalAmount =
         transReport?.CASH?.reduce((sum: number, item: any) => sum + item.total_amount, 0) +
         transReport?.ONLINE?.reduce((sum: number, item: any) => sum + item.total_amount, 0);
-    // console.log('totalAmount', Math.round(totalAmount));
 
     return (
         <div className="p-4" style={{ fontFamily: 'sans-serif' }}>

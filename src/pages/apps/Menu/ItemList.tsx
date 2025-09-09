@@ -20,14 +20,12 @@ type ItemData = {
 
 const ItemList = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
-    console.log(itemState);
 
     const { dispatch } = useRedux();
     const location = useLocation();
     const navigate = useNavigate();
     const outletId = location?.state?.outletId;
     const outlet_name = location?.state?.outlet_name;
-    console.log(outletId, outlet_name);
 
     const [itemToDelete, setItemToDelete] = useState<ItemData | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -35,7 +33,6 @@ const ItemList = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
     const outlets = useSelector((state: any) => state.Businesses.outlets);
     const outletListData = outlets?.OutletsLists ?? [];
-    console.log(outletListData);
     const [priceEditData, setPriceEditData] = useState<{
         outlet_id: string;
         outletName: string;
@@ -66,12 +63,10 @@ const ItemList = () => {
 
     const handleCategoryClick = (categoryId: string) => {
         setSelectedCategoryId(categoryId);
-        console.log('selectedCategoryId>>>', selectedCategoryId);
     };
 
     const selectedCategory = itemState.find((cat: any) => cat.category_id === selectedCategoryId);
     const items = selectedCategory?.items || [];
-    console.log(items.length);
 
     const handleItemToggle = (item_id: string, is_active: boolean) => {
         dispatch(itemUpdateIsActive(item_id, is_active));
@@ -117,7 +112,6 @@ const ItemList = () => {
     };
 
     const handleItemCardClicked = (item_id: string) => {
-        console.log('item clicked of id:', item_id);
         navigate('/item-details', {
             state: {
                 item_id,
@@ -127,8 +121,6 @@ const ItemList = () => {
     };
 
     const handleEditItem = (item_id: string, category_id: string) => {
-        console.log(category_id, item_id);
-
         navigate('/item-modal', {
             state: {
                 item_id,
@@ -169,8 +161,6 @@ const ItemList = () => {
     const onPriceFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!priceEditData) return;
-
-        console.log('Save price:', priceEditData);
 
         dispatch(updateOutletPrice(priceEditData.outlet_id, priceEditData.item_id, priceEditData.price));
 

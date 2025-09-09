@@ -19,7 +19,6 @@ const ItemDetails = () => {
     const location = useLocation();
 
     const recipeState = useSelector((state: any) => state?.Recipe?.recipes);
-    console.log('recipe??', recipeState);
 
     const outletId = location?.state?.outletId;
     const itemId = location?.state?.item_id; // passed when navigating here
@@ -69,8 +68,6 @@ const ItemDetails = () => {
     }
 
     const handleEditRecipe = (recipe_id: string, outletId: string, itemId: string) => {
-        console.log('edit recipe clicked for recipeID:', recipe_id, 'outlet_id:', outletId, 'item_id:', itemId);
-
         navigate('/recipe-modal', {
             state: {
                 itemId,
@@ -81,7 +78,6 @@ const ItemDetails = () => {
     };
 
     const handleAddRecipe = () => {
-        console.log('add recipe clicked for recipeID:', outletId, 'item_id:', itemId);
         navigate('/recipe-modal', {
             state: {
                 itemId,
@@ -91,18 +87,12 @@ const ItemDetails = () => {
     };
 
     const handleRecipeDelete = (recipe_id: string) => {
-        console.log(recipe_id);
-
         setRecipeToDelete(recipe_id);
         setShowDeleteModal(true);
     };
 
     const confirmDelete = () => {
-        console.log('here');
-
         if (recipeToDelete) {
-            console.log('here');
-
             dispatch(recipeDelete(recipeToDelete));
             setTimeout(() => {
                 const business = JSON.parse(localStorage.getItem('selected_business') || '{}');

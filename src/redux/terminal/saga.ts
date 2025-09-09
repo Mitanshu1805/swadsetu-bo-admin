@@ -40,8 +40,6 @@ function* terminalCreateSaga(action: any): SagaIterator {
             yield put(terminalCreateError('Terminal creation failed.'));
         }
     } catch (error: any) {
-        console.log('error>>>', error);
-
         yield put(terminalCreateError(error || 'Something went wrong'));
     }
 }

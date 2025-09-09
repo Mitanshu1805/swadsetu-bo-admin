@@ -31,8 +31,6 @@ type RecipeManagementActions =
     | { type: typeof RecipeManagementActionTypes.CLEAR_RECIPE };
 
 const RecipeManagementReducer = (state = initialState, action: RecipeManagementActions): State => {
-    console.log('action', action);
-
     switch (action.type) {
         case RecipeManagementActionTypes.RECIPE_ADD:
             return { ...state, loading: true, error: null };
@@ -53,8 +51,6 @@ const RecipeManagementReducer = (state = initialState, action: RecipeManagementA
             };
 
         case RecipeManagementActionTypes.RECIPE_LIST_SUCCESS:
-            console.log('action???', action.payload.recipes);
-
             return { ...state, loading: false, recipes: action.payload.recipes };
 
         case RecipeManagementActionTypes.RECIPE_LIST_ERROR:

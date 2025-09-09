@@ -22,10 +22,8 @@ type TerminalData = {
 const TerminalList: React.FC<Props> = ({ outletId }) => {
     const { dispatch } = useRedux();
     const terminal = useSelector((state: any) => state?.Terminal?.data);
-    console.log(terminal);
 
     const terminalError = useSelector((state: any) => state?.Terminal?.error);
-    console.log(terminalError);
 
     const [showTermEditModal, setShowTermEditModal] = useState(false);
     const [selectedTerminalData, setSelectedTerminalData] = useState<any>(null);

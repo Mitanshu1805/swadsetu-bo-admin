@@ -15,8 +15,6 @@ type Props = {
 };
 
 const TerminalUpdateModal: React.FC<Props> = ({ show, onHide, terminal, outlet_id, selectedTerminalData }) => {
-    console.log(selectedTerminalData);
-
     const [validity, setValidity] = useState(selectedTerminalData.session_duration);
     const { dispatch } = useRedux();
 

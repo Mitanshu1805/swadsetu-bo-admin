@@ -45,7 +45,6 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
     const recipeId = location?.state?.recipe_id;
     const ingredientsState = useSelector((state: any) => state?.RecipeIngredients?.ingredients);
     const navigate = useNavigate();
-    console.log(ingredientsState);
 
     useEffect(() => {
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
@@ -69,7 +68,6 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
     });
 
     const recipe = useSelector((state: any) => state?.Recipe?.recipes); // whatever your reducer key is
-    console.log(recipe);
 
     useEffect(() => {
         if (recipeId) {
@@ -98,7 +96,6 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
     // This effect runs only when recipe details are updated in the store
     // useEffect(() => {
     //     if (recipe && recipe.ingredients) {
-    //         console.log(recipe);
 
     //         reset({
     //             preparation_time: recipe.preparation_time,
@@ -173,7 +170,6 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
     // }, [recipeId, businessId, itemId, ingredientsState, reset, dispatch]);
 
     const submitHandler: SubmitHandler<RecipeFormValues> = (data) => {
-        console.log(data);
         const selectedIngredients = data.ingredients
             .filter((ing) => ing.selected)
             .map(({ ingredient_id, ingredient_name, unit, quantity }) => ({
@@ -182,7 +178,6 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
                 // unit,
                 quantity,
             }));
-        console.log(selectedIngredients);
 
         let payload: any = {
             preparation_time: data.preparation_time,
@@ -208,8 +203,6 @@ const RecipeModal: React.FC<AddRecipeModalProps> = ({ onSubmit }) => {
         } else {
             dispatch(recipeAdd(payload)); // or whatever your create action is
         }
-
-        console.log(payload);
 
         // navigate('/item-details');
 

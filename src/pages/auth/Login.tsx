@@ -51,7 +51,6 @@ const Login = () => {
         userLoggedIn: state.Auth.userLoggedIn,
         otp: state.Auth.user?.data.otp,
     }));
-    console.log(otp);
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const [showOtpForm, setShowOtpForm] = useState(false);
@@ -94,13 +93,7 @@ const Login = () => {
     };
 
     useEffect(() => {
-        console.log('useEffect triggered');
-
         if (verified && businesses && businesses.count > 1) {
-            console.log('verified>>>>>>>>', verified);
-            console.log('businesses>>>>', businesses);
-            console.log(businesses.count);
-
             setShowBusinessSelector(true);
         }
     }, [verified, businesses]);
@@ -131,28 +124,14 @@ const Login = () => {
                     <div className="text-center mb-4">
                         <h4 className="text-uppercase mt-0">{t('Login')}</h4>
                         <p className="text-muted">
-                            {!showOtpForm ? t('Sign in with your phone number') : t('Enter OTP to continue')}
+                            {showOtpForm && !error ? t('Enter OTP to continue') : t('Sign in with your phone number')}
                         </p>
                     </div>
 
                     {error && <Alert variant="danger">{error}</Alert>}
                     {loading && <Loader />}
 
-                    {!showOtpForm ? (
-                        <VerticalForm<UserData> onSubmit={handleSendOtp} resolver={phoneSchema}>
-                            <FormInput
-                                name="phone_number"
-                                label={t('Mobile Number')}
-                                placeholder={t('Enter your phone number')}
-                                containerClass="mb-3"
-                            />
-                            <div className="d-grid">
-                                <Button className="custom-btn" type="submit" disabled={loading}>
-                                    {t('Get OTP')}
-                                </Button>
-                            </div>
-                        </VerticalForm>
-                    ) : (
+                    {showOtpForm && !error ? (
                         <VerticalForm<OtpData>
                             onSubmit={handleVerifyOtp}
                             resolver={otpSchema}
@@ -171,6 +150,20 @@ const Login = () => {
                             <div className="d-grid">
                                 <Button className="custom-btn" type="submit" disabled={loading}>
                                     {t('Verify OTP')}
+                                </Button>
+                            </div>
+                        </VerticalForm>
+                    ) : (
+                        <VerticalForm<UserData> onSubmit={handleSendOtp} resolver={phoneSchema}>
+                            <FormInput
+                                name="phone_number"
+                                label={t('Mobile Number')}
+                                placeholder={t('Enter your phone number')}
+                                containerClass="mb-3"
+                            />
+                            <div className="d-grid">
+                                <Button className="custom-btn" type="submit" disabled={loading}>
+                                    {t('Get OTP')}
                                 </Button>
                             </div>
                         </VerticalForm>

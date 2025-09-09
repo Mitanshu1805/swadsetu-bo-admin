@@ -51,8 +51,6 @@ const Staff: React.FC<Props> = ({ outletId }) => {
 
     const confirmDelete = () => {
         if (staffToDelete) {
-            console.log(staffToDelete.business_id, staffToDelete.business_staff_id);
-
             dispatch(staffDelete(staffToDelete.business_id, staffToDelete.business_staff_id));
             setTimeout(() => {
                 const payload = { business_id: businessId, outlet_id: outletId };

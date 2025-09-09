@@ -96,7 +96,6 @@ function* verifyOtp({ payload: { otp, phone_number }, type }: VerifyOtpAction): 
         const response = yield call(verifyOtpApi, { otp, phone_number });
 
         const user = response.data;
-        console.log('user>>>', user.data.detail.auth_token);
         if (user?.data?.detail?.auth_token) {
             localStorage.setItem('auth_token', user?.data?.detail?.auth_token);
             api.setLoggedInUser(user);

@@ -6,7 +6,6 @@ type Props = {
 };
 
 const Menu: React.FC<Props> = ({ outletId }) => {
-    console.log('Menu page called for OutletID:>>', outletId);
     const cardStyle: React.CSSProperties = {
         boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
         marginBottom: '20px',

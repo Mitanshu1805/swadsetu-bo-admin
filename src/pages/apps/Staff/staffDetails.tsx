@@ -64,8 +64,6 @@ const StaffDetails = () => {
             status,
         };
 
-        console.log('payload>>', payload);
-
         dispatch(staffAttendanceUpdate(payload));
 
         setTimeout(() => {

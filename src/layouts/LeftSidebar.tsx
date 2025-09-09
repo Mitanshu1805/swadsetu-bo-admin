@@ -48,9 +48,6 @@ const UserBox = () => {
 
     // const selectedBusinessName = selectedBusinessObj?.name || 'No Business Selected';
 
-    // console.log(selectedBusinessObj);
-    // console.log(selectedBusinessName);
-
     // get the profilemenu
     const ProfileMenus = [
         {

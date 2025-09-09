@@ -19,12 +19,10 @@ type CategoryData = {
 
 const CategoryList = () => {
     const categoryState = useSelector((state: any) => state?.Menu?.categories || []);
-    console.log('categoryState>>>>>', categoryState);
 
     const { dispatch } = useRedux();
     const location = useLocation();
     const outletId = location?.state?.outletId;
-    console.log('outletId>>>', outletId);
 
     const outlet_name = location?.state?.outlet_name;
     const [categoryToDelete, setCategoryToDelete] = useState<CategoryData | null>(null);
@@ -93,7 +91,6 @@ const CategoryList = () => {
     };
 
     const handleEdit = (category: any) => {
-        console.log('Edit category:', category);
         // Navigate or open modal etc.
     };
 
@@ -122,7 +119,6 @@ const CategoryList = () => {
     };
 
     const handleRegisterCategory = (business_id: string, outletId: string) => {
-        console.log('register category clicked for business_id:', business_id, 'and outlet id:', outletId);
         navigate('/category-modal', {
             state: {
                 business_id,
@@ -132,7 +128,6 @@ const CategoryList = () => {
     };
 
     const handleEditCategory = (business_id: string, outletId: string, category_id: string) => {
-        console.log('edit category clicked for business_id:', business_id, 'and outlet id:', outletId);
         navigate('/category-modal', {
             state: {
                 business_id,

@@ -28,7 +28,6 @@ const AddStaff: React.FC = () => {
     const editMode = location?.state?.editMode || false;
     const staffId = location?.state?.staff_id || null;
     const staff = useSelector((state: any) => state?.Staff?.staffDetails);
-    console.log('staffff>>>', staff);
 
     const { dispatch } = useRedux();
     const startStep = location?.state?.startStep || 1;
@@ -112,12 +111,8 @@ const AddStaff: React.FC = () => {
 
     const outlet_name = location?.state?.outletName;
     const outlet_id = location?.state?.outletId;
-    console.log('outlet_id checker', outlet_id);
-    console.log('outlet_name checker', outlet_name);
 
     const onSubmit = (data: FormData) => {
-        console.log('welcome');
-
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const businessId = business.business_id;
 

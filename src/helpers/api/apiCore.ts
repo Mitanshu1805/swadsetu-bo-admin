@@ -13,9 +13,6 @@ axios.interceptors.response.use(
         let message;
 
         if (error && error.response) {
-            console.log(error);
-            console.log(error.response);
-
             const { status } = error.response;
 
             switch (status) {
@@ -103,7 +100,6 @@ class APICore {
      */
     isUserAuthenticated = () => {
         const user = getUserFromLocalStorage();
-        console.log(user);
 
         if (!user) {
             console.warn('No user data found in localStorage');
@@ -158,7 +154,6 @@ const user = getUserFromLocalStorage();
 const token = user?.data?.auth_token || user?.data?.detail?.auth_token;
 if (token) {
     setAuthorization(token);
-    console.log(token);
 } else {
     console.warn('No valid auth_token found in localStorage');
 }

@@ -55,11 +55,8 @@ const ItemModal = () => {
     const itemId = location?.state?.item_id || null;
     const category_id = location?.state?.category_id;
     const outletId = location?.state?.outletId;
-    console.log('outletId>>>', outletId);
 
     const itemData = useSelector((state: any) => state?.Menu?.categories);
-
-    console.log(itemData);
 
     const [selectedOutlets, setSelectedOutlets] = useState<Outlet[]>([]);
     const methods = useForm<FormData>({
@@ -85,16 +82,11 @@ const ItemModal = () => {
     // Populate form when data arrives
     useEffect(() => {
         if (editMode && itemId && Array.isArray(itemData)) {
-            console.log(editMode, itemId, itemData);
-
             let toEdit = null;
 
             for (const category of itemData) {
-                console.log(category.items);
-
                 if (Array.isArray(category.items)) {
                     const foundItem = category.items.find((item: any) => String(item.item_id) === String(itemId));
-                    console.log(foundItem);
 
                     if (foundItem) {
                         toEdit = foundItem;
@@ -102,7 +94,6 @@ const ItemModal = () => {
                     }
                 }
             }
-            console.log(toEdit.outlets);
 
             if (toEdit) {
                 methods.reset({
@@ -128,7 +119,6 @@ const ItemModal = () => {
                     online_display_name: toEdit.online_display_name,
                 });
             }
-            console.log(toEdit.outlets);
             if (Array.isArray(toEdit.outlets)) {
                 const mapped = toEdit.outlets.map((o: any) => ({
                     outlet_id: o.outlet_id,
@@ -136,7 +126,6 @@ const ItemModal = () => {
                 }));
                 setSelectedOutlets(mapped);
             }
-            console.log(selectedOutlets);
         }
     }, [editMode, itemId, itemData, methods]);
 
@@ -156,8 +145,6 @@ const ItemModal = () => {
     };
 
     const onSubmit = (data: any) => {
-        console.log('data>>', data);
-
         const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
         const businessId = business.business_id;
         if (!businessId) return;
@@ -190,8 +177,6 @@ const ItemModal = () => {
         // data.images.forEach((img: any) => {
         //     if (img instanceof File) formDataToSend.append('images', img);
         // });
-
-        console.log('formDataToSend>>>>>>>', formDataToSend);
 
         if (editMode) {
             dispatch(updateItem(formDataToSend));
