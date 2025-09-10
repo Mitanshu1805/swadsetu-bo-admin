@@ -26,15 +26,16 @@ const UserBox = () => {
     const { dispatch } = useRedux();
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-    useEffect(() => {
-        dispatch(usersBusinesses());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(usersBusinesses());
+    // }, [dispatch]);
     const selected_business = JSON.parse(localStorage.getItem('selected_business') || '{}');
 
     const business_name = selected_business?.business_name;
     const business_logo = selected_business?.business_logo;
 
-    const businesses = useSelector((state: any) => state.Businesses.businesses);
+    // const businesses = useSelector((state: any) => state.Businesses.businesses);
+    const businesses = JSON.parse(localStorage.getItem('businesses') || '{}');
 
     const handleClickChange = () => {
         setShowBusinessSelector(true);

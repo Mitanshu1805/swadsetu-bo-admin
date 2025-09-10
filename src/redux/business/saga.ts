@@ -13,10 +13,16 @@ function* usersBusinessesSaga(): SagaIterator {
         const response = yield call(usersBusinesses);
         if (response.data?.data) {
             const businesses = response.data.data;
+            console.log(businesses);
+
             const selected_business = businesses.list[0];
             if (businesses.count == 1) {
                 localStorage.setItem('selected_business', JSON.stringify(selected_business));
+            } else {
+                window.location.href = '/auth/business-selector';
+                localStorage.setItem('businesses', JSON.stringify(businesses));
             }
+
             yield put(usersBusinessesSuccess(businesses));
         } else {
             yield put(usersBusinessesError('No businesses found.'));

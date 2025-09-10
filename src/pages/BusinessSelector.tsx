@@ -9,16 +9,19 @@ const BusinessSelector = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const businesses = useSelector((state: any) => state.Businesses.businesses);
+    // const businesses = useSelector((state: any) => state.Businesses.businesses);
 
-    useEffect(() => {
-        if (!businesses || businesses.count === 0) {
-            dispatch(usersBusinesses());
-        }
-    }, [dispatch, businesses]);
+    // useEffect(() => {
+    //     if (!businesses || businesses.count === 0) {
+    //         dispatch(usersBusinesses());
+    //     }
+    // }, [dispatch, businesses]);
+    const businesses = JSON.parse(localStorage.getItem('businesses') || '{}');
+    console.log(businesses);
 
     const handleSelect = (business: any) => {
         localStorage.setItem('selected_business', JSON.stringify(business));
+        // localStorage.removeItem('businesses');
         navigate('/dashboard');
     };
 

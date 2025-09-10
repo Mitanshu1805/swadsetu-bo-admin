@@ -54,7 +54,6 @@ const Login = () => {
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const [showOtpForm, setShowOtpForm] = useState(false);
-    const [showBusinessSelector, setShowBusinessSelector] = useState(false);
     const [verified, setVerified] = useState(false);
     const selected_business = JSON.parse(localStorage.getItem('selected_business') || '{}');
     console.log(selected_business);
@@ -94,15 +93,15 @@ const Login = () => {
         setVerified(true);
     };
 
-    useEffect(() => {
-        if (verified && businesses && businesses.count > 1) {
-            setShowBusinessSelector(true);
-        }
-    }, [verified, businesses]);
+    // useEffect(() => {
+    //     if (verified && businesses && businesses.count > 1) {
+    //         setShowBusinessSelector(true);
+    //     }
+    // }, [verified, businesses]);
 
-    if (showBusinessSelector) {
-        navigate('/auth/business-selector');
-    }
+    // if (showBusinessSelector) {
+    //     navigate('/auth/business-selector');
+    // }
 
     // const location = useLocation();
     let redirectUrl = '/';
