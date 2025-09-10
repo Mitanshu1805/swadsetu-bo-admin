@@ -20,6 +20,8 @@ type CategoryData = {
 const CategoryList = () => {
     const categoryState = useSelector((state: any) => state?.Menu?.categories || []);
 
+    const categoryStateMessage = useSelector((state: any) => state?.Menu?.message || []);
+
     const { dispatch } = useRedux();
     const location = useLocation();
     const outletId = location?.state?.outletId;
@@ -102,18 +104,7 @@ const CategoryList = () => {
     const confirmDelete = () => {
         if (categoryToDelete) {
             dispatch(deleteCategory(categoryToDelete.category_id));
-            setTimeout(() => {
-                const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
-                const business_id = business.business_id;
-                const payload = {
-                    business_id,
-                    outlet_id: outletId,
-                };
-                if (payload.outlet_id === 'master') {
-                    delete payload.outlet_id;
-                }
-                dispatch(categoryItemList(payload));
-            });
+
             setShowDeleteModal(false);
         }
     };
@@ -140,21 +131,6 @@ const CategoryList = () => {
 
     const handleCategoryToggle = (category_id: string, is_active: boolean) => {
         dispatch(categoryUpdateIsActive(category_id, is_active));
-
-        setTimeout(() => {
-            const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
-            const business_id = business.business_id;
-            setBusinessId(business_id);
-
-            const payload = {
-                business_id: business_id,
-                outlet_id: outletId,
-            };
-            if (payload.outlet_id === 'master') {
-                delete payload.outlet_id;
-            }
-            dispatch(categoryItemList(payload));
-        }, 100);
     };
 
     return (

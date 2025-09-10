@@ -37,7 +37,8 @@ const StepTwo: React.FC = () => {
         <div className="form-container">
             {/* Active/Inactive Master */}
             <Form.Group className="mb-4">
-                <Form.Label>Active/Inactive Item</Form.Label>
+                {/* <Form.Label>Active/Inactive Item</Form.Label> */}
+                <Form.Label>Master</Form.Label>
                 <div
                     style={{
                         display: 'flex',

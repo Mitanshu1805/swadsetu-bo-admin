@@ -20,6 +20,9 @@ type ItemData = {
 
 const ItemList = () => {
     const itemState = useSelector((state: any) => state?.Menu?.categories || []);
+    console.log(itemState);
+    const itemMessage = useSelector((state: any) => state?.Menu || []);
+    console.log(itemMessage);
 
     const { dispatch } = useRedux();
     const location = useLocation();

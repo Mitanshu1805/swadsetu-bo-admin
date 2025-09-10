@@ -48,7 +48,7 @@ const StepTwo: React.FC = () => {
         <div className="form-container">
             {/* ✅ Active/Inactive Master */}
             <Form.Group className="mb-4">
-                <Form.Label>Active/Inactive Item</Form.Label>
+                <Form.Label>Master</Form.Label>
                 <div
                     onClick={() => setValue('master', true)} // optional if you want to track in form
                     style={{

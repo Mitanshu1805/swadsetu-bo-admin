@@ -32,6 +32,8 @@ const CategoryModal = () => {
     const categoryId = location?.state?.category_id || null;
     const outletId = location?.state?.outletId;
     const categoryData = useSelector((state: any) => state?.Menu?.categories);
+    const categoryStateMessage = useSelector((state: any) => state?.Menu?.message || []);
+    console.log(categoryStateMessage);
 
     useEffect(() => {
         if (editMode && categoryId) {
@@ -128,9 +130,9 @@ const CategoryModal = () => {
             dispatch(registerCategory(formDataToSend));
         }
 
-        setTimeout(() => {
-            navigate('/category-list', { state: { outletId } });
-        }, 500);
+        if (categoryStateMessage) {
+            navigate(-1);
+        }
     };
 
     return (
