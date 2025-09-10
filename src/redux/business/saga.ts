@@ -13,9 +13,9 @@ function* usersBusinessesSaga(): SagaIterator {
         const response = yield call(usersBusinesses);
         if (response.data?.data) {
             const businesses = response.data.data;
-
+            const selected_business = businesses.list[0];
             if (businesses.count == 1) {
-                localStorage.setItem('selected_business', JSON.stringify(businesses));
+                localStorage.setItem('selected_business', JSON.stringify(selected_business));
             }
             yield put(usersBusinessesSuccess(businesses));
         } else {

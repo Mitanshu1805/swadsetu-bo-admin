@@ -56,6 +56,8 @@ const Login = () => {
     const [showOtpForm, setShowOtpForm] = useState(false);
     const [showBusinessSelector, setShowBusinessSelector] = useState(false);
     const [verified, setVerified] = useState(false);
+    const selected_business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+    console.log(selected_business);
 
     const location = useLocation();
     useEffect(() => {
