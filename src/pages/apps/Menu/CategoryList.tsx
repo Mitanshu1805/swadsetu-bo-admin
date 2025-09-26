@@ -46,7 +46,7 @@ const CategoryList = () => {
         }
         dispatch(categoryItemList(payload));
 
-        if (categoryStateMessage?.status == 200) {
+        if (categoryStateMessage?.status == 200 || categoryStateMessage?.status == 201) {
             dispatch(categoryItemList(payload));
             setShowDeleteModal(false);
         }

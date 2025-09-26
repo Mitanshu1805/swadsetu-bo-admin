@@ -50,7 +50,7 @@ function* categoryOutletListsSaga(action: any): SagaIterator {
 function* categoryRegisterSaga(action: any): SagaIterator {
     try {
         const response = yield call(categoryRegister, action.payload);
-        yield put(registerCategorySuccess(response.data.message));
+        yield put(registerCategorySuccess(response));
     } catch (error: any) {
         yield put(registerCategoryError(error.message || 'Error Occured'));
     }
@@ -70,7 +70,7 @@ function* categoryDeleteSaga(action: any): SagaIterator {
 function* categoryUpdateSaga(action: any): SagaIterator {
     try {
         const response = yield call(categoryUpdate, action.payload);
-        yield put(updateCategorySuccess(response.data.message));
+        yield put(updateCategorySuccess(response));
     } catch (error: any) {
         yield put(updateCategoryError(error.message || 'Error Occured'));
     }
