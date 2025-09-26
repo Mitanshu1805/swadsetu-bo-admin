@@ -21,6 +21,7 @@ const CategoryList = () => {
     const categoryState = useSelector((state: any) => state?.Menu?.categories || []);
 
     const categoryStateMessage = useSelector((state: any) => state?.Menu?.message || []);
+    console.log(categoryStateMessage?.status);
 
     const { dispatch } = useRedux();
     const location = useLocation();
@@ -44,7 +45,12 @@ const CategoryList = () => {
             delete payload.outlet_id;
         }
         dispatch(categoryItemList(payload));
-    }, [dispatch]);
+
+        if (categoryStateMessage?.status == 200) {
+            dispatch(categoryItemList(payload));
+            setShowDeleteModal(false);
+        }
+    }, [dispatch, categoryStateMessage?.status]);
 
     const navigate = useNavigate();
 
@@ -104,8 +110,23 @@ const CategoryList = () => {
     const confirmDelete = () => {
         if (categoryToDelete) {
             dispatch(deleteCategory(categoryToDelete.category_id));
+            console.log(categoryStateMessage?.status);
 
-            setShowDeleteModal(false);
+            // if (categoryStateMessage?.status == 200) {
+            //     const business = JSON.parse(localStorage.getItem('selected_business') || '{}');
+            //     const business_id = business.business_id;
+            //     setBusinessId(business_id);
+
+            //     const payload = {
+            //         business_id: business_id,
+            //         outlet_id: outletId,
+            //     };
+            //     if (payload.outlet_id === 'master') {
+            //         delete payload.outlet_id;
+            //     }
+            //     dispatch(categoryItemList(payload));
+            //     setShowDeleteModal(false);
+            // }
         }
     };
 

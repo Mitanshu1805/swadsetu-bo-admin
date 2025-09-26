@@ -59,9 +59,11 @@ function* categoryRegisterSaga(action: any): SagaIterator {
 function* categoryDeleteSaga(action: any): SagaIterator {
     try {
         const response = yield call(categoryDelete, action.payload);
-        yield put(deleteCategorySuccess(response.data.message));
+        console.log(response);
+
+        yield put(deleteCategorySuccess(response));
     } catch (error: any) {
-        yield put(deleteCategoryError(error.message || 'Error Occured'));
+        yield put(deleteCategoryError(error.messages || 'Error Occured'));
     }
 }
 
