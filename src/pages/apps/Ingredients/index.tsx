@@ -164,7 +164,7 @@ const Ingredients = () => {
                                 onMouseEnter={() => setHoveredCardId(ingredient.ingredient_id)}
                                 onMouseLeave={() => setHoveredCardId(null)}>
                                 <Card.Body className="d-flex flex-column justify-content-between p-3">
-                                    <div>
+                                    <div style={{ paddingBottom: '10px' }}>
                                         <div
                                             style={{ fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '0.25rem' }}>
                                             {ingredient.ingredient_name || 'Unnamed'}
@@ -270,7 +270,7 @@ const Ingredients = () => {
                         Cancel
                     </Button>
                     <Button variant="danger" onClick={handleSaveIngredient}>
-                        {editData ? 'Update' : 'Save'}
+                        {editData ? 'Update' : 'Add'}
                     </Button>
                 </Modal.Footer>
             </Modal>
