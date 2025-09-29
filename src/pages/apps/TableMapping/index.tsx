@@ -13,8 +13,12 @@ type Props = {
 const TableMapping: React.FC<Props> = ({ outletId }) => {
     const dispatch = useDispatch();
     const areaTablesData = useSelector((state: RootState) => state?.TableMappingReducer?.areas?.data);
+    const areaTableInfo = useSelector((state: any) => state?.TableMappingReducer?.error);
+    console.log(areaTableInfo);
 
     const [selectedArea, setSelectedArea] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [tableNumberInput, setTableNumberInput] = useState('');
 
     useEffect(() => {
         if (!outletId) return;
@@ -186,7 +190,7 @@ const TableMapping: React.FC<Props> = ({ outletId }) => {
                             ))}
 
                         {/* Add Table Card */}
-                        <div
+                        {/* <div
                             onClick={() => {
                                 if (!selectedArea) return;
 
@@ -227,12 +231,120 @@ const TableMapping: React.FC<Props> = ({ outletId }) => {
                                 color: AppColors.primaryColor,
                             }}>
                             +
+                        </div> */}
+                        {/* Add Table Card */}
+                        <div
+                            onClick={() => {
+                                if (!selectedArea) return;
+                                setIsModalOpen(true); // open modal instead of prompt
+                            }}
+                            style={{
+                                background: '#fff',
+                                border: `2px dashed ${AppColors.primaryColor}`,
+                                borderRadius: '10px',
+                                padding: '1rem',
+                                textAlign: 'center',
+                                boxShadow: `0 2px 6px rgba(0,0,0,0.1)`,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '2rem',
+                                color: AppColors.primaryColor,
+                            }}>
+                            +
                         </div>
                     </>
                 ) : (
                     <p>Please select an area</p>
                 )}
             </div>
+            {isModalOpen && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 10000,
+                    }}>
+                    <div
+                        style={{
+                            background: '#fff',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            width: '300px',
+                            textAlign: 'center',
+                        }}>
+                        <h3>Add Table</h3>
+                        <input
+                            type="number"
+                            value={tableNumberInput}
+                            onChange={(e) => setTableNumberInput(e.target.value)}
+                            placeholder="Enter table number"
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                margin: '10px 0',
+                                borderRadius: '4px',
+                                border: '1px solid #ccc',
+                            }}
+                        />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                            <button
+                                style={{
+                                    background: AppColors.primaryColor,
+                                    color: '#fff',
+                                    border: 'none',
+                                    padding: '6px 12px',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => {
+                                    if (!tableNumberInput || isNaN(Number(tableNumberInput))) {
+                                        alert('Please enter a valid number');
+                                        return;
+                                    }
+
+                                    const payload = {
+                                        area_id: selectedArea,
+                                        table_number: Number(tableNumberInput),
+                                    };
+
+                                    dispatch(areaAdd(payload));
+
+                                    // setTimeout(() => {
+                                    //     dispatch(areaTables(outletId));
+                                    // }, 200);
+
+                                    setTableNumberInput('');
+                                    setIsModalOpen(false);
+                                }}>
+                                Add
+                            </button>
+                            <button
+                                style={{
+                                    background: '#ccc',
+                                    border: 'none',
+                                    padding: '6px 12px',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => {
+                                    setTableNumberInput('');
+                                    setIsModalOpen(false);
+                                }}>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

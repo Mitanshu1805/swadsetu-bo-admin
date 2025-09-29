@@ -106,7 +106,7 @@ function* categoryUpdateIsActiveSaga(action: any): SagaIterator {
         const response = yield call(categoryUpdateIsActive, action.payload);
         yield put(categoryUpdateIsActiveSuccess(response.data.message));
     } catch (error: any) {
-        yield put(categoryUpdateIsActiveError(error.message || 'Error Occured'));
+        yield put(categoryUpdateIsActiveError(error || 'Error Occured'));
     }
 }
 

@@ -22,21 +22,23 @@ const initialState: TableMappingState = {
 type TableMappingAction =
     | { type: TableMappingActionTypes.AREA_CREATE }
     | { type: TableMappingActionTypes.AREA_CREATE_SUCCESS; payload: Area }
-    | { type: TableMappingActionTypes.AREA_CREATE_ERROR; payload: string }
+    | { type: TableMappingActionTypes.AREA_CREATE_ERROR; payload: { error: string } }
     | { type: TableMappingActionTypes.AREA_DELETE }
     | { type: TableMappingActionTypes.AREA_DELETE_SUCCESS; payload: string } // areaId
-    | { type: TableMappingActionTypes.AREA_DELETE_ERROR; payload: string }
+    | { type: TableMappingActionTypes.AREA_DELETE_ERROR; payload: { error: string } }
     | { type: TableMappingActionTypes.AREA_UPDATE }
     | { type: TableMappingActionTypes.AREA_UPDATE_SUCCESS; payload: Area }
-    | { type: TableMappingActionTypes.AREA_UPDATE_ERROR; payload: string }
+    | { type: TableMappingActionTypes.AREA_UPDATE_ERROR; payload: { error: string } }
     | { type: TableMappingActionTypes.AREA_TABLES }
     | { type: TableMappingActionTypes.AREA_TABLES_SUCCESS; payload: Area[] }
-    | { type: TableMappingActionTypes.AREA_TABLES_ERROR; payload: string }
+    | { type: TableMappingActionTypes.AREA_TABLES_ERROR; payload: { error: string } }
     | { type: TableMappingActionTypes.AREA_ADD }
     | { type: TableMappingActionTypes.AREA_ADD_SUCCESS; payload: Area }
-    | { type: TableMappingActionTypes.AREA_ADD_ERROR; payload: string };
+    | { type: TableMappingActionTypes.AREA_ADD_ERROR; payload: { error: string } };
 
 const TableMappingReducer = (state = initialState, action: TableMappingAction): TableMappingState => {
+    console.log(action);
+
     switch (action.type) {
         case TableMappingActionTypes.AREA_CREATE:
         case TableMappingActionTypes.AREA_DELETE:
@@ -85,7 +87,7 @@ const TableMappingReducer = (state = initialState, action: TableMappingAction): 
         case TableMappingActionTypes.AREA_UPDATE_ERROR:
         case TableMappingActionTypes.AREA_TABLES_ERROR:
         case TableMappingActionTypes.AREA_ADD_ERROR:
-            return { ...state, loading: false, error: action.payload };
+            return { ...state, loading: false, error: action.payload?.error };
 
         default:
             return state;

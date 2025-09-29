@@ -21,7 +21,7 @@ const CategoryList = () => {
     const categoryState = useSelector((state: any) => state?.Menu?.categories || []);
 
     const categoryStateMessage = useSelector((state: any) => state?.Menu?.message || []);
-    console.log(categoryStateMessage?.status);
+    console.log(categoryStateMessage);
 
     const { dispatch } = useRedux();
     const location = useLocation();

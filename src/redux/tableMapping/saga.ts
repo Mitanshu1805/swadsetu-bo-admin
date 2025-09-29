@@ -47,6 +47,8 @@ function* areaAddSaga(action: any): SagaIterator {
         const response = yield call(areaAdd, action.payload);
         yield put(areaAddSuccess(response.data));
     } catch (error: any) {
+        console.log('saga error:', error);
+
         yield put(areaAddError(error || 'Something went wrong'));
     }
 }

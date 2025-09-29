@@ -20,7 +20,7 @@ export const areaCreateSuccess = (response: any): Action => ({
 
 export const areaCreateError = (error: string): Action => ({
     type: TableMappingActionTypes.AREA_CREATE_ERROR,
-    error,
+    payload: { error },
 });
 
 /* -------- AREA DELETE -------- */
@@ -84,5 +84,5 @@ export const areaAddSuccess = (response: any): Action => ({
 
 export const areaAddError = (error: string): Action => ({
     type: TableMappingActionTypes.AREA_ADD_ERROR,
-    error,
+    payload: { error },
 });
