@@ -12,6 +12,7 @@ import recipe from './recipe/saga';
 import recipeIngredients from './recipeIngredients/saga';
 import orderManagementSaga from './order/saga';
 import tableMappingSaga from './tableMapping/saga';
+import subscriptionRestrictedSaga from './subscription/saga';
 
 export default function* rootSaga() {
     yield all([
@@ -27,5 +28,6 @@ export default function* rootSaga() {
         recipeIngredients(),
         orderManagementSaga(),
         tableMappingSaga(),
+        subscriptionRestrictedSaga(),
     ]);
 }

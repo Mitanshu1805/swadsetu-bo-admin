@@ -235,6 +235,10 @@ export function areaAdd(data: any) {
     return api.create('/table/add', data);
 }
 
+export function subscriptionRestrictedList(data: any) {
+    return api.create('/subscription/restricted', data);
+}
+
 export {
     login,
     logout,
