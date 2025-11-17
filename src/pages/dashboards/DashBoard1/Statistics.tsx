@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
 import { useRedux } from '../../../hooks';
 import { useSelector } from 'react-redux';
-import { dashboardEarningReport, orderReportList, ingredientReportList } from '../../../redux/actions';
+import {
+    dashboardEarningReport,
+    orderReportList,
+    ingredientReportList,
+    subscriptionRestrictedList,
+} from '../../../redux/actions';
 import { Col, Row } from 'react-bootstrap';
 import { AppColors } from '../../../utils/Colors';
 import './Statistics.css';
@@ -15,6 +20,8 @@ const Statistics: React.FC<StatisticsProps> = ({ sales }) => {
     const dashboardEarningReports = useSelector(
         (state: any) => state?.Report?.dashboardEarningReport?.data?.data?.data
     );
+    const state = useSelector((state: any) => state);
+    console.log(state);
 
     const totalEarnings = dashboardEarningReports?.total_amount
         ? dashboardEarningReports.total_amount.toLocaleString()
@@ -22,6 +29,9 @@ const Statistics: React.FC<StatisticsProps> = ({ sales }) => {
     const totalOrders = dashboardEarningReports?.total_orders
         ? dashboardEarningReports.total_orders.toLocaleString()
         : '0';
+
+    // const todayOrderReport = useSelector((state: any) => state?.Report?.orderReport?.data?.data?.data?.totals);
+    // console.log(todayOrderReport);
 
     const { dispatch } = useRedux();
     const navigate = useNavigate();
@@ -31,16 +41,20 @@ const Statistics: React.FC<StatisticsProps> = ({ sales }) => {
         const business_id = business.business_id;
 
         if (business_id) {
-            dispatch(dashboardEarningReport(business_id));
-
             const today = new Date().toISOString().split('T')[0];
             const payload = {
                 start_date: today,
                 end_date: today,
                 business_id: business_id,
             };
+            const earningReportPayload = {
+                date: today,
+                business_id: business_id,
+            };
 
+            dispatch(dashboardEarningReport(earningReportPayload));
             dispatch(orderReportList(payload));
+            dispatch(subscriptionRestrictedList(business_id));
             dispatch(ingredientReportList(payload));
         }
     }, [dispatch]);

@@ -10,7 +10,9 @@ import { subscriptionRestrictedList } from '../../helpers/api/auth';
 
 function* subscriptionRestrictedListSaga(action: any): SagaIterator {
     try {
-        const response = yield call(subscriptionRestrictedList, action.payload.data);
+        console.log(action);
+
+        const response = yield call(subscriptionRestrictedList, action.payload);
         if (response?.data?.data) {
             yield put(subscriptionRestrictedListSuccess(response?.data?.data));
         } else {

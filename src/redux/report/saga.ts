@@ -30,7 +30,7 @@ import { SagaIterator } from 'redux-saga';
 
 function* dashboardEarningReportSaga(action: any): SagaIterator {
     try {
-        const response = yield call(dashboardEarningReport, action.payload);
+        const response = yield call(dashboardEarningReport, action.payload.data);
         yield put(dashboardEarningReportSuccess(response));
     } catch (error: any) {
         yield put(dashboardEarningReportError(error.message || 'Something went wrong'));
